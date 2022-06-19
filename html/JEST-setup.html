@@ -369,6 +369,23 @@ pre code {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#setting-up-to-run-a-jest-tutorial">Setting up to run a
+JEST tutorial</a>
+<ul>
+<li><a href="#install-r-and-rstudio">Install R and RStudio</a></li>
+<li><a href="#update-r-and-rstudio">Update R and RStudio</a></li>
+<li><a href="#install-required-r-packages">Install required R
+packages</a></li>
+<li><a href="#updating-r-packages">Updating R packages</a></li>
+<li><a href="#download-the-data">Download the data</a></li>
+</ul></li>
+<li><a href="#preparing-for-jest-workshops">Preparing for JEST
+workshops</a></li>
+</ul>
+</div>
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
@@ -386,11 +403,11 @@ development environment</a> as our primary programming and analysis
 environment. For working through these tutorials, either on your own or
 in a workshop, you should have both installed according to the
 instructions below.</p>
-<div id="install-r-and-rstudio" class="section level3">
-<h3>Install R and RStudio</h3>
-<p><em>This section borrows heavily from the “<a href="https://datacarpentry.org/R-ecology-lesson/">Data Carpentry: Data
+<p><em>The section below borrows heavily from the “<a href="https://datacarpentry.org/R-ecology-lesson/">Data Carpentry: Data
 Analysis and Visualization in R for Ecologists</a>” lesson (Eunice,
 2022)</em></p>
+<div id="install-r-and-rstudio" class="section level3">
+<h3>Install R and RStudio</h3>
 <p>R and RStudio are two separate pieces of software:</p>
 <ul>
 <li><strong>R</strong> is a programming language that is especially
@@ -492,13 +509,13 @@ automatically notify you of new versions every once in a while.</p>
 <h3>Install required R packages</h3>
 <p>During the course we will need a number of R packages. Packages
 contain useful R code written by other people. We will use the packages
-<code>tidyverse</code>, <code>hexbin</code>, <code>patchwork</code>, and
-<code>RSQLite</code>.</p>
+<code>tidyverse</code>, <code>nlme</code>, <code>lme4</code>,
+<code>emmeans</code>, and <code>AICmodavg</code>.</p>
 <p>To try to install these packages, open RStudio and copy and paste the
 following command into the console window (look for a blinking cursor on
 the bottom left), then press the <kbd>Enter</kbd> (Windows and Linux) or
 <kbd>Return</kbd> (MacOS) to execute the command.</p>
-<pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;hexbin&quot;, &quot;patchwork&quot;, &quot;RSQLite&quot;))</code></pre>
+<pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;nlme&quot;, &quot;lme4&quot;, &quot;emmeans&quot;, &quot;AICmodavg&quot;))</code></pre>
 <p>Alternatively, you can install the packages using RStudio’s graphical
 user interface by going to <code>Tools &gt; Install Packages</code> and
 typing the names of the packages separated by a comma.</p>
@@ -506,9 +523,10 @@ typing the names of the packages separated by a comma.</p>
 the installation has finished, you can try to load the packages by
 pasting the following code into the console:</p>
 <pre class="r"><code>library(tidyverse)
-library(hexbin)
-library(patchwork)
-library(RSQLite)</code></pre>
+library(nlme)
+library(lme4)
+library(emmeans)
+library(AICmodavg)</code></pre>
 <p>If you do not see an error like
 <code>there is no package called ‘...’</code> you are good to go!</p>
 </div>
