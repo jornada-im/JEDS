@@ -7,7 +7,7 @@ and real data from the Jornada.
 ## Setting up
 
 These tutorials are based on using R. To get set up for working through a
-tutorial on your own or in a workshop follow the [setup instructions](../html/JEST-setup.html)
+tutorial on your own or in a workshop follow the [setup instructions](./html/JEST-setup.html)
 
 ## Tutorials
 
