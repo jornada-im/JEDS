@@ -1,0 +1,46 @@
+---
+title: "Hypothesis testing basics"
+author: "Greg Maurer, Darren James"
+date: '2022-06-19'
+output:
+    html_document:
+      toc: true
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introduction
+
+Hypothesis testing is...
+
+We will cover:
+
+* P values
+* Common pitfalls
+* Making inferences
+* Understanding approximations underlying the analysis approach
+* Rencher & Schaalje P-value interpretations
+* Information-theoretic approaches
+
+### Our data and R packages
+
+You will need to have the `AICmodavg` package installed...
+
+Data for the exercises here come from the ... data package on EDI. To load the
+data use:
+
+```{r load_data}
+library(tidyverse)
+#read_csv('http:')
+```
+
+## Hypothesis testing and P-values
+
+## Common pitfalls
+
+## Statistical inference
+
+## Understanding ...
