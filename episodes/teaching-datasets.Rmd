@@ -1,0 +1,77 @@
+---
+title: "Teaching Datasets"
+author: "Greg Maurer, Darren James"
+date: '2022-06-19'
+output:
+    html_document:
+      toc: true
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+This page contains descriptions and the reproducible workflows used to create 
+and load the teaching datasets used in our lessons. In general these start as
+Jornada data files downloaded from a data repository like [EDI](https://edirepository.org).
+We often use tidyverse to do some data manipulation, and then all finished
+datasets are output to the repository's `data/` directory.
+
+The complete code needed to generate and load the teaching datasets are in the
+sections below. To use each teaching dataset, you can either run this code
+before you start a lesson, or you can download and load the pre-made datasets
+from the [`data/` directory](https://github.com/jornada-im/jest/data).
+Suggestions for how to proceed are found at the start of each lesson.
+
+## Teaching dataset 1 - Jornada ANPP data
+
+This dataset contains annual net primary production (NPP) data, measured in grams
+biomass per square meter, from the Jornada NPP study sites. There are 15
+NPP study sites, in 5 different vegetation zones, across the Jornada Basin. At
+each site there are 49 1x1 meter quadrats where repeated measures of plant
+volume by species take place several each year. These volume data have been
+converted to biomass using an allometric method, and then to net primary 
+production using the increment in biomass from one measurement to the next.
+
+The annual data are in this EDI dataset:
+
+* Peters, D. and L. Huenneke. 2022. Annual mean estimates of aboveground net primary production (NPP) at 15 sites at Jornada Basin LTER, 1989-ongoing ver 105. Environmental Data Initiative. https://doi.org/10.6073/pasta/925c86b094c123fae4ddabf31cf92a30 
+
+First we will need to load the `tidyverse` library.
+
+```{r, message=FALSE}
+library(tidyverse)
+```
+
+Then, load a comma-separated value file from the EDI repository. At the EDI
+repository, each file in a dataset is assigned a download URL. This can be 
+passed to the `tidyverse::read_csv()` function to read that file into a
+dataframe.
+
+```{r load_ds1}
+# Assign the address for the csv file hosted on EDI to a variable
+infile <- "https://pasta.lternet.edu/package/data/eml/knb-lter-jrn/210011003/105/127124b0f04a1c71f34148e3d40a5c72"
+
+# Read this file into a tibble with `tidyverse::read_csv()`
+anpp.annual <- read_csv(infile, na=c('NA', '', '.'))
+```
+R tells us that we have two character data columns (`zone` and `site`), and two
+floating point (`dbl`) columns that contain the year of measurement - `year` - 
+and estimated annual NPP values (`npp_g_m2`). Lets make a simple plot to look at
+the data. To do this we are using the `ggplot()` function, which is part of the 
+`ggplot2` library that was attached when we loaded the `tidyverse` package`
+
+```{r}
+ggplot(anpp.annual, aes(x = year, y = npp_g_m2, col = site, group = site)) +
+  geom_line() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+```
+
+Now, lets output this into our `data/` directory so that we can load it easily
+next time.
+
+```{r}
+write_csv(anpp.annual, '../data/td01_anpp.annual.csv')
+```

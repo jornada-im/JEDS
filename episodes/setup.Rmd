@@ -11,14 +11,13 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ## Introduction
 
 Welcome to the Jornada Ecological Statistics Tutorials, or JEST! Our aim is to
 teach introductory and intermediate statistics to Jornada researchers using R,
 and real data from the Jornada.
 
-## Setting up to run a JEST tutorial
+## Setting up for a lesson
 
 We use the [R programming language](https://www.r-project.org/), and additional
 packages from the R software ecosystem, as our primary statistical analysis
@@ -40,8 +39,8 @@ cat(dc_lines[55:140], sep = '\n')
 ### Install required R packages
 
 During the course we will need a number of R packages. Packages contain useful 
-R code written by other people. We will use the packages 
-`tidyverse`, `nlme`, `lme4`, `emmeans`, and `AICmodavg`.
+R code written by other people. In most workshops will use the packages 
+`tidyverse`, `nlme`, `lme4`, and `emmeans`.
 
 To try to install these packages, open RStudio and copy and paste the following 
 command into the console window (look for a blinking cursor on the bottom left),
@@ -49,7 +48,7 @@ then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS)
 to execute the command.
 
 ```{r eval=FALSE}
-install.packages(c("tidyverse", "nlme", "lme4", "emmeans", "AICmodavg"))
+install.packages(c("tidyverse", "nlme", "lme4", "emmeans"))
 ```
 
 Alternatively, you can install the packages using RStudio's graphical user 
@@ -65,11 +64,15 @@ library(tidyverse)
 library(nlme)
 library(lme4)
 library(emmeans)
-library(AICmodavg)
 ```
 
 If you do not see an error like `there is no package called ‘...’` you are good 
 to go!
+
+**NOTE** that you will likely receive additional instructions on packages to
+install for your workshop. It is a good idea to install these in advance, using
+commands like those above, and let your instructors know if you have any
+problems.
 
 ```{r results="asis", echo=FALSE}
 # This brings in DC R ecology content for updating R packages
@@ -77,7 +80,11 @@ to go!
 cat(dc_lines[174:194], sep = '\n')
 ```
 
-The data files for each tutorial will be specified near the top of the page.
+A copy of all data files used in these lessons are stored in the `data/`
+directory of the GitHub repository. The data files needed for each lesson will
+be specified by instructors in advance, or will be provided during the workshop.
+You can also check the lesson pages to find information about the data being
+used.
 
 ## Preparing for JEST workshops
 
@@ -85,8 +92,9 @@ These workshops are based on "live coding," so instructors will be running
 example R code while learners are expected to follow along on their own machine.
 To follow along successfully during a JEST workshop, please ensure you have a
 laptop or other Windows, MacOS, or Linux device that has R and RStudio, and any
-necessary R packages, installed and up to date. Also bring a charger for your
-device.
+necessary R packages, installed and up to date. You should receive instructions
+in advance about what R packages to install, and other materials you may need
+to download. Also, always bring a charger for your device.
 
 If the workshop is in a virtual format we will be using the Zoom platform, so
 make sure you have Zoom installed and up-to-date on your machine as well.
