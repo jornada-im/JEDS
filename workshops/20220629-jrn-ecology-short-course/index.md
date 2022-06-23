@@ -6,7 +6,7 @@ This workshop will teach basic hypothesis testing with ecological data, building
 
 ## Getting set up
 
-The lessons we are teaching have been developed for learners using `R`, and we are expecting people to code along with us as we subset our data, fit models, and interpret results. Please follow the general [setup instructions](./html/setup.html) to be prepared with a working version of R and R Studio. We will download data directly from the EDI repository at the start of the workshop (see more info on the [teaching datasets page](./html/teaching-datasets.html')). 
+The lessons we are teaching have been developed for learners using `R`, and we are expecting people to code along with us as we subset our data, fit models, and interpret results. Please follow the general [setup instructions](../../html/setup.html) to be prepared with a working version of R and R Studio. We will download data directly from the EDI repository at the start of the workshop (see more info on the [teaching datasets page](../../html/teaching-datasets.html')). 
 
 In addition to the basic setup, you should
 
@@ -17,4 +17,4 @@ In addition to the basic setup, you should
 
 We only have one big lesson this time:
 
-1. [Hypothesis testing with general linear models and mixed models](./html/hypothesis-testing-basics.html)
+1. [Hypothesis testing with general linear models and mixed models](../../html/hypothesis-testing-basics.html)
