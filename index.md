@@ -1,6 +1,4 @@
-# Jornada Ecological Statistics Tutorials (JEST)
-
-Welcome to the Jornada Ecological Statistics Tutorials, or JEST! Our aim is to
+**Welcome to the Jornada Ecological Statistics Tutorials, or JEST!** Our aim is to
 teach introductory and intermediate statistics to Jornada researchers using accessible methods and relatable data.
 
 ## Setting up your environment
