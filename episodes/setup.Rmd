@@ -69,10 +69,10 @@ library(emmeans)
 If you do not see an error like `there is no package called ‘...’` you are good 
 to go!
 
-**NOTE** that you will likely receive additional instructions on packages to
-install for your workshop. It is a good idea to install these in advance, using
-commands like those above, and let your instructors know if you have any
-problems.
+**NOTE** that if you are attending a workshop, you will likely receive additional
+instructions about packages required for for your workshop. It is a good idea to
+install these in advance, using commands like those above, and let your
+instructors know if you have any problems.
 
 ```{r results="asis", echo=FALSE}
 # This brings in DC R ecology content for updating R packages
@@ -81,10 +81,9 @@ cat(dc_lines[174:194], sep = '\n')
 ```
 
 A copy of all data files used in these lessons are stored in the `data/`
-directory of the GitHub repository. The data files needed for each lesson will
-be specified by instructors in advance, or will be provided during the workshop.
-You can also check the lesson pages to find information about the data being
-used.
+directory of the GitHub repository. The data files you will work with will
+be specified at the start of the lesson materials, and you may also receive
+additional instructions or materials for workshops.
 
 ## Preparing for JEST workshops
 
@@ -92,9 +91,10 @@ These workshops are based on "live coding," so instructors will be running
 example R code while learners are expected to follow along on their own machine.
 To follow along successfully during a JEST workshop, please ensure you have a
 laptop or other Windows, MacOS, or Linux device that has R and RStudio, and any
-necessary R packages, installed and up to date. You should receive instructions
-in advance about what R packages to install, and other materials you may need
-to download. Also, always bring a charger for your device.
+necessary R packages, installed and up to date. Look for instructions provided
+by instructors in advance of the workshop about what R packages to install, and
+any other materials you may need to download or bring. Also, always bring a
+charger for your device.
 
 If the workshop is in a virtual format we will be using the Zoom platform, so
 make sure you have Zoom installed and up-to-date on your machine as well.
