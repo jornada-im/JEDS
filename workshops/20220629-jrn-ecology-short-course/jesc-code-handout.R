@@ -5,6 +5,8 @@ library(tidyverse)
 
 anpp <- read_csv('https://pasta.lternet.edu/package/data/eml/knb-lter-jrn/210011003/105/127124b0f04a1c71f34148e3d40a5c72')
 
+str(anpp)
+
 # Then, make a summary figure
 ggplot(anpp, aes(x = year, y = npp_g_m2, col = site, group = site)) +
   geom_line() +
