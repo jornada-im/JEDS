@@ -36,13 +36,20 @@ output tables. You will also need `emmeans` to do post-hoc comparisons of groups
 in fitted linear models, and `lme4` to fit some mixed models.
 
 Data for the exercises here come from the Jornada annual NPP data package on
-EDI. You can learn more about this dataset on the [teaching datasets]('./teaching_datasets.Rmd#Teaching-dataset-1') page. To load the data we will first load the `tidyverse`, then use `read_csv()`
-function to read in the data from EDI:
+EDI. You can learn more about this dataset on the [teaching datasets]('./teaching_datasets.Rmd#Teaching-dataset-1') page. To load the data we will first load the `tidyverse` and use its
+`read_csv()` function to read in the data from EDI. Then we'll make a summary
+plot with `ggplot()`.
 
 ```{r load_data, message=FALSE}
+# Get tidyverse & the NPP data
 library(tidyverse)
 
-anpp.annual <- read_csv('https://pasta.lternet.edu/package/data/eml/knb-lter-jrn/210011003/105/127124b0f04a1c71f34148e3d40a5c72')
+anpp <- read_csv('https://pasta.lternet.edu/package/data/eml/knb-lter-jrn/210011003/105/127124b0f04a1c71f34148e3d40a5c72')
+
+# Then, make a summary figure
+ggplot(anpp, aes(x = year, y = npp_g_m2, col = site, group = site)) +
+  geom_line() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
 ```
 
 ## Comparing two samples
@@ -53,96 +60,100 @@ anpp.annual <- read_csv('https://pasta.lternet.edu/package/data/eml/knb-lter-jrn
 ##
 ```
 
-We commonly need to compare two samples from a set of observations. Today we are
-examining net primary production data (NPP) at the Jornada, so lets compare 
-observations made in 2019 and 2020 and see if they are different using a
+We commonly need to compare two samples from a set of observations. In this
+lesson, we examine net primary production data (NPP) collected at the Jornada.
+This dataset has been collected for over 3 decades, and as shown above, there is
+significant variability from year to year. Lets begin by comparing observations
+in two years only, 2019 and 2020, to see if they are markedly different using a 
 t-test.
 
-First lets create a dataframe that is subset of the data from our larger
-dataset.
+First, create a dataframe that is subset of our full `anpp` dataframe.
 
 ```{r}
 # Create a 2-year data subset
-anpp.2019.2020 <- anpp.annual %>%
+anpp.sub1 <- anpp %>%
   dplyr::filter(year %in% 2019:2020)
 ```
 
-In t-tests we are usually testing whether the mean of the two groups is
-different. Lets look at some summary statistics first.
+In t-tests we are usually testing whether the mean of two groups is different. 
+Lets look at some summary statistics from our two years of data first.
 
 ```{r}
 # Summary statistics
-anpp.2019.2020.stats <- anpp.2019.2020 %>%
+anpp.sub1.stats <- anpp.sub1 %>%
   group_by(year) %>%
   summarise(n = n(),
             mean = mean(npp_g_m2),
             std.dev = sd(npp_g_m2)) %>%
   mutate(std.err = std.dev/sqrt(n))
 
-anpp.2019.2020.stats
+anpp.sub1.stats
 ```
 From this we see that the means for each year are offset, increasing by about 
-16-19$g\cdot m^{-2}$ from 2018 to 2020. There are also differences in the
-variance around the means, shown in different standard deviation and error
-statistics.
+19 $g\cdot m^{-2}$ from 2019 to 2020. There are also differences in the
+variance around the means, which we see as different standard deviation and
+error statistics.
 
-For the t-test we will first need to put data into "wide" form, with
-observations for each year in separate columns. Lets also calculate the
-difference between years.
+For a t-test we first need to put data into "wide" form, with observations
+for the different years in separate columns.
 
 ```{r}
 # Spread to wide form
-anpp.2019.2020.wide <- anpp.2019.2020 %>%
+anpp.sub1.wide <- anpp.sub1 %>%
   spread(year, npp_g_m2)
 
-head(anpp.2019.2020.wide)
+head(anpp.sub1.wide)
 ```
 
-Now do a t-test of differences in mean NPP in 2019 and 2020
+Now do a t-test for differences in mean NPP in 2019 and 2020, using the
+`t.test()` function.
 
 ```{r}
 # A default 2-sample t-test in R
-t.test(x = anpp.2019.2020.wide$`2019`, 
-       y = anpp.2019.2020.wide$`2020`)
+t.test(x = anpp.sub1.wide$`2019`, 
+       y = anpp.sub1.wide$`2020`)
 ```
 We see that the default here is a "Welch Two Sample t-test", which is
 an unequal variance test. That means that the test is designed to account for 
-differences in variance between the 2019 and 2020 sample. We'll se later that
-this testing samples with different variances is something a mixed model would
-alsodo. This test is telling us that there isn't a "significant" difference in
-the means since the p-value is greater than 0.05. 
+differences in variance between the 2019 and 2020 sample. We'll see later that
+testing two samples with different variances is something we could also do 
+with a mixed model. This test tells us that there isn't a "significant"
+difference in the means since the p-value is greater than 0.05, which is our
+$\alpha$ value, or the threshold we use to reject the null hypothesis that the
+two means are the same.
 
-Lets look at some other t-tests. First, a standard Student's t-test with equal,
-or pooled, variance.
+Lets look at some variations on the t-test. First, a standard Student's t-test
+with equal, or pooled, variance.
 
 ```{r}
 # t-test with equal variance
-t.test(x = anpp.2019.2020.wide$`2019`, 
-       y = anpp.2019.2020.wide$`2020`, 
+t.test(x = anpp.sub1.wide$`2019`, 
+       y = anpp.sub1.wide$`2020`, 
        var.equal = TRUE)
 ```
 This lowers the p-value a tad, but is that a good thing? We've pooled the
 variance for 2019 and 2020, even though we saw from our summary statistics that
-the variances might be unequal, i.e., the std. deviation of the 2020
+the variances might be unequal, i.e., the standard deviation of the 2020
 observations are higher.
 
 Next lets try a paired t-test, which assumes that the observations in each
 sample are not independent. We know this is the case since we're measuring the 
 same sites each year, and therefore comparing two samples of the same 
-experimental or statistical units. In a paired test, we are testing whether the
-difference between the 2019 and 2020 samples is different than zero. If we know
-that we have unequal variances between samples, taking the difference is a
-quick way to get around the issue.
+experimental or statistical units (sites). In a paired t-test, the question
+becomes whether the difference between the two samples, 2019 and 2020
+observations, is itself different than zero. Therefore, if we already know that
+we have unequal variances in our samples, taking the difference is a quick way
+to get around that issue.
 
 ```{r}
 # Paired t-test
-t.test(x = anpp.2019.2020.wide$`2019`, 
-       y = anpp.2019.2020.wide$`2020`, 
+t.test(x = anpp.sub1.wide$`2019`, 
+       y = anpp.sub1.wide$`2020`, 
        paired = TRUE)
 ```
 We have a significant result here (p-value < 0.05) which tells us that we can
 reject the null hypothesis that the difference between these two years of data
-is equal to zero. So, NPP changed in these two years.
+is equal to zero. So, NPP changed from 2019 to 2020.
 
 We'll see later that this paired t-test can also be formulated as a mixed model.
 
@@ -164,7 +175,7 @@ to 2020.
 
 ```{r}
 # Create a 4-year data subset
-anpp.2017.2020 <- anpp.annual %>%
+anpp.sub2 <- anpp %>%
   dplyr::filter(year %in% 2017:2020)
 ```
 
@@ -173,26 +184,27 @@ comparing? If we plot the data, we will see some visual cues. Boxplots are a
 nice method for this.
 
 ```{r}
-ggplot(anpp.2017.2020, aes(x = year, y = npp_g_m2, group = year)) +
+ggplot(anpp.sub2, aes(x = year, y = npp_g_m2, group = year)) +
   geom_boxplot()
 ```
-With the two additional years, we can see that some years, namely 2017, can have
-much higher variance than others. We also have some tests we can use to quantify
+With the two additional years, we can see that some years, namely 2017, have
+much higher variance than others. We can use some additional tests to quantify
 that range in variance. (@Darren -  I'm not sure what to say on these, and also
 not sure why we need the car package)
 
-To give us some access to tests we'll use, lets first use the `car` package.
+To give us some access to tests we'll use, lets first load the `car` package.
 
 ```{r, message=FALSE}
 library(car)
 ```
 
 ```{r}
-bartlett.test(npp_g_m2 ~ year, data = anpp.2017.2020)
-fligner.test(npp_g_m2 ~ year, data = anpp.2017.2020)
-leveneTest(npp_g_m2 ~ as.factor(year), data = anpp.2017.2020) # from car package
+bartlett.test(npp_g_m2 ~ year, data = anpp.sub2)
+fligner.test(npp_g_m2 ~ year, data = anpp.sub2)
+leveneTest(npp_g_m2 ~ as.factor(year), data = anpp.sub2) # from car package
 ```
-
+Each of these tests appears to reject the null hypothesis that observations
+occurring in these four years have the same variance.
 
 ## Comparing samples with general linear models
 
@@ -203,37 +215,40 @@ leveneTest(npp_g_m2 ~ as.factor(year), data = anpp.2017.2020) # from car package
 ```
 
 Comparing the mean of different samples, as we have done with t-tests, is also
-possible using *General linear models*, a class of procedures used often in
-standard statistics that includes linear regression, one- and two-way analysis
+possible using *General linear models*, a class of procedures often used in
+standard statistics, including linear regression, one- and two-way analysis
 of variance (ANOVA), and analysis of covariance (ANCOVA). All of these are
 variations of "straight-line-fitting" statistics, and `R` uses the `lm()`
-function for all of these procedures. So, instead of comparing sample means
-directly, we are essentially compare best-fit lines drawn between the mean
+function for all these procedures. Instead of comparing sample means
+directly, we are essentially comparing best-fit lines drawn between the mean
 values of the samples.
 
-Lets go back to our 2019 and 2020 dataframe and compare one of these general
-linear models to the t-test we did then. A similar mean comparison test can be
-done as a linear regression, using `lm` directly. We will fit the model and then
-ask for summary results.
+Lets go back to our 2019 and 2020 dataframe and compare the general linear
+models to the t-tests we did earlier in the lesson. A mean comparison test can
+be done as a linear regression, using `lm` directly. We will fit a model and
+then ask for summary results.
 
 ```{r}
 # Two-sample mean comparison using a linear regression model
-lm.ttest <- lm(npp_g_m2 ~ year, data = anpp.2019.2020)
+lm.ttest <- lm(npp_g_m2 ~ year, data = anpp.sub1)
 summary(lm.ttest)
 ```
-We get a few details on the linear model fit here, and we see that we have
+We get quite a few details on the linear model fit here, and see that we have
 estimated the same difference in means and the same p-value as we had in the
-earlier t-test.
+earlier equal-variance two-sample t-test.
 
 If we want to look at how this model is being fit visually, we can make a plot
-using `ggplot`. It allows us to add model to a plot with `geom_smooth`. We need
-to specify the type of model as "lm" to get a linear model.
+using `ggplot`, which allows us to fitted models to a plot with `geom_smooth`.
+We need to specify the type of model as "lm" to get a linear model.
 
 ```{r}
-ggplot(data=anpp.2019.2020, aes(x=year, y=npp_g_m2)) +
+ggplot(data=anpp.sub1, aes(x=year, y=npp_g_m2)) +
   geom_point() +
   geom_smooth(method="lm")
 ```
+Notice the difference in the means, represented by the slope of the line, and
+the difference in the variance (vertical range of the points) between the 2019 
+and 2020 samples.
 
 We can also compare the means using one-way ANOVA. The function to do this is
 `aov()`, but under the hood this is really just fitting an `lm` model again,
@@ -250,8 +265,8 @@ differences between discrete categories, so we should make sure we are using a
 to a factor first.
 
 ```{r}
-anpp.2019.2020.f <- anpp.2019.2020
-anpp.2019.2020.f$year <- factor(anpp.2019.2020.f$year)
+anpp.sub1.f <- anpp.sub1
+anpp.sub1.f$year <- factor(anpp.sub1.f$year)
 ```
 
 Now we can fit the ANOVA model using `aov()`, first specifying the linear model
@@ -259,7 +274,7 @@ and dataframe to use, and then ask R for summary statistics.
 
 ```{r}
 # One-way ANOVA equivalent to the 2-sample t-test
-aov.ttest <- aov(npp_g_m2 ~ year, data = anpp.2019.2020.f)
+aov.ttest <- aov(npp_g_m2 ~ year, data = anpp.sub1.f)
 summary(aov.ttest)
 car::Anova(lm.ttest, type = "III") # Not clear on difference in outputs, p value is same.
 ```
@@ -269,38 +284,47 @@ earlier. This suggests that by default, `lm` is making some assumptions that
 our observations are independent. We already know that they aren't. Later, we'll
 see some ways to account for this.
 
-When we have two categories in our data, we can also do a multi-way ANOVA by 
-adding additional factors to the model. In our case we have an additional
-categorical variable, called `zone`, that assigns each NPP site to one of the
-five major vegetation zones at Jornada. Since this is a character column,  `lm`,
-or `aov`, will interpret that column as a factor, and we can easily fit a 
-two-way ANOVA model.
+When we have multiple categories in our data, we can do a multi-way ANOVA by 
+adding additional factors to the model. In our case we have aother categorical
+variable, called `zone`, that assigns each NPP site to one of the five major
+vegetation zones at Jornada. Since this is a character column `lm`, or `aov`, 
+will interpret that column as a factor, and we don't need to convert it first.
 
 ```{r}
 # Two-way ANOVA using year and vegetation zone
-aov.2way <- aov(npp_g_m2 ~ year + zone, data = anpp.2019.2020.f)
+aov.2way <- aov(npp_g_m2 ~ year + zone, data = anpp.sub1.f)
 summary(aov.2way)
 ```
 In our two-way ANOVA, we see that vegetation zone has a p-value below 0.05,
 which suggests that we might be able to reject the null hypothesis that all the
-vegetation zones have the same mean NPP value.
+vegetation zones have the same mean NPP value in 2019 and 2020.
 
-We know that we should be using a paired model, since our observations are not
-independent. In ANOVA, the term for this is *repeated measures*. To do this we
-must add an "Error" term to our model.
+This is all instructive, but we know that we should be using a paired model
+since our observations are not independent. In ANOVA, the term for this is
+*repeated measures*.  To use repeated measures with `aov` we must add an "Error"
+term to our model that tells us to partition the observed variance between years
+according to `site`, since `site` is our experimental unit or subject.
 
 ```{r}
-# Two-way, repeated measures ANOVA using year and vegetation zone
-aov.2way.rm <- aov(npp_g_m2 ~ year + zone + Error(zone/year),
-                   data = anpp.2019.2020.f)
-summary(aov.2way.rm)
+# One-way, repeated measures ANOVA using year and site
+aov.1way.rm <- aov(npp_g_m2 ~ year + Error(site/year),
+                   data = anpp.sub1.f)
+summary(aov.1way.rm)
 ```
-Here we have begun to partition our error, or variance. according to different
-groups in our data. (@Greg @Darren - this seems like a good place to jump to 
-mixed models, but need a better explanation here first...?).
+Somewhat unsurprisingly here, we have gotten the same result as with the earlier
+paired t-test. This also suggests that we can use linear models to partition 
+variance according to the groups in our data. Why would we want to do that?
+
+(@Greg @Darren - this seems like a good place to jump to 
+mixed models, but do we need a better explanation here first...?).
 
 ## Interlude - Unequal variance and random effects
 
 
 
 ## Into the wilderness with linear mixed models
+```{r, include=FALSE}
+##
+## Into the wilderness with linear mixed models
+##
+```

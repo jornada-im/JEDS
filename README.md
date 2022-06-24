@@ -4,7 +4,7 @@ This is the repository for Jornada Ecological Statistics Tutorials, or JEST. The
 
 More information to come.
 
-## Rendering the tutorials
+## Rendering the lessons
 
 To render the R markdown tutorials to html, us the `render.R` script. From the R commandline:
 
