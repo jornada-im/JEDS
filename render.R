@@ -1,4 +1,5 @@
 # Render the markdown files to html and move to html directory
+library(tidyverse)
 
 rmd_list <- list.files('episodes', pattern='\\.Rmd$', full.names=T)
 for (file in rmd_list){

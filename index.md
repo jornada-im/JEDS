@@ -8,7 +8,7 @@ These tutorials have been developed for learners using `R`. To set up your envir
 
 ## Lessons
 
-1. [Hypothesis testing with general linear models and mixed models](./html/hypothesis-testing-basics.html)
+1. [Hypothesis testing with general linear models and mixed models](./html/statistical-inference-linear-and-mixed.html)
 
 ## Upcoming workshops
 
