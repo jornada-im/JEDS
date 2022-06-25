@@ -11,22 +11,27 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
 ## Introduction
 
-(@Greg @Darren - this is the old outline for the workshop, we can update this
-or have this on the [workshop page](../workshops/20220628-ecology-short-course.Rmd)
+This lesson introduces statistical inference using a sequence of approaches
+building from mean comparison procedures (t-tests), to simple linear models
+(often called general linear models), through linear mixed models. The lesson
+centers on the assumptions that underlie the process of fitting linear models.
+These are:
 
-Hypothesis testing is...
+1. The samples are drawn from a normal population, and therefore the residuals 
+are normally distributed (not necessarily the whole dataset).
+2. The populations the samples are drawn from have constant variance 
+(they are *homoscedastic*).
+3. The observations in each group, or sample, are independent of one another.
 
-We will cover:
-
-* P values
-* Common pitfalls
-* Making inferences
-* Understanding approximations underlying the analysis approach
-* Rencher & Schaalje P-value interpretations
-* Information-theoretic approaches
+We should try to meet these assumptions when fitting linear models^[A fourth
+assumption is that the continuous predictor variables, or covariates, are
+measured without error, but that one is pretty tough to meet.], but when 
+analyzing ecological data they are easily violated. So, as this lesson
+introduces various types of statistical inference around linear models, we will 
+also show ways to test these assumptions with our data, and fit alternative 
+models (such as mixed models) when they can't be met.
 
 ### Our data and R packages
 
@@ -62,7 +67,7 @@ ggplot(anpp, aes(x = year, y = npp_g_m2, col = site, group = site)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
 ```
 
-## Comparing two samples
+## Comparing the mean of two samples (t-tests)
 
 ```{r, include=FALSE}
 ##
@@ -134,8 +139,8 @@ difference in the means since the p-value is greater than 0.05, which is our
 $\alpha$ value, or the threshold we use to reject the null hypothesis that the
 two means are the same.
 
-Lets look at some variations on the t-test. First, a standard Student's t-test
-with equal, or pooled, variance.
+Lets look at some other variations on the t-test. First, a standard Student's 
+t-test with equal, or pooled, variance.
 
 ```{r}
 # t-test with equal variance
@@ -169,77 +174,121 @@ We have a significant result here (p-value < 0.05) which tells us that we can
 reject the null hypothesis that the difference between these two years of data
 is equal to zero. So, NPP changed from 2019 to 2020.
 
-We'll see later that this paired t-test can also be formulated as a mixed model.
+We'll see later that paired t-test can also be formulated as a type of linear
+mixed model.
+
+### How do we know which comparison (t-test) to use?
+
+```{r, include=FALSE}
+##
+## How do we know which comparison (t-test) to use?
+##
+```
+
+It can be challenging to know whether the data are paired, or whether they
+have unequal variance. It is a good idea to be fairly systematic and examine
+assumptions as you go. Lets take a slightly larger slice of our original dataset
+and compare years 2017 and 2018 this time.
+
+```{r}
+# Create a slightly different data subset - 2017 and 2018
+anpp.17.18 <- anpp %>%
+  dplyr::filter(year %in% 2017:2018)
+```
+
+How would we test whether there are unequal variances within these two 1-year 
+samples (i.e., whether the data are *heteroscedastic*) ? If we plot the data, we
+will see some visual cues, and boxplots are a nice method for this.
+
+```{r}
+ggplot(anpp.17.18, aes(x = year, y = npp_g_m2, color = factor(year))) +
+  geom_boxplot()
+```
+
+We see here that 2017 has much wider box, suggesting higher variance, than 2018.
+We can use some additional tests to quantify that range in variance. The first
+is the Bartlett test, which tests the null hypothesis that the variance in each
+sample, or group, is equal.
+
+```{r}
+# Bartlett test for unequal variance (homescedasticity)
+bartlett.test(npp_g_m2 ~ year, data = anpp.17.18)
+```
+
+The low p-value here suggestst that we don't have equal variance in 2017 and
+2018. No big surprise given the boxplots we made.
+
+However, perhaps our data are not normally distributed, in which case the 
+Bartlett test is inadequate because it is sensitive to non-normal data. Lets
+first check if the data are normal using the Shapiro-Wilks test, which tests the
+null hypothesis that the data are normally distributed.
+
+```{r}
+# Test for normality of the data
+shapiro.test(anpp.17.18$npp_g_m2)
+```
+We have a low p-value here, so we have strong evidence that we are actually
+working with non-normally distributed data. Since that is the case, we might
+want to test for unequal variances using one of two other tests, the Fligner
+test or the Levene test.
+
+```{r}
+# Fligner test for homoscedasticity
+fligner.test(npp_g_m2 ~ as.factor(year), data = anpp.17.18)
+```
+There is evidence for heteroscedasticity here. What about Levene?
+
+```{r}
+# Levene test for homoscedasticity, which is in the `car` R package
+car::leveneTest(npp_g_m2 ~ as.factor(year), data = anpp.17.18)
+```
+
+Each of these tests appears to reject the null hypothesis that observations
+occurring in these two years have the same variance.
+
+Interesting, so it is beginning to look like the data are non-normal and have
+unequal variance (are *heteroscedastic*). Are they independent? Well, as we know
+from learning about the experimental design and inspecting the data, the same 
+sites are measured year after year. This means the measurements in 2017 and 
+2018 are not independent. So, to compare the means of these years we want to
+do a paired t-test again.
+
+```{r}
+# Spread to wide form
+anpp.17.18.wide <- anpp.17.18 %>%
+  spread(year, npp_g_m2)
+
+# Paired t-test
+t.test(x = anpp.17.18.wide$`2017`, 
+       y = anpp.17.18.wide$`2018`, 
+       paired = TRUE,
+       equal_variance=FALSE) # This is the default, we don't have to specify
+```
+
+We get a nice low p-value here, strong evidence that mean NPP changed from 2017
+to 2018.
 
 ## Interlude - how should we interpret p-values?
 
 An opinionated section on hypothesis testing with p-values.
 
-## Testing for unequal variance
+## Comparing sample means with simple linear models
 
 ```{r, include=FALSE}
 ##
-## Testing for unequal variance
-##
-```
-
-Lets take a slightly larger slice of our original dataset now and examine
-changes in variance within it. We can create a new dataset with years 2017
-to 2020.
-
-```{r}
-# Create a 4-year data subset
-anpp.17.20 <- anpp %>%
-  dplyr::filter(year %in% 2017:2020)
-```
-
-How would we test whether there are unequal variances within the samples we are
-comparing? If we plot the data, we will see some visual cues. Boxplots are a
-nice method for this.
-
-```{r}
-ggplot(anpp.17.20, aes(x = year, y = npp_g_m2, group = year)) +
-  geom_boxplot()
-```
-
-With the two additional years, we can see that some years, namely 2017, have
-much higher variance than others. We can use some additional tests to quantify
-that range in variance. (@Darren -  I'm not sure what to say on these, and also
-not sure why we need the car package)
-
-To give us some access to tests we'll use, lets first load the `car` package.
-
-```{r, message=FALSE}
-library(car)
-```
-
-```{r}
-bartlett.test(npp_g_m2 ~ year, data = anpp.17.20)
-fligner.test(npp_g_m2 ~ year, data = anpp.17.20)
-leveneTest(npp_g_m2 ~ as.factor(year), data = anpp.17.20) # from car package
-```
-
-Each of these tests appears to reject the null hypothesis that observations
-occurring in these four years have the same variance.
-
-## Comparing samples with general linear models
-
-```{r, include=FALSE}
-##
-## Comparing samples with general linear models
+## Comparing sample means with simple linear models
 ##
 ```
 
 Comparing the mean of different samples, as we have done with t-tests, is also
-possible using *General linear models*, a class of procedures often used in
-standard statistics, including linear regression, one- and two-way analysis
-of variance (ANOVA), and analysis of covariance (ANCOVA). All of these are
-variations of "straight-line-fitting" statistics, and `R` uses the `lm()`
-function for all these procedures. Instead of comparing sample means
-directly, we are essentially comparing best-fit lines drawn between the mean
-values of the samples.
+possible using simple linear models (sometimes referred to as *general linear
+models*), a class of procedures often used in standard statistics that includes 
+linear regression, one- and two-way analysis of variance (ANOVA), and analysis of covariance (ANCOVA). All of these are variations of "straight-line-fitting"
+statistics, and `R` uses the `lm()`function for all these procedures. Instead of
+comparing sample means directly, we are essentially comparing best-fit lines
+drawn between the mean values of the samples.
 
-Lets go back to our 2019 and 2020 dataframe and compare the general linear
+Looking back at our 2019 and 2020 dataframe, lets compare some simple linear
 models to the t-tests we did earlier in the lesson. A mean comparison test can
 be done as a linear regression, using `lm` directly. We will fit a model and
 then ask for summary results.
@@ -294,7 +343,8 @@ and dataframe to use, and then ask R for summary statistics.
 # One-way ANOVA equivalent to the 2-sample t-test
 aov.ttest <- aov(npp_g_m2 ~ year, data = anpp.19.20.f)
 summary(aov.ttest)
-car::Anova(lm.ttest, type = "III") # Not clear on difference in outputs, p value is same.
+# We could also use car::Anova here, but the results are the same
+#car::Anova(lm.ttest, type = "III")
 ```
 
 Notice that here, and when we used `lm`, our hypothesis test results were the 
@@ -336,77 +386,186 @@ Somewhat unsurprisingly here, we have gotten the same result as with the earlier
 paired t-test. This also suggests that we can use linear models to partition 
 variance according to the groups in our data. Why would we want to do that?
 
-(@Greg @Darren - this seems like a good place to jump to 
-mixed models, but do we need a better explanation here first...?).
+## Comparing grouped data using linear models
+```{r, include=FALSE}
+##
+## Comparing group means with ANOVA results
+##
+```
 
-## Unequal variance in ANOVA
+When we did a two-way ANOVA above, we saw some evidence that Jornada vegetation 
+types, indicated by the `zone` variable in our dataset, have different mean 
+values. Lets dig into this using the 2017 data and try compare the different 
+zones. First lets subset the data and plot it by `zone`.
 
 ```{r}
-# ANOVA with 2017 data
-# Differences between vegetation zones
+# Subset to 2017
 anpp.2017 <- anpp %>%
   dplyr::filter(year == "2017") %>%
   mutate(zone = factor(zone))
 
-# Graph data with boxplots
+# Graph data by zone with boxplots
 ggplot(anpp.2017, aes(x = zone, y = npp_g_m2, fill = zone)) +
   geom_boxplot()
+```
 
+We see several things here, including some we noticed earlier. Some vegetation
+zones, like `P` (for Playa grassland), have high variance, and some, like `T` 
+(for Tarbush shrubland), have low variance. We also see some pretty big 
+differences in observed NPP between the zones.
+
+We can use a linear model to tell us about differences between those groups. As
+we do that, we should again check some of our linear model assumptions. Lets fit
+the model using `lm`. Since `zone` is a factor this will be treated as an ANOVA.
+
+```{r}
 # Run ANOVA with lm()
-lm.ANOVA <- lm(npp_g_m2 ~ zone, data = anpp.2017) 
-# Diagnostics
+lm.ANOVA <- lm(npp_g_m2 ~ zone, data = anpp.2017)
+```
+
+Lets get our ANOVA summary results two ways. First the standard `R` way, which
+gives Type 1 sums of squares.
+
+```{r}
+summary(lm.ANOVA)
+```
+
+And now lets use the `car` way, which gives Type III sums of squares (Darren
+recommends this).
+
+```{r}
+car::Anova(lm.ANOVA, type = "III", test.statistic = "F")
+```
+In this case the results are the same with both types of sums of squares.
+
+The results above are interesting, and suggest that mean NPP is different 
+between the vegetation zones. We have more interpretation of this ahead, but
+first we should look a little more closely at how this model is meeting linear 
+model assumptions. `R` gives us some nice ways to evaluate fitted `lm` models,
+including information about the normality of the residuals. These are accessed by
+plotting the fitted model itself using `plot()`.
+
+```{r, fig.height=6}
+# Diagnostic plots - here we put them all on one page
+par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -> opar
 plot(lm.ANOVA)
+```
 
+The top right figure is key here, and the divergence from a 1:1 line suggests
+that the residuals from the model are not completely normal. Lets test this
+directly using the Shapiro-Wilk test.
 
+```{r}
 # Test for normality of residuals
 resid(lm.ANOVA) %>% shapiro.test()
+```
+Actually its not too bad. The residuals seem to be normal enough!
 
-# Look at model results.  Note that this reports Type I Sums of Squares
-summary(lm.ANOVA)
-# Note: recommend using Type III F tests from car::Anova()
-# In this case they are the same as Type I
-car::Anova(lm.ANOVA, type = "III", test.statistic = "F")
+### Post-hoc tests and pairwise comparisons
 
+```{r, include=FALSE}
+##
+## Post-hoc tests and pairwise comparisons
+##
+```
+
+The ANOVA we did for the 2017 data gave us some useful information. We can see
+that from the `zone` coefficients and p-values that vegetation type has a large
+effect on the mean NPP values. The information in the ANOVA summary table isn't
+enough to determine which vegetation zones have means that are *different than
+each other*.
+
+Making comparisons between groups is typically something we do after the ANOVA
+analysis, and is called a *post-hoc* comparison or test^[As with other
+statistical procedures, post-hoc comparisons have other names, like *pairwise comparisons* or *multiple comparisons*.]. The `multcomp` and `emmeans` packages
+are commonly used for these types of comparisons. 
+
+The first step, after loading `emmeans` is to examine the least squares means
+given by our ANOVA model for each vegetation zone.
+
+```{r}
 library(emmeans)
 # Least squares means (estimated marginal means)
 emmeans(lm.ANOVA, ~ zone)
+```
 
-# Notice there are n*(n-2)/2 possible pairwise comparisons
+This gives an estimated mean and upper and lower 95% confidence levels. We can
+do some pairwise comparisons of these means, comparing each zone to the four 
+other zones to determine which are "significantly different". Note that the
+formula for the number if independent comparisons is always $n(n-1)/2$, where
+$n$ is the number of groups.
+
+```{r}
 # Pairwise comparisons of least squares means
 contrast(emmeans(lm.ANOVA, specs= ~zone), method = "pairwise")
+```
+This gives us ten mean comparisons using the Tukey method, and in a few cases,
+the p-values indicating that we can reject the null hypothesis that the means
+are the same^[This should be equivalent to using `TukeyHSD()` with an `aov` 
+object, if you are used to that]. But, it would be nice to put these together in
+a way that tells us which groups are  statistically different, and which are
+not. We do that by adding the pairwise comparison letters with `multcomp::cld`.
+The default comparison here is, again, the Tukey method.
 
+```{r}
 # Letter separations (efficient way to display)
-emmeans(lm.ANOVA, ~ zone) %>%
+emmeans.Tukey <- emmeans(lm.ANOVA, ~ zone) %>%
   multcomp::cld(Letters = LETTERS)
 
+emmeans.Tukey
+```
+This groups the comparisons, telling us that the group `P`, or Playa grasslands
+are significantly more productive in 2017, while the other four groups are
+statistically the same.
+
+```{r, include=FALSE}
 # Problem: emmeans switches to Sidak when adjust = "Tukey" is specified
+# I actually found this from Russ Lenth:
+#    https://stats.stackexchange.com/questions/508055/unclear-why-adjust-tukey-was-changed-to-sidak
+# It seems the confidence limits are being adjusted when you specify adjust = 
+# "Tukey" but not the means themselves. This is intended I guess, but I'm still
+# fuzzy on the statistical meaning.
 emmeans(lm.ANOVA, ~ zone, adjust = "Tukey") %>%
   multcomp::cld(Letters = LETTERS)
+```
 
-# Compare results from Tukey and Scheffe
-emmeans.Tukey <- emmeans(lm.ANOVA, specs = ~ zone) %>% 
-  multcomp::cld(Letters = LETTERS) %>%
-  as_tibble() %>%
-  mutate(method = "Tukey")
+We've based these mean comparison letters on the default Tukey method and its
+confidence intervals. However, there are other methods that might be more or
+less conservative. Lets compare results from Tukey and Scheffe methods, by 
+re-doing the comparison, binding the tables, and making a figure.
 
+```{r}
+# First get comparisons from Scheffe
 emmeans.Scheffe <- emmeans(lm.ANOVA, specs = ~ zone) %>% 
   multcomp::cld(Letters = LETTERS, adjust = "scheffe") %>%
   as_tibble() %>%
   mutate(method = "Scheffe")
 
-# Look at least squares means and 95% confidence intervals
-bind_rows(emmeans.Tukey, emmeans.Scheffe) %>%
+# Put the Tukey results in a tibble
+emmeans.Tukey <- emmeans.Tukey %>% as_tibble() %>% mutate(method = "Tukey")
+
+# Look at least squares means and 95% confidence intervals for
+# Tukey and Scheffe
+bind_rows(emmeans.Scheffe, emmeans.Tukey) %>%
   mutate(.group = trimws(.group)) %>%
   ggplot(aes(x = zone, y = emmean, col = zone)) +
   geom_point() +
   geom_errorbar(aes(ymin=lower.CL, ymax=upper.CL), width=.1) +
-  geom_text(aes(x = zone, y = emmean, label = .group), hjust = - 0.5, show.legend = FALSE) +
+  geom_text(aes(x = zone, y = emmean, label = .group),
+            hjust = -0.5, show.legend = FALSE) +
   facet_wrap(~ method, ncol = 1) +
   ggtitle("2017 ANPP by Vegetation Zone", 
-          subtitle = "means with the same letter are not different at alpha = 0.05") +
+          subtitle = "Same-letter means are not different at alpha = 0.05") +
   ylab("Model-based mean ANPP (g/m^2) +/- 95% CI")
+```
 
+They are similar but not the same, and you can see that the error bars, here
+showing the 95% confidence intervals estimated for each method, give some
+indication of how they are grouping the comparisons. In scientific papers, the
+convention is to plot figures like this with standard error bars. Lets take a
+look at the difference.
 
+```{r}
 # Look at least squares means and standard errors
 # This kind of figure is the one most commonly reported in scientific papers
 bind_rows(emmeans.Tukey, emmeans.Scheffe) %>%
@@ -414,14 +573,17 @@ bind_rows(emmeans.Tukey, emmeans.Scheffe) %>%
   ggplot(aes(x = zone, y = emmean, col = zone)) +
   geom_point() +
   geom_errorbar(aes(ymin=emmean-SE, ymax=emmean+SE), width=.1) +
-  geom_text(aes(x = zone, y = emmean, label = .group), hjust = - 0.5, show.legend = FALSE) +
+  geom_text(aes(x = zone, y = emmean, label = .group), 
+            hjust = - 0.5, show.legend = FALSE) +
   facet_wrap(~ method, ncol = 1) +
   ggtitle("2017 ANPP by Vegetation Zone", 
-          subtitle = "means with the same letter are not different at alpha = 0.05") +
+          subtitle = "Same-letter means are not different at alpha = 0.05") +
   ylab("Model-based mean ANPP (g/m^2) +/- S.E.")
 ```
 
-
+Notice that if we were basing our comparisons on standard error bar overlaps
+alone, we would draw a different conclusion about which vegetation zones had
+different means.
 
 ## Into the wilderness with linear mixed models
 
@@ -431,97 +593,176 @@ bind_rows(emmeans.Tukey, emmeans.Scheffe) %>%
 ##
 ```
 
-```{r}
+In the last section we learned to compare the means across all the groups in our
+dataset. We were using a very restricted dataset of one year, so there was no
+issue with independence, but we've already seen that we need approaches like
+paired t-tests and repeated measures ANOVA when observations aren't independent.
+We also ignored the somewhat unequal variance among groups in our observation
+though we know that it exists. As we look at additional years of data, we'll
+have to reconsider both of these assumptions when fitting linear models.
+
+Mixed models help us get around two of the main assumptions behind linear 
+models. In particular they are useful for fitting linear models in cases where:
+
+1. there is unequal variance between groupings in the data
+2. the observations or samples are not independent, like we often see in an
+ecological time series.
+
+Mixed models are potentially very complex, and there is not perfect agreement in
+the statistics community on the best way to fit them. Additionally, in `R` there
+are more than the usual number of approaches and packages for fitting mixed
+models. Prepare to be a little confused sometimes, and to do your own research.
+Here, we will introduce some basics.
+
+There are two primary `R` packages for linear mixed modeling. `nlme` and `lme4`.
+Lets load them.
+
+```{r, message = FALSE}
 library(nlme)
 library(lme4)
+```
 
-# Repeated measures: 2017-2020
-# Compare Annual ANPP between 2019 and 2020
-anpp.2017.2020 <- anpp %>%
+To get started, lets look at a four-year NPP dataset- 2017 to 2020. First we'll
+subset and plot the dataset.
+
+```{r}
+# Subset the data between 2017 and 2020
+anpp.17.20 <- anpp %>%
   dplyr::filter(year %in% 2017:2020) 
 
 # Plot the data
-ggplot(anpp.2017.2020, aes(x = year, y = npp_g_m2, col = zone, group = site)) +
+ggplot(anpp.17.20, aes(x = year, y = npp_g_m2, col = zone, group = site)) +
   geom_point() +
   geom_line(linetype="dashed", size = .05) +
   scale_x_continuous(breaks = 2017:2020)
+```
 
+Some summary statistics will show us that these data have unequal variance,
+in particular higher variance in 2017.
+
+```{r}
 # Variance is highest in 2017
-anpp.2017.2020 %>%
+anpp.17.20 %>%
   group_by(year) %>%
   summarise(std.dev = sd(npp_g_m2))
+```
 
-# Fit a repeated measures model (correlated errors with unstructured structure)
+Since we have a time series of non-independent measurements, and unequal 
+variance in our samples, we should account for this when we fit a linear model.
+We'll begin by fitting a repeated measures model with `gls` from the `nlme`
+package. 
+
+```{r}
+# Fit a repeated measures model (unstructured correlated errors)
 model.un <- gls(npp_g_m2 ~ zone*factor(year),
                 corSymm(form = ~ 1 | site),
                 weights=varIdent(form=~1|factor(year)),
-                data = anpp.2017.2020)
+                data = anpp.17.20)
+```
 
-# Fit a repeated measures model (correlated errors with autoregressive covariance structure)
+The model above has specifies and unstructured correlation between error terms.
+Since this is a time series, we can also reasonably assume that each observation
+at a site is correlated with previous observations at the site, which is
+something we can also specify in this model. Lets do that and compare the fitted
+models.
+
+```{r}
+# Fit a repeated measures model (correlated errors with autoregressive
+# covariance structure)
 model.ar <- gls(npp_g_m2 ~ zone*factor(year),  
                 corAR1(form = ~ 1 | site), 
                 weights=varIdent(form=~1|factor(year)), 
-                data = anpp.2017.2020)
+                data = anpp.17.20)
+```
 
+Now we'll compare these two models using the Akaike Information Criterion, or
+AIC (the function in `R` is `AIC()`). Comparing models this way is part of the
+information theoretic approach to model selection. A lower AIC value for the
+same data, indicates a better-fitting, and more parsimonious model.
+
+```{r}
 AIC(model.un)
 AIC(model.ar)
+```
+We can see that the model with an autoregressive covariance structure is a
+"better" model.
 
-# AR actually fits better than Unstructured
-# Try using only 2 varaiance: parameters: one for 2017 when the varance in high 
-# Set 2018, 2019, 2020 variances to be estimated as the same 
+To improve our model further, we could break the data into high variance and
+low variance groups (called `level`), since we know there is unequal variance
+during different years. We'll assign 2017 to a high variance group, and the
+other years to a low variance group, and then fit a model that includes a random effect of the `level` variance group. We'll also re-calculate the AIC value.
 
-anpp.2017.2020 <- anpp.2017.2020 %>%
+```{r}
+# Assign 2017 to high variance group, other years to low
+anpp.17.20 <- anpp.17.20 %>%
   mutate(anpp_level = if_else(year == 2017, "high", "low")) 
 
-
+# Re-fit a model with a variance level
 model.ar <- gls(npp_g_m2 ~ zone*factor(year),  
                       corAR1(form = ~ 1 | site), 
                       weights=varIdent(form=~1|anpp_level), 
-                      data = anpp.2017.2020)
+                      data = anpp.17.20)
 
 AIC(model.ar)
+```
+The AIC value dropped, which suggests that grouping by the new `level` category
+is improving the fit of this model. Now we can compare the estimated means
+from this mixed model using `emmeans` again.
 
+```{r}
 emmeans(model.ar, ~ zone*factor(year), lmer.df = "kenward-roger") 
+```
 
-# It's a little difficult to extract the correlationa and variance parameters
+It is a little more difficult to extract correlation and variance estimates
+```{r}
+# Bet correlation and variance estimates
 coef(model.un$modelStruct$corStruct, uncons = FALSE, allCoef = TRUE)
 coef(model.un$modelStruct$varStruct, uncons = FALSE, allCoef = TRUE) 
+```
 
-# Compare model results from 3 different mixed models specified similarly
-# Note differnt spceficiations in the funtion arguments
+Now lets compare the fit of three different mixed models that are specified
+similarly, but using 2 different functions from `nlme`, and one from `lme4`.
+Take note of how the models are specified differently in the arguments to each 
+function.
 
+```{r}
 # R-side model from nlme::gls()
 model.ar.level.gls <- gls(npp_g_m2 ~ zone*factor(year),  
                           corAR1(form = ~ 1 | site), 
                           weights=varIdent(form=~1|anpp_level), 
-                          data = anpp.2017.2020,
+                          data = anpp.17.20,
                           method = 'REML')
 
 # G-side model from nlme::lme()
 model.ar.level.lme <- lme(fixed = npp_g_m2 ~ zone*factor(year),  
                           random = ~ 1 | site,
                           weights = varIdent(form = ~ 1 | anpp_level),
-                          data = anpp.2017.2020,
+                          data = anpp.17.20,
                           method = 'REML')
 
 # G-side model from lme4::lmer()
 model.ar.level.lmer <- lmer(npp_g_m2 ~ zone*factor(year) + 
                               (anpp_level | site),
-                            data = anpp.2017.2020 %>%
+                            data = anpp.17.20 %>%
                               mutate(anpp_level = factor(anpp_level),
                                      site = factor(site)))
 
 AIC(model.ar.level.gls)
 AIC(model.ar.level.lme)
 AIC(model.ar.level.lmer)
+```
 
-mod.compare <- emmeans(model.ar.level.gls, ~zone*factor(year), lmer.df = "satterthwaite") %>%
+```{r}
+mod.compare <- emmeans(model.ar.level.gls, ~zone*factor(year),
+                       lmer.df = "satterthwaite") %>%
   multcomp::cld(alpha = 0.05, Letters = LETTERS) %>%
   mutate(model = "gls") %>%
-  bind_rows(emmeans(model.ar.level.lme, ~zone*factor(year), lmer.df = "satterthwaite") %>%
+  bind_rows(emmeans(model.ar.level.lme, ~zone*factor(year),
+                    lmer.df = "satterthwaite") %>%
               multcomp::cld(alpha = 0.05, Letters = LETTERS) %>%
               mutate(model = "lme")) %>%
-  bind_rows(emmeans(model.ar.level.lmer, ~zone*factor(year), lmer.df = "satterthwaite") %>%
+  bind_rows(emmeans(model.ar.level.lmer, ~zone*factor(year),
+                    lmer.df = "satterthwaite") %>%
               multcomp::cld(alpha = 0.05, Letters = LETTERS) %>%
               mutate(model = "lmer"))
 
