@@ -35,11 +35,11 @@ models (such as mixed models) when they can't be met.
 
 ### Our data and R packages
 
-You will need to have the `car` package installed, which adds additional options
-and specifications to fitted regression models, such as type-II and -III ANOVA 
-output tables. You will also need `emmeans`, `multcomp`, and `multcompView`
-for post-hoc comparisons of groups in fitted linear models, and `lme4` and
-`lmerTest` to fit and test some mixed models.
+In addition to `tidyverse`, you will need to have the `car` package installed,
+which adds some options for inspecting fitted regression models, such as type-II
+and -III ANOVA output tables. You will also need `emmeans`, `multcomp`, and
+`multcompView`for post-hoc comparisons of groups in fitted linear models, and
+`lme4` and `lmerTest` to fit and test some mixed models.
 
 Data for the exercises here come from the Jornada annual NPP data package on
 EDI. You can learn more about this dataset on the [teaching datasets]('./teaching_datasets.Rmd#Teaching-dataset-1') page. To load the data we will first load the `tidyverse` and use its
@@ -283,7 +283,8 @@ An opinionated section on hypothesis testing with p-values.
 Comparing the mean of different samples, as we have done with t-tests, is also
 possible using simple linear models (sometimes referred to as *general linear
 models*), a class of procedures often used in standard statistics that includes 
-linear regression, one- and two-way analysis of variance (ANOVA), and analysis of covariance (ANCOVA). All of these are variations of "straight-line-fitting"
+linear regression, one- and multi-way analysis of variance (ANOVA), and analysis
+of covariance (ANCOVA). All of these are variations of "straight-line-fitting"
 statistics, and `R` uses the `lm()`function for all these procedures. Instead of
 comparing sample means directly, we are essentially comparing best-fit lines
 drawn between the mean values of the samples.
@@ -459,7 +460,7 @@ directly using the Shapiro-Wilk test.
 # Test for normality of residuals
 resid(lm.ANOVA) %>% shapiro.test()
 ```
-Actually its not too bad. The residuals seem to be normal enough!
+Actually its not too bad. The residuals seem to be "normal enough"!
 
 ### Post-hoc tests and pairwise comparisons
 
@@ -471,12 +472,12 @@ Actually its not too bad. The residuals seem to be normal enough!
 
 The ANOVA we did for the 2017 data gave us some useful information. We can see
 that from the `zone` coefficients and p-values that vegetation type has a large
-effect on the mean NPP values. The information in the ANOVA summary table isn't
-enough to determine which vegetation zones have means that are *different than
-each other*.
+effect on the mean NPP values. That is useful information, but the ANOVA summary
+table isn't enough to determine which vegetation zones have means that are 
+*different than each other*.
 
-Making comparisons between groups is typically something we do after the ANOVA
-analysis, and is called a *post-hoc* comparison or test^[As with other
+Making comparisons between groups is typically something we do after fitting an
+ANOVA model, and is called a *post-hoc* comparison or test^[As with other
 statistical procedures, post-hoc comparisons have other names, like *pairwise comparisons* or *multiple comparisons*.]. The `multcomp` and `emmeans` packages
 are commonly used for these types of comparisons. 
 
@@ -500,9 +501,9 @@ $n$ is the number of groups.
 contrast(emmeans(lm.ANOVA, specs= ~zone), method = "pairwise")
 ```
 This gives us ten mean comparisons using the Tukey method, and in a few cases,
-the p-values indicating that we can reject the null hypothesis that the means
+the p-values indicate that we can reject the null hypothesis that the means
 are the same^[This should be equivalent to using `TukeyHSD()` with an `aov` 
-object, if you are used to that]. But, it would be nice to put these together in
+object, if you are used to that.]. But, it would be nice to put these together in
 a way that tells us which groups are  statistically different, and which are
 not. We do that by adding the pairwise comparison letters with `multcomp::cld`.
 The default comparison here is, again, the Tukey method.
@@ -597,16 +598,16 @@ In the last section we learned to compare the means across all the groups in our
 dataset. We were using a very restricted dataset of one year, so there was no
 issue with independence, but we've already seen that we need approaches like
 paired t-tests and repeated measures ANOVA when observations aren't independent.
-We also ignored the somewhat unequal variance among groups in our observation
-though we know that it exists. As we look at additional years of data, we'll
-have to reconsider both of these assumptions when fitting linear models.
+We also ignored the somewhat unequal variance among groups in our observations,
+even though we know that it exists. As we look at additional years of data,
+we will need to reconsider both of these assumptions when fitting linear models.
 
 Mixed models help us get around two of the main assumptions behind linear 
 models. In particular they are useful for fitting linear models in cases where:
 
-1. there is unequal variance between groupings in the data
+1. there is unequal variance between groups in the data
 2. the observations or samples are not independent, like we often see in an
-ecological time series.
+ecological time series
 
 Mixed models are potentially very complex, and there is not perfect agreement in
 the statistics community on the best way to fit them. Additionally, in `R` there

@@ -57,6 +57,7 @@ infile <- "https://pasta.lternet.edu/package/data/eml/knb-lter-jrn/210011003/105
 # Read this file into a tibble with `tidyverse::read_csv()`
 anpp.annual <- read_csv(infile, na=c('NA', '', '.'))
 ```
+
 R tells us that we have two character data columns (`zone` and `site`), and two
 floating point (`dbl`) columns that contain the year of measurement - `year` - 
 and estimated annual NPP values (`npp_g_m2`). Lets make a simple plot to look at

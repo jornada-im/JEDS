@@ -16,7 +16,7 @@ The lessons we are teaching have been developed using `R`, and we are expecting 
 
 In addition to the basic preparations above, you should:
 
-1. Install these R packages: `tidyverse`, `car`, `emmeans`, and `lme4`.
+1. Install these R packages: `tidyverse`, `car`, `emmeans`, `multcomp`, `multcompView`, `lme4`, and `lmerTest`.
 2. Download the [code handout](./jesc-code-handout.R) (DRAFT - be sure to update before the workshop)
 
 If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.edu>).

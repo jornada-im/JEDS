@@ -400,7 +400,7 @@ pre code {
 <p>We should try to meet these assumptions when fitting linear models<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, but when analyzing ecological data they are easily violated. So, as this lesson introduces various types of statistical inference around linear models, we will also show ways to test these assumptions with our data, and fit alternative models (such as mixed models) when they can’t be met.</p>
 <div id="our-data-and-r-packages" class="section level3">
 <h3>Our data and R packages</h3>
-<p>You will need to have the <code>car</code> package installed, which adds additional options and specifications to fitted regression models, such as type-II and -III ANOVA output tables. You will also need <code>emmeans</code>, <code>multcomp</code>, and <code>multcompView</code> for post-hoc comparisons of groups in fitted linear models, and <code>lme4</code> and <code>lmerTest</code> to fit and test some mixed models.</p>
+<p>In addition to <code>tidyverse</code>, you will need to have the <code>car</code> package installed, which adds some options for inspecting fitted regression models, such as type-II and -III ANOVA output tables. You will also need <code>emmeans</code>, <code>multcomp</code>, and <code>multcompView</code>for post-hoc comparisons of groups in fitted linear models, and <code>lme4</code> and <code>lmerTest</code> to fit and test some mixed models.</p>
 <p>Data for the exercises here come from the Jornada annual NPP data package on EDI. You can learn more about this dataset on the <a href="&#39;./teaching_datasets.Rmd#Teaching-dataset-1&#39;">teaching datasets</a> page. To load the data we will first load the <code>tidyverse</code> and use its <code>read_csv()</code> function to read in the data from EDI. Then we’ll look at the structure of this data.</p>
 <pre class="r"><code># Get tidyverse &amp; the NPP data
 library(tidyverse)
@@ -593,7 +593,7 @@ t.test(x = anpp.17.18.wide$`2017`,
 </div>
 <div id="comparing-sample-means-with-simple-linear-models" class="section level2">
 <h2>Comparing sample means with simple linear models</h2>
-<p>Comparing the mean of different samples, as we have done with t-tests, is also possible using simple linear models (sometimes referred to as <em>general linear models</em>), a class of procedures often used in standard statistics that includes linear regression, one- and two-way analysis of variance (ANOVA), and analysis of covariance (ANCOVA). All of these are variations of “straight-line-fitting” statistics, and <code>R</code> uses the <code>lm()</code>function for all these procedures. Instead of comparing sample means directly, we are essentially comparing best-fit lines drawn between the mean values of the samples.</p>
+<p>Comparing the mean of different samples, as we have done with t-tests, is also possible using simple linear models (sometimes referred to as <em>general linear models</em>), a class of procedures often used in standard statistics that includes linear regression, one- and multi-way analysis of variance (ANOVA), and analysis of covariance (ANCOVA). All of these are variations of “straight-line-fitting” statistics, and <code>R</code> uses the <code>lm()</code>function for all these procedures. Instead of comparing sample means directly, we are essentially comparing best-fit lines drawn between the mean values of the samples.</p>
 <p>Looking back at our 2019 and 2020 dataframe, lets compare some simple linear models to the t-tests we did earlier in the lesson. A mean comparison test can be done as a linear regression, using <code>lm</code> directly. We will fit a model and then ask for summary results.</p>
 <pre class="r"><code># Two-sample mean comparison using a linear regression model
 lm.ttest &lt;- lm(npp_g_m2 ~ year, data = anpp.19.20)
@@ -734,11 +734,11 @@ resid(lm.ANOVA) %&gt;% shapiro.test()</code></pre>
 ## 
 ## data:  .
 ## W = 0.9296, p-value = 0.2691</code></pre>
-<p>Actually its not too bad. The residuals seem to be normal enough!</p>
+<p>Actually its not too bad. The residuals seem to be “normal enough”!</p>
 <div id="post-hoc-tests-and-pairwise-comparisons" class="section level3">
 <h3>Post-hoc tests and pairwise comparisons</h3>
-<p>The ANOVA we did for the 2017 data gave us some useful information. We can see that from the <code>zone</code> coefficients and p-values that vegetation type has a large effect on the mean NPP values. The information in the ANOVA summary table isn’t enough to determine which vegetation zones have means that are <em>different than each other</em>.</p>
-<p>Making comparisons between groups is typically something we do after the ANOVA analysis, and is called a <em>post-hoc</em> comparison or test<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. The <code>multcomp</code> and <code>emmeans</code> packages are commonly used for these types of comparisons.</p>
+<p>The ANOVA we did for the 2017 data gave us some useful information. We can see that from the <code>zone</code> coefficients and p-values that vegetation type has a large effect on the mean NPP values. That is useful information, but the ANOVA summary table isn’t enough to determine which vegetation zones have means that are <em>different than each other</em>.</p>
+<p>Making comparisons between groups is typically something we do after fitting an ANOVA model, and is called a <em>post-hoc</em> comparison or test<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. The <code>multcomp</code> and <code>emmeans</code> packages are commonly used for these types of comparisons.</p>
 <p>The first step, after loading <code>emmeans</code> is to examine the least squares means given by our ANOVA model for each vegetation zone.</p>
 <pre class="r"><code>library(emmeans)
 # Least squares means (estimated marginal means)
@@ -767,7 +767,7 @@ contrast(emmeans(lm.ANOVA, specs= ~zone), method = &quot;pairwise&quot;)</code><
 ##  P - T      212.90 37.8 10   5.634  0.0016
 ## 
 ## P value adjustment: tukey method for comparing a family of 5 estimates</code></pre>
-<p>This gives us ten mean comparisons using the Tukey method, and in a few cases, the p-values indicating that we can reject the null hypothesis that the means are the same<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. But, it would be nice to put these together in a way that tells us which groups are statistically different, and which are not. We do that by adding the pairwise comparison letters with <code>multcomp::cld</code>. The default comparison here is, again, the Tukey method.</p>
+<p>This gives us ten mean comparisons using the Tukey method, and in a few cases, the p-values indicate that we can reject the null hypothesis that the means are the same<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. But, it would be nice to put these together in a way that tells us which groups are statistically different, and which are not. We do that by adding the pairwise comparison letters with <code>multcomp::cld</code>. The default comparison here is, again, the Tukey method.</p>
 <pre class="r"><code># Letter separations (efficient way to display)
 emmeans.Tukey &lt;- emmeans(lm.ANOVA, ~ zone) %&gt;%
   multcomp::cld(Letters = LETTERS)
@@ -831,11 +831,11 @@ bind_rows(emmeans.Tukey, emmeans.Scheffe) %&gt;%
 </div>
 <div id="into-the-wilderness-with-linear-mixed-models" class="section level2">
 <h2>Into the wilderness with linear mixed models</h2>
-<p>In the last section we learned to compare the means across all the groups in our dataset. We were using a very restricted dataset of one year, so there was no issue with independence, but we’ve already seen that we need approaches like paired t-tests and repeated measures ANOVA when observations aren’t independent. We also ignored the somewhat unequal variance among groups in our observation though we know that it exists. As we look at additional years of data, we’ll have to reconsider both of these assumptions when fitting linear models.</p>
+<p>In the last section we learned to compare the means across all the groups in our dataset. We were using a very restricted dataset of one year, so there was no issue with independence, but we’ve already seen that we need approaches like paired t-tests and repeated measures ANOVA when observations aren’t independent. We also ignored the somewhat unequal variance among groups in our observations, even though we know that it exists. As we look at additional years of data, we will need to reconsider both of these assumptions when fitting linear models.</p>
 <p>Mixed models help us get around two of the main assumptions behind linear models. In particular they are useful for fitting linear models in cases where:</p>
 <ol style="list-style-type: decimal">
-<li>there is unequal variance between groupings in the data</li>
-<li>the observations or samples are not independent, like we often see in an ecological time series.</li>
+<li>there is unequal variance between groups in the data</li>
+<li>the observations or samples are not independent, like we often see in an ecological time series</li>
 </ol>
 <p>Mixed models are potentially very complex, and there is not perfect agreement in the statistics community on the best way to fit them. Additionally, in <code>R</code> there are more than the usual number of approaches and packages for fitting mixed models. Prepare to be a little confused sometimes, and to do your own research. Here, we will introduce some basics.</p>
 <p>There are two primary <code>R</code> packages for linear mixed modeling. <code>nlme</code> and <code>lme4</code>. Lets load them.</p>
@@ -1061,7 +1061,7 @@ ggplot(mod.compare, aes(x = year, y = emmean, group = zone, colour = zone)) +
 <ol>
 <li id="fn1"><p>A fourth assumption is that the continuous predictor variables, or covariates, are measured without error, but that one is pretty tough to meet.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>As with other statistical procedures, post-hoc comparisons have other names, like <em>pairwise comparisons</em> or <em>multiple comparisons</em>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>This should be equivalent to using <code>TukeyHSD()</code> with an <code>aov</code> object, if you are used to that<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>This should be equivalent to using <code>TukeyHSD()</code> with an <code>aov</code> object, if you are used to that.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 
