@@ -447,9 +447,12 @@ including information about the normality of the residuals. These are accessed b
 plotting the fitted model itself using `plot()`.
 
 ```{r, fig.height=6}
-# Diagnostic plots - here we put them all on one page
-par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -> opar
-plot(lm.ANOVA)
+# Diagnostic plots - we could put them all on one page
+#par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -> opar
+#plot(lm.ANOVA)
+
+# But this gives us just the plot we need
+qqnorm(resid(lm.ANOVA))
 ```
 
 The top right figure is key here, and the divergence from a 1:1 line suggests
@@ -519,7 +522,14 @@ This groups the comparisons, telling us that the group `P`, or Playa grasslands
 are significantly more productive in 2017, while the other four groups are
 statistically the same.
 
-```{r, include=FALSE}
+Be prepared to encounter issues with interpreting the intent and statistical
+meaning of some procedures in R. For example, below, `emmeans` comparisons using
+the `adjust = "Tukey"` parameter give us some difficult-to-parse warnings
+about the confidence interval adjustment. You will need to read up on issues
+like this and be aware that statisticians developing `R` packages don't always
+agree on methods.
+
+```{r}
 # Problem: emmeans switches to Sidak when adjust = "Tukey" is specified
 # I actually found this from Russ Lenth:
 #    https://stats.stackexchange.com/questions/508055/unclear-why-adjust-tukey-was-changed-to-sidak
@@ -645,34 +655,43 @@ in particular higher variance in 2017.
 # Variance is highest in 2017
 anpp.17.20 %>%
   group_by(year) %>%
-  summarise(std.dev = sd(npp_g_m2))
+  summarise(mean = mean(npp_g_m2),
+            std.dev = sd(npp_g_m2))
 ```
+
+Other than 2017, the other three years, 2018-2020, seem to have fairly similar
+variances. Perhaps we will want to model 2017 as being in its own high-variance
+group.
 
 Since we have a time series of non-independent measurements, and unequal 
 variance in our samples, we should account for this when we fit a linear model.
 We'll begin by fitting a repeated measures model with `gls` from the `nlme`
-package. 
+package. The correlation structure here is unstructured, so the `correlation`
+parameter can be used to specify the off-diagonal values in our R matrix, while
+`weights` specifies heterogenous variances in the the diagonals (years here) in 
+that matrix.
 
 ```{r}
 # Fit a repeated measures model (unstructured correlated errors)
-model.un <- gls(npp_g_m2 ~ zone*factor(year),
-                corSymm(form = ~ 1 | site),
-                weights=varIdent(form=~1|factor(year)),
+model.un <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),
+                correlation = corSymm(form = ~ 1 | site),
+                weights = varIdent(form=~1|factor(year)),
                 data = anpp.17.20)
 ```
 
 The model above has specifies and unstructured correlation between error terms.
 Since this is a time series, we can also reasonably assume that each observation
 at a site is correlated with previous observations at the site, which is
-something we can also specify in this model. Lets do that and compare the fitted
+something we can also specify in this model. Using `corAR1` correlates the 
+errors with an autoregressive structure. Lets do that and compare the fitted
 models.
 
 ```{r}
 # Fit a repeated measures model (correlated errors with autoregressive
 # covariance structure)
-model.ar <- gls(npp_g_m2 ~ zone*factor(year),  
-                corAR1(form = ~ 1 | site), 
-                weights=varIdent(form=~1|factor(year)), 
+model.ar <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),  
+                correlation = corAR1(form = ~ 1 | site), 
+                weights = varIdent(form=~1|factor(year)), 
                 data = anpp.17.20)
 ```
 
@@ -699,26 +718,27 @@ anpp.17.20 <- anpp.17.20 %>%
   mutate(anpp_level = if_else(year == 2017, "high", "low")) 
 
 # Re-fit a model with a variance level
-model.ar <- gls(npp_g_m2 ~ zone*factor(year),  
-                      corAR1(form = ~ 1 | site), 
-                      weights=varIdent(form=~1|anpp_level), 
+model.ar.level <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),  
+                      correlation = corAR1(form = ~ 1 | site), 
+                      weights = varIdent(form=~1|anpp_level), 
                       data = anpp.17.20)
 
-AIC(model.ar)
+AIC(model.ar.level)
 ```
 The AIC value dropped, which suggests that grouping by the new `level` category
 is improving the fit of this model. Now we can compare the estimated means
 from this mixed model using `emmeans` again.
 
 ```{r}
-emmeans(model.ar, ~ zone*factor(year), lmer.df = "kenward-roger") 
+emmeans(model.ar.level, ~ zone*factor(year), lmer.df = "kenward-roger") 
 ```
 
-It is a little more difficult to extract correlation and variance estimates
-```{r}
-# Bet correlation and variance estimates
-coef(model.un$modelStruct$corStruct, uncons = FALSE, allCoef = TRUE)
-coef(model.un$modelStruct$varStruct, uncons = FALSE, allCoef = TRUE) 
+It is a little more difficult to extract correlation and variance estimates.
+
+```{r, include=FALSE, purl=FALSE}
+# Get correlation and variance estimates
+coef(model.ar.level$modelStruct$corStruct, uncons = FALSE, allCoef = TRUE)
+coef(model.ar.level$modelStruct$varStruct, uncons = FALSE, allCoef = TRUE) 
 ```
 
 Now lets compare the fit of three different mixed models that are specified
@@ -728,30 +748,31 @@ function.
 
 ```{r}
 # R-side model from nlme::gls()
-model.ar.level.gls <- gls(npp_g_m2 ~ zone*factor(year),  
-                          corAR1(form = ~ 1 | site), 
-                          weights=varIdent(form=~1|anpp_level), 
+model.ar.level.gls <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),  
+                          correlation = corAR1(form = ~ 1 | site), 
+                          weights = varIdent(form=~1|anpp_level), 
                           data = anpp.17.20,
                           method = 'REML')
 
 # G-side model from nlme::lme()
-model.ar.level.lme <- lme(fixed = npp_g_m2 ~ zone*factor(year),  
+model.ar.level.lme <- lme(fixed = npp_g_m2 ~ zone + factor(year) +
+                            zone*factor(year),  
                           random = ~ 1 | site,
                           weights = varIdent(form = ~ 1 | anpp_level),
                           data = anpp.17.20,
                           method = 'REML')
 
 # G-side model from lme4::lmer()
-model.ar.level.lmer <- lmer(npp_g_m2 ~ zone*factor(year) + 
+model.ar.level.lmer <- lmer(npp_g_m2 ~ zone + factor(year) + zone*factor(year) + 
                               (anpp_level | site),
-                            data = anpp.17.20 %>%
-                              mutate(anpp_level = factor(anpp_level),
-                                     site = factor(site)))
+                            data = anpp.17.20)
 
 AIC(model.ar.level.gls)
 AIC(model.ar.level.lme)
 AIC(model.ar.level.lmer)
 ```
+These are not compared with Kenward-Rogers method because this is not 
+available in `gls` yet.
 
 ```{r}
 mod.compare <- emmeans(model.ar.level.gls, ~zone*factor(year),
@@ -766,7 +787,11 @@ mod.compare <- emmeans(model.ar.level.gls, ~zone*factor(year),
                     lmer.df = "satterthwaite") %>%
               multcomp::cld(alpha = 0.05, Letters = LETTERS) %>%
               mutate(model = "lmer"))
+```
 
+They compare.
+
+```{r}
 # Compare means ... should all be the same
 mod.compare %>%
   dplyr::select(zone, year, emmean, model) %>%
@@ -781,7 +806,11 @@ mod.compare %>%
 mod.compare %>%
   dplyr::select(zone, year, .group, model) %>%
   spread(model, .group)
+```
+Overall they agree, but we are finding some small differences between the
+different methods.
 
+```{r}
 pd <- position_dodge(0.5)
 ggplot(mod.compare, aes(x = year, y = emmean, group = zone, colour = zone)) +
   geom_point(position=pd) +
@@ -793,3 +822,7 @@ ggplot(mod.compare, aes(x = year, y = emmean, group = zone, colour = zone)) +
   theme(legend.position = "top")
 
 ```
+
+The three models specified in the three different packages give the same
+estimates, only some standard errors and the  mean comparisons were slightly
+different.

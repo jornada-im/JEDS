@@ -135,9 +135,12 @@ summary(lm.ANOVA)
 
 car::Anova(lm.ANOVA, type = "III", test.statistic = "F")
 
-# Diagnostic plots - here we put them all on one page
-par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -> opar
-plot(lm.ANOVA)
+# Diagnostic plots - we could put them all on one page
+#par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -> opar
+#plot(lm.ANOVA)
+
+# But this gives us just the plot we need
+qqnorm(resid(lm.ANOVA))
 
 # Test for normality of residuals
 resid(lm.ANOVA) %>% shapiro.test()
@@ -225,19 +228,20 @@ ggplot(anpp.17.20, aes(x = year, y = npp_g_m2, col = zone, group = site)) +
 # Variance is highest in 2017
 anpp.17.20 %>%
   group_by(year) %>%
-  summarise(std.dev = sd(npp_g_m2))
+  summarise(mean = mean(npp_g_m2),
+            std.dev = sd(npp_g_m2))
 
 # Fit a repeated measures model (unstructured correlated errors)
-model.un <- gls(npp_g_m2 ~ zone*factor(year),
-                corSymm(form = ~ 1 | site),
-                weights=varIdent(form=~1|factor(year)),
+model.un <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),
+                correlation = corSymm(form = ~ 1 | site),
+                weights = varIdent(form=~1|factor(year)),
                 data = anpp.17.20)
 
 # Fit a repeated measures model (correlated errors with autoregressive
 # covariance structure)
-model.ar <- gls(npp_g_m2 ~ zone*factor(year),  
-                corAR1(form = ~ 1 | site), 
-                weights=varIdent(form=~1|factor(year)), 
+model.ar <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),  
+                correlation = corAR1(form = ~ 1 | site), 
+                weights = varIdent(form=~1|factor(year)), 
                 data = anpp.17.20)
 
 AIC(model.un)
@@ -248,39 +252,36 @@ anpp.17.20 <- anpp.17.20 %>%
   mutate(anpp_level = if_else(year == 2017, "high", "low")) 
 
 # Re-fit a model with a variance level
-model.ar <- gls(npp_g_m2 ~ zone*factor(year),  
-                      corAR1(form = ~ 1 | site), 
-                      weights=varIdent(form=~1|anpp_level), 
+model.ar.level <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),  
+                      correlation = corAR1(form = ~ 1 | site), 
+                      weights = varIdent(form=~1|anpp_level), 
                       data = anpp.17.20)
 
-AIC(model.ar)
+AIC(model.ar.level)
 
-emmeans(model.ar, ~ zone*factor(year), lmer.df = "kenward-roger") 
+emmeans(model.ar.level, ~ zone*factor(year), lmer.df = "kenward-roger") 
 
-# Bet correlation and variance estimates
-coef(model.un$modelStruct$corStruct, uncons = FALSE, allCoef = TRUE)
-coef(model.un$modelStruct$varStruct, uncons = FALSE, allCoef = TRUE) 
+
 
 # R-side model from nlme::gls()
-model.ar.level.gls <- gls(npp_g_m2 ~ zone*factor(year),  
-                          corAR1(form = ~ 1 | site), 
-                          weights=varIdent(form=~1|anpp_level), 
+model.ar.level.gls <- gls(npp_g_m2 ~ zone + factor(year) + zone*factor(year),  
+                          correlation = corAR1(form = ~ 1 | site), 
+                          weights = varIdent(form=~1|anpp_level), 
                           data = anpp.17.20,
                           method = 'REML')
 
 # G-side model from nlme::lme()
-model.ar.level.lme <- lme(fixed = npp_g_m2 ~ zone*factor(year),  
+model.ar.level.lme <- lme(fixed = npp_g_m2 ~ zone + factor(year) +
+                            zone*factor(year),  
                           random = ~ 1 | site,
                           weights = varIdent(form = ~ 1 | anpp_level),
                           data = anpp.17.20,
                           method = 'REML')
 
 # G-side model from lme4::lmer()
-model.ar.level.lmer <- lmer(npp_g_m2 ~ zone*factor(year) + 
+model.ar.level.lmer <- lmer(npp_g_m2 ~ zone + factor(year) + zone*factor(year) + 
                               (anpp_level | site),
-                            data = anpp.17.20 %>%
-                              mutate(anpp_level = factor(anpp_level),
-                                     site = factor(site)))
+                            data = anpp.17.20)
 
 AIC(model.ar.level.gls)
 AIC(model.ar.level.lme)
