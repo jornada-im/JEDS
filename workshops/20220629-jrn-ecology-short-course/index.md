@@ -26,3 +26,7 @@ If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.ed
 We are still drafting it, but so far there is just one big lesson for this workshop:
 
 1. [Statistical inference with general linear models and mixed models](../../html/statistical-inference-linear-and-mixed.html)
+
+## Post-workshop feedback
+
+Please tell us how the workshop went in the [post-workshop survey](https://docs.google.com/forms/d/e/1FAIpQLSezgQ6rsMzvnX7Cg-ohMtkjCDPyQjPK31zVevGMPWKn-9gaoQ/viewform?usp=sf_link). We'll use your anonymous feedback to improve future workshops and lessons.
