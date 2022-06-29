@@ -131,6 +131,8 @@ ggplot(anpp.2017, aes(x = zone, y = npp_g_m2, fill = zone)) +
 # Run ANOVA with lm()
 lm.ANOVA <- lm(npp_g_m2 ~ zone, data = anpp.2017)
 
+summary(lm.ANOVA)
+
 anova(lm.ANOVA)
 
 car::Anova(lm.ANOVA, type = "III", test.statistic = "F")

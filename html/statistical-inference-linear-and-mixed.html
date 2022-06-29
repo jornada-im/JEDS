@@ -379,7 +379,11 @@ pre code {
 <ul>
 <li><a href="#how-do-we-know-which-comparison-t-test-to-use">How do we know which comparison (t-test) to use?</a></li>
 </ul></li>
-<li><a href="#interlude-statistical-inference-and-hypothesis-testing-with-p-values">Interlude: Statistical inference and hypothesis testing with p-values</a></li>
+<li><a href="#interlude-statistical-inference-and-hypothesis-testing-with-p-values">Interlude: Statistical inference and hypothesis testing with p-values</a>
+<ul>
+<li><a href="#inference-with-hypothesis-tests">Inference with hypothesis tests</a></li>
+<li><a href="#whats-up-with-p-values">Whats up with p-values?</a></li>
+</ul></li>
 <li><a href="#comparing-sample-means-with-simple-linear-models">Comparing sample means with simple linear models</a></li>
 <li><a href="#comparing-grouped-data-using-linear-models">Comparing grouped data using linear models</a>
 <ul>
@@ -391,10 +395,10 @@ pre code {
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>This lesson introduces statistical inference using a sequence of approaches building from mean comparison procedures (t-tests), to simple linear models (often called general linear models), through linear mixed models. The lesson centers on the assumptions that underlie the process of fitting linear models. These are:</p>
+<p>This lesson introduces statistical inference using a sequence of approaches building from mean comparison procedures (t-tests), to simple linear models (often called general linear models), through linear mixed models. The lesson centers on the assumptions that underlie the process of fitting linear models. These, in order of increasing importance, are:</p>
 <ol style="list-style-type: decimal">
-<li>The samples are drawn from a normal population, and therefore the residuals are normally distributed (not necessarily the whole dataset).</li>
-<li>The populations the samples are drawn from have constant variance (they are <em>homoscedastic</em>).</li>
+<li>The samples are drawn from a normal population, and therefore the residuals, or errors, are normally distributed (not necessarily the whole dataset).</li>
+<li>The samples drawn from our population, or our groups, from have constant variance (they are <em>homoscedastic</em>).</li>
 <li>The observations in each group, or sample, are independent of one another.</li>
 </ol>
 <p>We should try to meet these assumptions when fitting linear models<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, but when analyzing ecological data they are easily violated. So, as this lesson introduces various types of statistical inference around linear models, we will also show ways to test these assumptions with our data, and fit alternative models (such as mixed models) when they can’t be met.</p>
@@ -590,14 +594,56 @@ t.test(x = anpp.17.18.wide$`2017`,
 <div id="interlude-statistical-inference-and-hypothesis-testing-with-p-values" class="section level2">
 <h2>Interlude: Statistical inference and hypothesis testing with p-values</h2>
 <p>You might be wondering why we are doing these types of hypothesis testing procedures and using p-values, especially since other statistical approaches are gaining favor with modern statisticians and data scientists. Lets give a few definitions and talk about the reasons for this approach.</p>
-<p>First, in this lesson we’re learning to make inferences using statistics in this lesson. <em>Inferential</em> statistics is a class of analysis where the objective is to use samples drawn from a larger population to make inferences, or draw logical conclusions, about the larger population. To do this, we commonly go through a process of <em>hypothesis testing</em> where the objective is to identify “significant” differences between samples by ruling out chance or sampling error as the most plausible explanation for those differences. Hypothesis tests are usually framed with two competing hypotheses:</p>
+<div id="inference-with-hypothesis-tests" class="section level3">
+<h3>Inference with hypothesis tests</h3>
+<p>First, in this lesson we’re learning how to do <em>inferential statistics</em>. This is a class of statistical analysis where the objective is to use samples drawn from a larger population to make inferences, or draw logical conclusions, about the larger population. To do this, we commonly go through a process of <em>hypothesis testing</em> where the objective is to identify “significant” differences between samples by ruling out chance or sampling error as the most plausible explanation for those differences. Hypothesis tests are usually framed with two competing hypotheses:</p>
 <ol style="list-style-type: decimal">
 <li>The null hypothesis (<span class="math inline">\(H_0\)</span>) that there is no statistical relationship.</li>
-<li>The alternative hypothesis (<span class="math inline">\(H_1\)</span>) that there is one or more statistical relationship of interest.</li>
+<li>The alternative hypothesis (<span class="math inline">\(H_a\)</span>) that there is one or more statistical relationship of interest.</li>
 </ol>
+<p>The reason for learning this method is partly that it is useful, and partly that it is convention. It is common in ecology to want to distinguish groups in our data, and hypothesis testing is an effective way to do that. It is also, for better or worse, a very common approach in scientific literature, which means understanding hypothesis testing will help you understand literature. Hypothesis testing is not always the best approach to apply in modern ecological data analysis, but it remains a useful tool to know.</p>
 <p>A couple examples of hypothesis testing using common procedures are below</p>
-<p><strong>Global F-test for a fixed-effect in ANOVA</strong> * <span class="math inline">\(H_0\)</span>: all levels of the effect have equal means * <span class="math inline">\(H_1\)</span>: at least one level has a different mean than another level</p>
-<p><strong>The Shapiro-Wilk test for normality</strong> * <span class="math inline">\(H_0\)</span>: data follow a normal distribution * <span class="math inline">\(H_1\)</span>: data do not follow a normal distribution</p>
+<p><strong>Global F-test for a fixed-effect in ANOVA</strong></p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: all levels of the effect have equal means</li>
+<li><span class="math inline">\(H_a\)</span>: at least one level has a different mean than another level</li>
+</ul>
+<p><strong>The Shapiro-Wilk test for normality</strong></p>
+<ul>
+<li><span class="math inline">\(H_0\)</span>: data follow a normal distribution</li>
+<li><span class="math inline">\(H_a\)</span>: data do not follow a normal distribution</li>
+</ul>
+<p>When we make inferences using statistical procedures like these, it is common practice to select between <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_a\)</span> using the the evidence we get from some probability tests, usually in the form of a <em>p-value</em>. So then, the basic procedure underlying inference with hypothesis testing and p-values is:</p>
+<ol style="list-style-type: decimal">
+<li>Define <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_a\)</span></li>
+<li>Identify a test statistic with that is known under <span class="math inline">\(H_0\)</span> is known (<span class="math inline">\(t\)</span>, <span class="math inline">\(f\)</span>, <span class="math inline">\(\chi^2\)</span>, etc)</li>
+<li>Calculate the test statistic for the data.</li>
+<li>Compare the test statistic to its distribution under <span class="math inline">\(H_0\)</span>, and the probability of observing a test statistic more extreme (p-value).</li>
+</ol>
+<p>The software we are using (<code>R</code> hopefully), generally does at least steps 2 through 4. If the resulting p-value is sufficiently low (5% or less is usual for biologists), we reject <span class="math inline">\(H_0\)</span> in favor of <span class="math inline">\(H_a\)</span>. If we fail to reject <span class="math inline">\(H_0\)</span>, we proceed as though it is true. Note that we haven’t proven <span class="math inline">\(H_0\)</span> true, but we can say are data are consistent with it.</p>
+</div>
+<div id="whats-up-with-p-values" class="section level3">
+<h3>Whats up with p-values?</h3>
+<p>The <em>p-value</em> is a probability value that gets returned to us from many types of hypothesis tests that we use in inferential statistics. What is the definition? Its a little bit clumsy, and commonly misunderstood. A p-value is</p>
+<ul>
+<li>the conditional probability of observing a statistic as extreme as or more extreme than the one computed from the current data, across hypothetical repetitions of the experiment.</li>
+</ul>
+<p>or alternatively,</p>
+<ul>
+<li>the probability of the data given that it was generated under the null hypothesis (<span class="math inline">\(H_0\)</span>).</li>
+</ul>
+<p>Its also useful to talk about what p-values are not. P-values are NOT</p>
+<ul>
+<li>the probability of <span class="math inline">\(H_0\)</span> being true.</li>
+<li>the probability of falsely rejecting <span class="math inline">\(H_0\)</span> (i.e. the probability of a Type I error)</li>
+</ul>
+<p>P-values are a bit controversial and are commonly misused. Its easy to look for a small number, or a threshold, and then declare a significant result, but it pays to understand the model being fit and what the p-values really represent. So, there are a few other points to keep in mind.</p>
+<ul>
+<li>The first is that you can’t interpret a p-value without knowing what the null hypothesis is. Make sure to have a clear understanding of <span class="math inline">\(H_0\)</span>.</li>
+<li>A p-value is a conditional probability, representing the probability of an event given that other events have already occurred. They are conditional on <span class="math inline">\(H_0\)</span> being testable, model structure, model assumptions, sample size, experimental design, sampling methods, using the statistical software correctly, the software being “correct”, etc.</li>
+<li>The threshold for rejecting <span class="math inline">\(H_0\)</span>, usually called <span class="math inline">\(\alpha\)</span> and set at <span class="math inline">\(p \le 0.05\)</span>, is not a magic number. It is better to think of p-values as a continuum, where p values below 0.1 indicate evidence for rejecting <span class="math inline">\(H_0\)</span>, and the smaller <span class="math inline">\(p\)</span> gets from 0.1, the stronger the evidence. Numbers greater than 0.1, however, are no better than random noise<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>.</li>
+</ul>
+</div>
 </div>
 <div id="comparing-sample-means-with-simple-linear-models" class="section level2">
 <h2>Comparing sample means with simple linear models</h2>
@@ -694,7 +740,31 @@ ggplot(anpp.2017, aes(x = zone, y = npp_g_m2, fill = zone)) +
 <p>We can use a linear model to tell us about differences between those groups. As we do that, we should again check some of our linear model assumptions. Lets fit the model using <code>lm</code>. Since <code>zone</code> is a factor this will be treated as an ANOVA.</p>
 <pre class="r"><code># Run ANOVA with lm()
 lm.ANOVA &lt;- lm(npp_g_m2 ~ zone, data = anpp.2017)</code></pre>
-<p>Lets get our ANOVA summary results two ways. First, the standard <code>R</code> way is to use the <code>anova()</code> function with our model to get an ANOVA summary for this model. This uses Type 1 sums of squares.</p>
+<p>Lets get our ANOVA summary results a few different ways. First, lets use <code>summary()</code> to look at the fitted model.</p>
+<pre class="r"><code>summary(lm.ANOVA)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = npp_g_m2 ~ zone, data = anpp.2017)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -90.733 -10.533   4.067  20.300  84.067 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  108.900     26.720   4.076 0.002230 ** 
+## zoneG         67.233     37.788   1.779 0.105563    
+## zoneM         23.367     37.788   0.618 0.550164    
+## zoneP        204.433     37.788   5.410 0.000297 ***
+## zoneT         -8.467     37.788  -0.224 0.827226    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 46.28 on 10 degrees of freedom
+## Multiple R-squared:  0.8103, Adjusted R-squared:  0.7345 
+## F-statistic: 10.68 on 4 and 10 DF,  p-value: 0.001239</code></pre>
+<p>This gives us a bunch of information, including an estimated intercept with an F test that is significant, meaning that the overall average mean of all vegetation zones is differently than zero. We also have a global F test on <code>zone</code>, which is the p-value on the lower right, which suggests that we can reject the null hypothesis that the means of different vegetation zones are all the same. There is also a suggestion of which zone is significantly different than others (<code>P</code>). Note that this summary of the fitted ANOVA model uses Type I sums of squares.</p>
+<p>Another standard <code>R</code> method for evaluating an ANOVA model is to use the <code>anova()</code> function with our model to get an ANOVA summary for this model. This also uses Type 1 sums of squares.</p>
 <pre class="r"><code>anova(lm.ANOVA)</code></pre>
 <pre><code>## Analysis of Variance Table
 ## 
@@ -704,7 +774,7 @@ lm.ANOVA &lt;- lm(npp_g_m2 ~ zone, data = anpp.2017)</code></pre>
 ## Residuals 10  21419  2141.9                    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>We have a low p-value for the global F test for <code>zone</code> here, which suggests that we can reject the null hypothesis that the means of different vegetation zones are the same.</p>
+<p>Here we see the same low p-value for the global F test for <code>zone</code> that we saw in the summary above.</p>
 <p>Now lets use the <code>car</code> way, which gives Type III sums of squares (Darren recommends this).</p>
 <pre class="r"><code>car::Anova(lm.ANOVA, type = &quot;III&quot;, test.statistic = &quot;F&quot;)</code></pre>
 <pre><code>## Anova Table (Type III tests)
@@ -716,7 +786,7 @@ lm.ANOVA &lt;- lm(npp_g_m2 ~ zone, data = anpp.2017)</code></pre>
 ## Residuals    21419 10                    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The intercept here is an F test on the overall average difference between the means of all vegetation zones and zero. There is also an F test for <code>zone</code> where the results are same with the Type III sums of squares as with the Type I.</p>
+<p>We see the same significant test that the intercept of the model (overall means of the zones are different than zero), and the same global F test for <code>zone</code> (some zones are significantly different than one another). In the case of this moodel, the results are same with the Type III sums of squares as with Type I.</p>
 <p>The results above are interesting, and suggest that mean NPP is different between the vegetation zones. We have more interpretation of this ahead, but first we should look a little more closely at how this model is meeting linear model assumptions. <code>R</code> gives us some nice ways to evaluate fitted <code>lm</code> models, including information about the normality of the residuals. These can be accessed by plotting the fitted model itself using <code>plot()</code>. For ANOVA, we are primarily interested in the Q-Q normal plot, which we will examing for the residuals of our linear model.</p>
 <pre class="r"><code># Standard lm diagnostic plots - we could put them all on one page
 #par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -&gt; opar
@@ -738,7 +808,7 @@ resid(lm.ANOVA) %&gt;% shapiro.test()</code></pre>
 <div id="post-hoc-tests-and-pairwise-comparisons" class="section level3">
 <h3>Post-hoc tests and pairwise comparisons</h3>
 <p>The ANOVA we did for the 2017 data gave us some useful information. We can see that from the <code>zone</code> coefficients and p-values that vegetation type has a large effect on the mean NPP values. That is useful information, but the ANOVA summary table isn’t enough to determine which vegetation zones have means that are <em>different than each other</em>.</p>
-<p>Making comparisons between groups is typically something we do after fitting an ANOVA model, and is called a <em>post-hoc</em> comparison or test<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. The <code>multcomp</code> and <code>emmeans</code> packages are commonly used for these types of comparisons.</p>
+<p>Making comparisons between groups is typically something we do after fitting an ANOVA model, and is called a <em>post-hoc</em> comparison or test<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. The <code>multcomp</code> and <code>emmeans</code> packages are commonly used for these types of comparisons.</p>
 <p>The first step, after loading <code>emmeans</code> is to examine the least squares means given by our ANOVA model for each vegetation zone.</p>
 <pre class="r"><code>library(emmeans)
 # Least squares means (estimated marginal means)
@@ -767,7 +837,7 @@ contrast(emmeans(lm.ANOVA, specs= ~zone), method = &quot;pairwise&quot;)</code><
 ##  P - T      212.90 37.8 10   5.634  0.0016
 ## 
 ## P value adjustment: tukey method for comparing a family of 5 estimates</code></pre>
-<p>This gives us ten mean comparisons using the Tukey method, and in a few cases, the p-values indicate that we can reject the null hypothesis that the means are the same<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. But, it would be nice to put these together in a way that tells us which groups are statistically different, and which are not. We do that by adding the pairwise comparison letters with <code>multcomp::cld</code>. The default comparison here is, again, the Tukey method.</p>
+<p>This gives us ten mean comparisons using the Tukey method, and in a few cases, the p-values indicate that we can reject the null hypothesis that the means are the same<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>. But, it would be nice to put these together in a way that tells us which groups are statistically different, and which are not. We do that by adding the pairwise comparison letters with <code>multcomp::cld</code>. The default comparison here is, again, the Tukey method.</p>
 <pre class="r"><code># Letter separations (efficient way to display)
 emmeans.Tukey &lt;- emmeans(lm.ANOVA, ~ zone) %&gt;%
   multcomp::cld(Letters = LETTERS)
@@ -862,6 +932,7 @@ bind_rows(emmeans.Tukey, emmeans.Scheffe) %&gt;%
 <li>there is unequal variance between groups in the data</li>
 <li>the observations or samples are not independent, like we often see in an ecological time series</li>
 </ol>
+<p>They do this using something called <em>random effects</em>.</p>
 <p>Mixed models are potentially very complex, and there is not perfect agreement in the statistics community on the best way to fit them. Additionally, in <code>R</code> there are more than the usual number of approaches and packages for fitting mixed models. Prepare to be a little confused sometimes, and to do your own research. Here, we will introduce some basics.</p>
 <p>There are two primary <code>R</code> packages for linear mixed modeling. <code>nlme</code> and <code>lme4</code>. Lets load them.</p>
 <pre class="r"><code>library(nlme)
@@ -1083,8 +1154,9 @@ ggplot(mod.compare, aes(x = year, y = emmean, group = zone, colour = zone)) +
 <hr />
 <ol>
 <li id="fn1"><p>A fourth assumption is that the continuous predictor variables, or covariates, are measured without error, but that one is pretty tough to meet.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p>As with other statistical procedures, post-hoc comparisons have other names, like <em>pairwise comparisons</em> or <em>multiple comparisons</em>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>This should be equivalent to using <code>TukeyHSD()</code> with an <code>aov</code> object, if you are used to that.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Ramsey, Fred, and Daniel Schafer. The statistical sleuth: a course in methods of data analysis. Cengage Learning, 2012.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>As with other statistical procedures, post-hoc comparisons have other names, like <em>pairwise comparisons</em> or <em>multiple comparisons</em>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>This should be equivalent to using <code>TukeyHSD()</code> with an <code>aov</code> object, if you are used to that.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
 

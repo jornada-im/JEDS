@@ -17,12 +17,12 @@ This lesson introduces statistical inference using a sequence of approaches
 building from mean comparison procedures (t-tests), to simple linear models
 (often called general linear models), through linear mixed models. The lesson
 centers on the assumptions that underlie the process of fitting linear models.
-These are:
+These, in order of increasing importance, are:
 
-1. The samples are drawn from a normal population, and therefore the residuals 
-are normally distributed (not necessarily the whole dataset).
-2. The populations the samples are drawn from have constant variance 
-(they are *homoscedastic*).
+1. The samples are drawn from a normal population, and therefore the residuals,
+or errors, are normally distributed (not necessarily the whole dataset).
+2. The samples drawn from our population, or our groups, from have constant
+variance (they are *homoscedastic*).
 3. The observations in each group, or sample, are independent of one another.
 
 We should try to meet these assumptions when fitting linear models^[A fourth
@@ -275,30 +275,93 @@ procedures and using p-values, especially since other statistical approaches are
 gaining favor with modern statisticians and data scientists. Lets give a few
 definitions and talk about the reasons for this approach.
 
-First, in this lesson we're learning to make inferences using statistics in this
-lesson. *Inferential* statistics is a class of analysis where the objective is
-to use samples drawn from a larger population to make inferences, or draw
-logical conclusions, about the larger population. To do this, we commonly go
-through a process of *hypothesis testing* where the objective is to identify
-"significant" differences between samples by ruling out chance or sampling error
-as the most plausible explanation for those differences. Hypothesis tests are
-usually framed with two competing hypotheses:
+### Inference with hypothesis tests
+
+First, in this lesson we're learning how to do *inferential statistics*. This is
+a class of statistical analysis where the objective is to use samples drawn from
+a larger population to make inferences, or draw logical conclusions, about the
+larger population. To do this, we commonly go through a process of *hypothesis
+testing* where the objective is to identify "significant" differences between
+samples by ruling out chance or sampling error as the most plausible explanation
+for those differences. Hypothesis tests are usually framed with two competing hypotheses:
 
 1. The null hypothesis ($H_0$) that there is no statistical relationship.
-2. The alternative hypothesis ($H_1$) that there is one or more statistical
+2. The alternative hypothesis ($H_a$) that there is one or more statistical
 relationship of interest.
+
+The reason for learning this method is partly that it is useful, and partly that
+it is convention. It is common in ecology to want to distinguish groups in our
+data, and hypothesis testing is an effective way to do that. It is also, for 
+better or worse, a very common approach in scientific literature, which means
+understanding hypothesis testing will help you understand literature. Hypothesis
+testing is not always the best approach to apply in modern ecological data 
+analysis, but it remains a useful tool to know.
 
 A couple examples of hypothesis testing using common procedures are below
 
 **Global F-test for a fixed-effect in ANOVA**
+
   * $H_0$: all levels of the effect have equal means
-  * $H_1$: at least one level has a different mean than another level
+  * $H_a$: at least one level has a different mean than another level
 
 **The Shapiro-Wilk test for normality**
+
   * $H_0$: data follow a normal distribution
-  * $H_1$: data do not follow a normal distribution
+  * $H_a$: data do not follow a normal distribution
   
+When we make inferences using statistical procedures like these, it is common practice to select between $H_0$ and $H_a$ using the the evidence we get from
+some probability tests, usually in the form of a *p-value*. So then, the basic
+procedure underlying inference with hypothesis testing and p-values is:
+
+1. Define $H_0$ and $H_a$
+2. Identify a test statistic with that is known under $H_0$ is known ($t$, $f$,
+$\chi^2$, etc)
+3. Calculate the test statistic for the data.
+4. Compare the test statistic to its distribution under $H_0$, and the 
+probability of observing a test statistic more extreme (p-value).
+
+The software we are using (`R` hopefully), generally does at least steps 2
+through 4. If the resulting p-value is sufficiently low (5% or less is usual for
+biologists), we reject $H_0$ in favor of $H_a$. If we fail to reject $H_0$,
+we proceed as though it is true. Note that we haven't proven $H_0$ true, but
+we can say are data are consistent with it.
   
+### Whats up with p-values?
+
+The *p-value* is a probability value that gets returned to us from many types
+of hypothesis tests that we use in inferential statistics. What is the
+definition? Its a little bit clumsy, and commonly misunderstood. A p-value is
+
+* the conditional probability of observing a statistic as extreme as or more extreme than the one computed from the current data, across hypothetical repetitions of the experiment.
+
+or alternatively,
+
+* the probability of the data given that it was generated under the null hypothesis ($H_0$).
+
+Its also useful to talk about what p-values are not. P-values are NOT
+
+* the probability of $H_0$ being true.
+* the probability of falsely rejecting $H_0$ (i.e. the probability of a Type I error)
+
+P-values are a bit controversial and are commonly misused. Its easy to look for
+a small number, or a threshold, and then declare a significant result, but it
+pays to understand the model being fit and what the p-values really represent.
+So, there are a few other points to keep in mind.
+
+* The first is that you can't interpret a p-value without knowing what the null
+hypothesis is. Make sure to have a clear understanding of $H_0$.
+* A p-value is a conditional probability, representing the probability of an
+event given that other events have already occurred. They are conditional on
+$H_0$ being testable, model structure, model assumptions, sample size,
+experimental design, sampling methods, using the statistical software correctly,
+the software being "correct", etc.
+* The threshold for rejecting $H_0$, usually called $\alpha$ and set at
+$p \le 0.05$, is not a magic number. It is better to think of p-values as a
+continuum, where p values below 0.1 indicate evidence for rejecting $H_0$, and
+the smaller $p$ gets from 0.1, the stronger the evidence. Numbers greater than
+0.1, however, are no better than random noise^[Ramsey, Fred, and Daniel Schafer. The statistical sleuth: a course in methods of data analysis. Cengage Learning, 2012.]. 
+
+
 ## Comparing sample means with simple linear models
 
 ```{r, include=FALSE}
@@ -451,16 +514,30 @@ the model using `lm`. Since `zone` is a factor this will be treated as an ANOVA.
 lm.ANOVA <- lm(npp_g_m2 ~ zone, data = anpp.2017)
 ```
 
-Lets get our ANOVA summary results two ways. First, the standard `R` way is to
-use the `anova()` function with our model to get an ANOVA summary for this 
-model. This uses Type 1 sums of squares.
+Lets get our ANOVA summary results a few different ways. First, lets use
+`summary()` to look at the fitted model.
+
+```{r}
+summary(lm.ANOVA)
+```
+This gives us a bunch of information, including an estimated intercept with 
+an F test that is significant, meaning that the overall average mean of all vegetation zones is differently than zero. We also have a global F test on
+`zone`, which is the p-value on the lower right, which suggests that we can
+reject the null hypothesis that the means of different vegetation zones are
+all the same. There is also a suggestion of which zone is significantly
+different than others (`P`). Note that this summary of the fitted ANOVA model
+uses Type I sums of squares.
+
+Another standard `R` method for evaluating an ANOVA model is to use the
+`anova()` function with our model to get an ANOVA summary for this model. This
+also uses Type 1 sums of squares.
 
 ```{r}
 anova(lm.ANOVA)
 ```
-We have a low p-value for the global F test for `zone` here, which suggests that
-we can reject the null hypothesis that the means of different vegetation zones
-are the same.
+
+Here we see the same low p-value for the global F test for `zone` that we saw in
+the summary above.
 
 Now lets use the `car` way, which gives Type III sums of squares (Darren
 recommends this).
@@ -468,9 +545,10 @@ recommends this).
 ```{r}
 car::Anova(lm.ANOVA, type = "III", test.statistic = "F")
 ```
-The intercept here is an F test on the overall average difference between the
-means of all vegetation zones and zero. There is also an F test for `zone` where
-the results are same with the Type III sums of squares as with the Type I.
+We see the same significant test that the intercept of the model (overall means
+of the zones are different than zero), and the same global F test for `zone`
+(some zones are significantly different than one another). In the case of this
+moodel, the results are same with the Type III sums of squares as with Type I.
 
 The results above are interesting, and suggest that mean NPP is different 
 between the vegetation zones. We have more interpretation of this ahead, but
@@ -500,6 +578,7 @@ Shapiro-Wilk test.
 # Test for normality of residuals
 resid(lm.ANOVA) %>% shapiro.test()
 ```
+
 Actually its not too bad. We don't have enough evidence to reject the null
 hypothesis here ($H_0$ is that the data are normal). So, the residuals seem to
 be "normal enough"!
@@ -542,6 +621,7 @@ $n$ is the number of groups.
 # Pairwise comparisons of least squares means
 contrast(emmeans(lm.ANOVA, specs= ~zone), method = "pairwise")
 ```
+
 This gives us ten mean comparisons using the Tukey method, and in a few cases,
 the p-values indicate that we can reject the null hypothesis that the means
 are the same^[This should be equivalent to using `TukeyHSD()` with an `aov` 
@@ -657,6 +737,8 @@ models. In particular they are useful for fitting linear models in cases where:
 1. there is unequal variance between groups in the data
 2. the observations or samples are not independent, like we often see in an
 ecological time series
+
+They do this using something called *random effects*.
 
 Mixed models are potentially very complex, and there is not perfect agreement in
 the statistics community on the best way to fit them. Additionally, in `R` there
