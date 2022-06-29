@@ -268,10 +268,37 @@ t.test(x = anpp.17.18.wide$`2017`,
 We get a nice low p-value here, strong evidence that mean NPP changed from 2017
 to 2018.
 
-## Interlude - how should we interpret p-values?
+## Interlude: Statistical inference and hypothesis testing with p-values
 
-An opinionated section on hypothesis testing with p-values.
+You might be wondering why we are doing these types of hypothesis testing
+procedures and using p-values, especially since other statistical approaches are
+gaining favor with modern statisticians and data scientists. Lets give a few
+definitions and talk about the reasons for this approach.
 
+First, in this lesson we're learning to make inferences using statistics in this
+lesson. *Inferential* statistics is a class of analysis where the objective is
+to use samples drawn from a larger population to make inferences, or draw
+logical conclusions, about the larger population. To do this, we commonly go
+through a process of *hypothesis testing* where the objective is to identify
+"significant" differences between samples by ruling out chance or sampling error
+as the most plausible explanation for those differences. Hypothesis tests are
+usually framed with two competing hypotheses:
+
+1. The null hypothesis ($H_0$) that there is no statistical relationship.
+2. The alternative hypothesis ($H_1$) that there is one or more statistical
+relationship of interest.
+
+A couple examples of hypothesis testing using common procedures are below
+
+**Global F-test for a fixed-effect in ANOVA**
+  * $H_0$: all levels of the effect have equal means
+  * $H_1$: at least one level has a different mean than another level
+
+**The Shapiro-Wilk test for normality**
+  * $H_0$: data follow a normal distribution
+  * $H_1$: data do not follow a normal distribution
+  
+  
 ## Comparing sample means with simple linear models
 
 ```{r, include=FALSE}
@@ -424,46 +451,58 @@ the model using `lm`. Since `zone` is a factor this will be treated as an ANOVA.
 lm.ANOVA <- lm(npp_g_m2 ~ zone, data = anpp.2017)
 ```
 
-Lets get our ANOVA summary results two ways. First the standard `R` way, which
-gives Type 1 sums of squares.
+Lets get our ANOVA summary results two ways. First, the standard `R` way is to
+use the `anova()` function with our model to get an ANOVA summary for this 
+model. This uses Type 1 sums of squares.
 
 ```{r}
-summary(lm.ANOVA)
+anova(lm.ANOVA)
 ```
+We have a low p-value for the global F test for `zone` here, which suggests that
+we can reject the null hypothesis that the means of different vegetation zones
+are the same.
 
-And now lets use the `car` way, which gives Type III sums of squares (Darren
+Now lets use the `car` way, which gives Type III sums of squares (Darren
 recommends this).
 
 ```{r}
 car::Anova(lm.ANOVA, type = "III", test.statistic = "F")
 ```
-In this case the results are the same with both types of sums of squares.
+The intercept here is an F test on the overall average difference between the
+means of all vegetation zones and zero. There is also an F test for `zone` where
+the results are same with the Type III sums of squares as with the Type I.
 
 The results above are interesting, and suggest that mean NPP is different 
 between the vegetation zones. We have more interpretation of this ahead, but
 first we should look a little more closely at how this model is meeting linear 
 model assumptions. `R` gives us some nice ways to evaluate fitted `lm` models,
-including information about the normality of the residuals. These are accessed by
-plotting the fitted model itself using `plot()`.
+including information about the normality of the residuals. These can be
+accessed by plotting the fitted model itself using `plot()`. For ANOVA, we are
+primarily interested in the Q-Q normal plot, which we will examing for the
+residuals of our linear model.
 
 ```{r, fig.height=6}
-# Diagnostic plots - we could put them all on one page
+# Standard lm diagnostic plots - we could put them all on one page
 #par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -> opar
 #plot(lm.ANOVA)
 
 # But this gives us just the plot we need
 qqnorm(resid(lm.ANOVA))
+qqline(resid(lm.ANOVA))
 ```
 
-The top right figure is key here, and the divergence from a 1:1 line suggests
-that the residuals from the model are not completely normal. Lets test this
-directly using the Shapiro-Wilk test.
+In this plot the divergence from a 1:1 line suggests that the residuals of the model are not completely normal, a violation of one of our ANOVA assumptions. In this
+figure there are only a couple of outliers from the 1:1 line, so the residuals
+may be more-or-less normally distributed. Lets also test this directly using the
+Shapiro-Wilk test.
 
 ```{r}
 # Test for normality of residuals
 resid(lm.ANOVA) %>% shapiro.test()
 ```
-Actually its not too bad. The residuals seem to be "normal enough"!
+Actually its not too bad. We don't have enough evidence to reject the null
+hypothesis here ($H_0$ is that the data are normal). So, the residuals seem to
+be "normal enough"!
 
 ### Post-hoc tests and pairwise comparisons
 

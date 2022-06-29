@@ -131,16 +131,17 @@ ggplot(anpp.2017, aes(x = zone, y = npp_g_m2, fill = zone)) +
 # Run ANOVA with lm()
 lm.ANOVA <- lm(npp_g_m2 ~ zone, data = anpp.2017)
 
-summary(lm.ANOVA)
+anova(lm.ANOVA)
 
 car::Anova(lm.ANOVA, type = "III", test.statistic = "F")
 
-# Diagnostic plots - we could put them all on one page
+# Standard lm diagnostic plots - we could put them all on one page
 #par(mfrow = c(2, 2), oma = c(0, 0, 2, 0)) -> opar
 #plot(lm.ANOVA)
 
 # But this gives us just the plot we need
 qqnorm(resid(lm.ANOVA))
+qqline(resid(lm.ANOVA))
 
 # Test for normality of residuals
 resid(lm.ANOVA) %>% shapiro.test()

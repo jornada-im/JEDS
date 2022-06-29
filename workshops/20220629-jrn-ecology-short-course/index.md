@@ -23,7 +23,7 @@ If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.ed
 
 ## Lesson plan
 
-We are still drafting it, but so far there is just one big lesson for this workshop:
+We have one big lesson for the workshop, and we will touch on only a few sections of it. Please keep in mind that this is a draft.
 
 1. [Statistical inference with general linear models and mixed models](../../html/statistical-inference-linear-and-mixed.html)
 
