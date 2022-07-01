@@ -153,7 +153,7 @@ resid(lm.ANOVA) %>% shapiro.test()
 ##
 
 library(emmeans)
-# Least squares means (estimated marginal means)
+# Get the estimated marginal means of each zone
 emmeans(lm.ANOVA, ~ zone)
 
 # Pairwise comparisons of least squares means

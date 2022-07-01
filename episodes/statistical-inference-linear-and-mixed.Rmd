@@ -521,43 +521,48 @@ Lets get our ANOVA summary results a few different ways. First, lets use
 summary(lm.ANOVA)
 ```
 This gives us a bunch of information, including an estimated intercept with 
-an F test that is significant, meaning that the overall average mean of all vegetation zones is differently than zero. We also have a global F test on
-`zone`, which is the p-value on the lower right, which suggests that we can
-reject the null hypothesis that the means of different vegetation zones are
-all the same. There is also a suggestion of which zone is significantly
-different than others (`P`). Note that this summary of the fitted ANOVA model
-uses Type I sums of squares.
+a significant t-test, indicating that we can reject the null hypothesis that the
+intercept is zero. We also have a global F test on `zone`, which is the p-value
+on the lower right, that suggests we can reject the null hypothesis that the 
+means of different vegetation zones are all the same. The `summary()` output
+however, is a little funny in the case of an ANOVA. Notice that there are also
+t-tests for all the estimated coefficients of `zone`, EXCEPT for `zoneC`. In
+comparing the five groups, `R` must assume the effect of one group is zero, and
+thus made `zoneC` the intercept and compared the other four groups to it. These
+comparisons do suggest that `zoneP` is significantly different than `zoneC`, but
+it will be challenging to interpret the rest. So, be careful reading `summary()`
+outputs for ANOVA models. It is probably easier to use the options below.
 
 Another standard `R` method for evaluating an ANOVA model is to use the
-`anova()` function with our model to get an ANOVA summary for this model. This
-also uses Type 1 sums of squares.
+`anova()` function with our model.
 
 ```{r}
 anova(lm.ANOVA)
 ```
 
 Here we see the same low p-value for the global F test for `zone` that we saw in
-the summary above.
+the summary above, and notice that there is no intercept in this case.
 
-Now lets use the `car` way, which gives Type III sums of squares (Darren
-recommends this).
+Both of the summary methods above compare the groups using Type I sums of
+squares. Now lets use the `car` way, which gives Type III sums of squares
+(Darren recommends this).
 
 ```{r}
 car::Anova(lm.ANOVA, type = "III", test.statistic = "F")
 ```
-We see the same significant test that the intercept of the model (overall means
-of the zones are different than zero), and the same global F test for `zone`
-(some zones are significantly different than one another). In the case of this
-moodel, the results are same with the Type III sums of squares as with Type I.
+Here we see a significant F test that the intercept of the model (overall means
+of the zones) are different than zero, and the same global F test for `zone`
+(at least one `zone` is significantly different than another). In this model,
+the results are same with the Type III sums of squares as with Type I.
 
 The results above are interesting, and suggest that mean NPP is different 
 between the vegetation zones. We have more interpretation of this ahead, but
 first we should look a little more closely at how this model is meeting linear 
 model assumptions. `R` gives us some nice ways to evaluate fitted `lm` models,
-including information about the normality of the residuals. These can be
-accessed by plotting the fitted model itself using `plot()`. For ANOVA, we are
-primarily interested in the Q-Q normal plot, which we will examing for the
-residuals of our linear model.
+including information about the normality of the residuals. A suite of
+diagnostic plots for a fitted linear model can be accessed using `plot()`. For
+ANOVA, however, we are primarily interested in the Q-Q normal plot, which we
+will use to examine the residuals of our fitted ANOVA model.
 
 ```{r, fig.height=6}
 # Standard lm diagnostic plots - we could put them all on one page
@@ -569,10 +574,10 @@ qqnorm(resid(lm.ANOVA))
 qqline(resid(lm.ANOVA))
 ```
 
-In this plot the divergence from a 1:1 line suggests that the residuals of the model are not completely normal, a violation of one of our ANOVA assumptions. In this
-figure there are only a couple of outliers from the 1:1 line, so the residuals
-may be more-or-less normally distributed. Lets also test this directly using the
-Shapiro-Wilk test.
+In this kind of plot, points that diverge from a 1:1 line suggests that the residuals of the model are not completely normal, violating one of our ANOVA
+assumptions. In our figure there are only a couple of outliers from the 1:1
+line, so the residuals may be more-or-less normally distributed. Lets also test
+this directly using the Shapiro-Wilk test.
 
 ```{r}
 # Test for normality of residuals
@@ -602,12 +607,14 @@ ANOVA model, and is called a *post-hoc* comparison or test^[As with other
 statistical procedures, post-hoc comparisons have other names, like *pairwise comparisons* or *multiple comparisons*.]. The `multcomp` and `emmeans` packages
 are commonly used for these types of comparisons. 
 
-The first step, after loading `emmeans` is to examine the least squares means
-given by our ANOVA model for each vegetation zone.
+The first step, after loading `emmeans`, is to examine the estimated marginal
+means of the vegetation `zone` groups in our fitted ANOVA model. Note that these
+are equivalent to least-squares means in this model, but if there were
+additional effects than `zone`, the means would be adjusted for those.
 
 ```{r}
 library(emmeans)
-# Least squares means (estimated marginal means)
+# Get the estimated marginal means of each zone
 emmeans(lm.ANOVA, ~ zone)
 ```
 
@@ -622,13 +629,17 @@ $n$ is the number of groups.
 contrast(emmeans(lm.ANOVA, specs= ~zone), method = "pairwise")
 ```
 
-This gives us ten mean comparisons using the Tukey method, and in a few cases,
-the p-values indicate that we can reject the null hypothesis that the means
-are the same^[This should be equivalent to using `TukeyHSD()` with an `aov` 
-object, if you are used to that.]. But, it would be nice to put these together in
-a way that tells us which groups are  statistically different, and which are
-not. We do that by adding the pairwise comparison letters with `multcomp::cld`.
-The default comparison here is, again, the Tukey method.
+This gives us ten mean comparisons using the Tukey method. Because there are ten
+comparisons at an $\alpha$ of 0.05, we are elevating our false positive rate to
+$0.05 \times 10$, or 0.5. The Tukey method adjusts the p-values, making them stricter, to account for these multiple comparisons. So, this set of contrasts
+contrasts shows ten estimated differences between group means, and in some cases
+the adjusted p-values indicate that we can reject the null hypothesis that the
+differences equal zero^[This should be equivalent to using `TukeyHSD()` with an
+`aov` object, if you are used to that.]. But, it would be nice to condense this
+output in a way that tells us which groups are statistically different, and
+which are not. We do that by adding a "compact letter display" with 
+`multcomp::cld`. The default multiple comparisons adjustment is, again, the
+Tukey method.
 
 ```{r}
 # Letter separations (efficient way to display)
@@ -637,8 +648,9 @@ emmeans.Tukey <- emmeans(lm.ANOVA, ~ zone) %>%
 
 emmeans.Tukey
 ```
-This groups the comparisons, telling us that the group `P`, or Playa grasslands
-are significantly more productive in 2017, while the other four groups are
+
+This groups the comparisons, telling us that group `P`, or Playa grasslands are
+significantly more productive in 2017, while the other four groups are
 statistically the same.
 
 Be prepared to encounter issues with interpreting the intent and statistical
@@ -658,11 +670,14 @@ agree on methods.
 emmeans(lm.ANOVA, ~ zone, adjust = "Tukey") %>%
   multcomp::cld(Letters = LETTERS)
 ```
+Should we be using the Sidak confidence interval adjustment? The statistician
+who wrote `emmeans` thinks so.
 
 We've based these mean comparison letters on the default Tukey method and its
 confidence intervals. However, there are other methods that might be more or
 less conservative. Lets compare results from Tukey and Scheffe methods, by 
-re-doing the comparison, binding the tables, and making a figure.
+re-doing the comparison, binding the tables, and making a figure. Sheffe is a
+more conservative method of comparing groups.
 
 ```{r}
 # First get comparisons from Scheffe
@@ -689,11 +704,19 @@ bind_rows(emmeans.Scheffe, emmeans.Tukey) %>%
   ylab("Model-based mean ANPP (g/m^2) +/- 95% CI")
 ```
 
-They are similar but not the same, and you can see that the error bars, here
-showing the 95% confidence intervals estimated for each method, give some
-indication of how they are grouping the comparisons. In scientific papers, the
-convention is to plot figures like this with standard error bars. Lets take a
-look at the difference.
+The Tukey and Sheffe pairwise contrast methods are similar but not the same,
+and you can see that the error bars, here showing the 95% confidence intervals
+estimated by each method, are wider for Sheffe since it is more conservative.
+Also note that groups that are significantly different according to the pairwise
+contrast (in different letter groups), can still have overlapping error bars.
+So, you must rely on the outcome of the pairwise contrast, not just the 
+confidence intervals to distinguish groups.
+
+In scientific papers, the convention is to plot figures like this with standard
+error bars instead of confidence intervals. The meaning of standard error is an
+estimate of where the mean might fall if you did your experiment again. The
+confidence interval estimate for a fitted model or contrast is broader. Lets 
+take a look at the difference.
 
 ```{r}
 # Look at least squares means and standard errors
@@ -711,9 +734,10 @@ bind_rows(emmeans.Tukey, emmeans.Scheffe) %>%
   ylab("Model-based mean ANPP (g/m^2) +/- S.E.")
 ```
 
-Notice that if we were basing our comparisons on standard error bar overlaps
-alone, we would draw a different conclusion about which vegetation zones had
-different means.
+Notice that the error bars, now showing standard errors, are much narrower. If 
+we were ignoring the pairwise contrasts and basing our comparisons on standard
+error bar overlaps alone, we would draw a different conclusion about which
+vegetation zones had different means.
 
 ## Into the wilderness with linear mixed models
 
@@ -738,7 +762,8 @@ models. In particular they are useful for fitting linear models in cases where:
 2. the observations or samples are not independent, like we often see in an
 ecological time series
 
-They do this using something called *random effects*.
+They do this using something called *random effects*. These are different than
+the *fixed effects* we have been examining in ANOVA models.
 
 Mixed models are potentially very complex, and there is not perfect agreement in
 the statistics community on the best way to fit them. Additionally, in `R` there

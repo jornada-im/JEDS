@@ -377,7 +377,7 @@ pre code {
 <li><a href="#install-r-and-rstudio">Install R and RStudio</a></li>
 <li><a href="#update-r-and-rstudio">Update R and RStudio</a></li>
 <li><a href="#install-required-r-packages">Install required R packages</a></li>
-<li><a href="#updating-r-packages">Updating R packages</a></li>
+<li><a href="#install-required-r-packages-1">Install required R packages</a></li>
 <li><a href="#download-the-data">Download the data</a></li>
 </ul></li>
 <li><a href="#preparing-for-jest-workshops">Preparing for JEST workshops</a></li>
@@ -406,7 +406,7 @@ pre code {
 <li>Download R from the <a href="https://cran.r-project.org/bin/windows/base/release.htm">CRAN website</a>.</li>
 <li>Run the <code>.exe</code> file that was just downloaded</li>
 <li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>Installers</em> select <strong>RStudio x.yy.zzz - Windows Vista/7/8/10</strong> (where x, y, and z represent version numbers)</li>
+<li>Under <em>All Installers</em>, download the RStudio Installer for Windows.</li>
 <li>Double click the file to install it</li>
 <li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
 </ul>
@@ -418,7 +418,7 @@ pre code {
 <li>Double click on the downloaded file to install R</li>
 <li>It is also a good idea to install <a href="https://www.xquartz.org/">XQuartz</a> (needed by some packages)</li>
 <li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>Installers</em> select <strong>RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit)</strong> (where x, y, and z represent version numbers)</li>
+<li>Under <em>All Installers</em>, download the RStudio Installer for MacOS.</li>
 <li>Double click the file to install RStudio</li>
 <li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
 </ul>
@@ -428,7 +428,7 @@ pre code {
 <ul>
 <li>Follow the instructions for your distribution from <a href="https://cloud.r-project.org/bin/linux">CRAN</a>, they provide information to get the most recent version of R for common distributions. For most distributions, you could use your package manager (e.g., for Debian/Ubuntu run <code>sudo apt-get install r-base</code>, and for Fedora <code>sudo yum install R</code>), but we don’t recommend this approach as the versions provided by this are usually out of date. In any case, make sure you have at least R 3.3.1.</li>
 <li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>Installers</em> select the version that matches your distribution, and install it with your preferred method (e.g., with Debian/Ubuntu <code>sudo dpkg -i   rstudio-x.yy.zzz-amd64.deb</code> at the terminal).</li>
+<li>Under <em>All Installers</em>, select the version that matches your distribution and install it with your preferred method (e.g., with Debian/Ubuntu <code>sudo dpkg -i   rstudio-YYYY.MM.X-ZZZ-amd64.deb</code> at the terminal).</li>
 <li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
 </ul>
 </div>
@@ -447,6 +447,9 @@ pre code {
 </div>
 <div id="install-required-r-packages" class="section level3">
 <h3>Install required R packages</h3>
+</div>
+<div id="install-required-r-packages-1" class="section level3">
+<h3>Install required R packages</h3>
 <p>During the course we will need a number of R packages. Packages contain useful R code written by other people. In most workshops will use the packages <code>tidyverse</code>, <code>nlme</code>, <code>lme4</code>, and <code>emmeans</code>.</p>
 <p>To try to install these packages, open RStudio and copy and paste the following command into the console window (look for a blinking cursor on the bottom left), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command.</p>
 <pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;nlme&quot;, &quot;lme4&quot;, &quot;emmeans&quot;))</code></pre>
@@ -458,15 +461,13 @@ library(lme4)
 library(emmeans)</code></pre>
 <p>If you do not see an error like <code>there is no package called ‘...’</code> you are good to go!</p>
 <p><strong>NOTE</strong> that if you are attending a workshop, you will likely receive additional instructions about packages required for for your workshop. It is a good idea to install these in advance, using commands like those above, and let your instructors know if you have any problems.</p>
-</div>
-<div id="updating-r-packages" class="section level3">
-<h3>Updating R packages</h3>
 <p>Generally, it is recommended to keep your R version and all packages up to date, because new versions bring improvements and important bugfixes. To update the packages that you have installed, click <code>Update</code> in the <code>Packages</code> tab in the bottom right panel of RStudio, or go to <code>Tools &gt; Check for Package Updates...</code>.</p>
 <p>Sometimes, package updates introduce changes that break your old code, which can be very frustrating. To avoid this problem, you can use a package called <code>renv</code>. It locks the package versions you have used for a given project and makes it straightforward to reinstall those exact package version in a new environment, for example after updating your R version or on another computer. However, the details are outside of the scope of this lesson.</p>
 </div>
 <div id="download-the-data" class="section level3">
 <h3>Download the data</h3>
 <p>We will download the data directly from R during the lessons. However, if you are expecting problems with the network, it may be better to download the data beforehand and store it on your machine.</p>
+<p>The data files for the lesson can be downloaded manually here: <a href="https://doi.org/10.6084/m9.figshare.1314459" class="uri">https://doi.org/10.6084/m9.figshare.1314459</a></p>
 <p>A copy of all data files used in these lessons are stored in the <code>data/</code> directory of the GitHub repository. The data files you will work with will be specified at the start of the lesson materials, and you may also receive additional instructions or materials for workshops.</p>
 </div>
 </div>
