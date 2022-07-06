@@ -12,8 +12,8 @@ These tutorials have been developed for learners using `R`. To set up your envir
 
 ## Upcoming workshops
 
-* [Jornada Desert Ecology Short Course](./workshops/20220629-jrn-ecology-short-course/index)
+* Probably something in coming in fall 2022...
 
 ## Past workshops
 
-None yet...
+* [2022-06-29 - Jornada Desert Ecology Short Course](./workshops/20220629-jrn-ecology-short-course/index)
