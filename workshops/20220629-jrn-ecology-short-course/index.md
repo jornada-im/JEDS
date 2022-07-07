@@ -21,11 +21,15 @@ In addition to the basic preparations above, you should:
 
 If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.edu>).
 
-## Lesson plan
+## Lesson materials
 
 We have one big lesson for the workshop, and we will touch on only a few sections of it. Please keep in mind that this is a draft.
 
 1. [Statistical inference with general linear models and mixed models](../../html/statistical-inference-linear-and-mixed.html)
+
+Here are the slides for the workshop:
+
+* [jesc20220629_workhop_slides.pdf](jesc20220629_workhop_slides.pdf)
 
 ## Post-workshop feedback
 
