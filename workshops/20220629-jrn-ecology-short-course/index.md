@@ -29,7 +29,7 @@ We have one big lesson for the workshop, and we will touch on only a few section
 
 Here are the slides for the workshop:
 
-* [jesc20220629_workhop_slides.pdf](jesc20220629_workhop_slides.pdf)
+* [jesc20220629_workshop_slides.pdf](jesc20220629_workshop_slides.pdf)
 
 ## Post-workshop feedback
 
