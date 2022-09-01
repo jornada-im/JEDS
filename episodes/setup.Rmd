@@ -103,10 +103,10 @@ sure you can open it. For Windows you can install `git` and the `bash` shell tog
 There are two good resources for getting `git` and related software ready for a
 one of the JEDS tutorials. 
 
-  * The [Carpentries `git` installation instructions](https://carpentries.github.io/workshop-template/#git)
-    gives good platform-based instructions.
-  * [Happy Git with R](https://happygitwithr.com/install-intro.html) has more detailed instructions
-    that cover a few edge-cases.
+* The [Carpentries `git` installation instructions](https://carpentries.github.io/workshop-template/#git)
+gives good platform-based instructions.
+* [Happy Git with R](https://happygitwithr.com/install-intro.html) has more detailed instructions
+that cover a few edge-cases.
 
 If you want, you can also install a GUI client for `git` to help visualize
 and manage what is happening with repositories you are working with. A few recommended

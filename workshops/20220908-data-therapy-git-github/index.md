@@ -8,13 +8,13 @@ This will be a 1-hour beginner-level tutorial on using `git` and GitHub as a res
 
 ## Getting set up
 
-Basically you will need to install `git` and make yourself an account at <https://github.com>. There are quite a few ways to do this, but check the JEDS [setup instructions](../../episodes/setup) for some recommended ones.
+Basically you will need to install `git` and make yourself an account at <https://github.com>. There are quite a few ways to do this, but check the JEDS [setup instructions](../../html/setup) for some recommended ones.
 
 If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.edu>).
 
 ## Lesson materials
 
-Still in development!
+* [Using git and GitHub as a researcher](../../html/git-and-github-for-research.html) (Still in development!)
 
 ## Post-workshop feedback
 
