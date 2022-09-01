@@ -22,7 +22,7 @@ datasets are output to the repository's `data/` directory.
 The complete code needed to generate and load the teaching datasets are in the
 sections below. To use each teaching dataset, you can either run this code
 before you start a lesson, or you can download and load the pre-made datasets
-from the [`data/` directory](https://github.com/jornada-im/jest/data).
+from the [`data/` directory](https://github.com/jornada-im/jeds/data).
 Suggestions for how to proceed are found at the start of each lesson.
 
 ## Teaching dataset 1 - Jornada ANPP data

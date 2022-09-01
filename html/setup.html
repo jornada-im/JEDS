@@ -13,7 +13,7 @@
 
 <meta name="date" content="2022-06-18" />
 
-<title>JEST Introduction and Setup</title>
+<title>JEDS Introduction and Setup</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -363,7 +363,7 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">JEST Introduction and Setup</h1>
+<h1 class="title toc-ignore">JEDS Introduction and Setup</h1>
 <h4 class="author">Greg Maurer, Darren James</h4>
 <h4 class="date">2022-06-18</h4>
 
@@ -372,25 +372,25 @@ pre code {
 <div id="TOC">
 <ul>
 <li><a href="#introduction">Introduction</a></li>
-<li><a href="#setting-up-for-a-lesson">Setting up for a lesson</a>
+<li><a href="#setting-up-for-an-r-lesson">Setting up for an <code>R</code> lesson</a>
 <ul>
 <li><a href="#install-r-and-rstudio">Install R and RStudio</a></li>
 <li><a href="#update-r-and-rstudio">Update R and RStudio</a></li>
 <li><a href="#install-required-r-packages">Install required R packages</a></li>
-<li><a href="#install-required-r-packages-1">Install required R packages</a></li>
+<li><a href="#install-required-r-packages-1">Install required <code>R</code> packages</a></li>
 <li><a href="#download-the-data">Download the data</a></li>
 </ul></li>
-<li><a href="#preparing-for-jest-workshops">Preparing for JEST workshops</a></li>
+<li><a href="#preparing-for-jeds-workshops">Preparing for JEDS workshops</a></li>
 </ul>
 </div>
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Welcome to the Jornada Ecological Statistics Tutorials, or JEST! Our aim is to teach introductory and intermediate statistics to Jornada researchers using R, and real data from the Jornada.</p>
+<p>Welcome to the Jornada Environmental Data Science education site (JEDS!) Our aim is to teach introductory and intermediate elements of data science (data management, analysis, statistics, visualization, etc.) to Jornada researchers using open-source software tools, and real data from the Jornada.</p>
 </div>
-<div id="setting-up-for-a-lesson" class="section level2">
-<h2>Setting up for a lesson</h2>
-<p>We use the <a href="https://www.r-project.org/">R programming language</a>, and additional packages from the R software ecosystem, as our primary statistical analysis tools in these tutorials. During JEST workshops we teach using the <a href="https://www.rstudio.com/">RStudio development environment</a> as our primary programming and analysis environment. For working through these tutorials, either on your own or in a workshop, you should have both installed according to the instructions below.</p>
+<div id="setting-up-for-an-r-lesson" class="section level2">
+<h2>Setting up for an <code>R</code> lesson</h2>
+<p>Many JEDS tutorials use the <a href="https://www.r-project.org/">R programming language</a>, and additional packages from the R software ecosystem, as the primary software tools, especially for statistical analysis. During <code>R</code>-based JEDS workshops we teach using the <a href="https://www.rstudio.com/">RStudio development environment</a> as our primary programming and analysis environment. For working through these tutorials, either on your own or in a workshop, you should have both installed according to the instructions below.</p>
 <p><em>The section below borrows heavily from the “<a href="https://datacarpentry.org/R-ecology-lesson/">Data Carpentry: Data Analysis and Visualization in R for Ecologists</a>” lesson (Eunice, 2022)</em></p>
 <div id="install-r-and-rstudio" class="section level3">
 <h3>Install R and RStudio</h3>
@@ -449,7 +449,7 @@ pre code {
 <h3>Install required R packages</h3>
 </div>
 <div id="install-required-r-packages-1" class="section level3">
-<h3>Install required R packages</h3>
+<h3>Install required <code>R</code> packages</h3>
 <p>During the course we will need a number of R packages. Packages contain useful R code written by other people. In most workshops will use the packages <code>tidyverse</code>, <code>nlme</code>, <code>lme4</code>, and <code>emmeans</code>.</p>
 <p>To try to install these packages, open RStudio and copy and paste the following command into the console window (look for a blinking cursor on the bottom left), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command.</p>
 <pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;nlme&quot;, &quot;lme4&quot;, &quot;emmeans&quot;))</code></pre>
@@ -471,9 +471,9 @@ library(emmeans)</code></pre>
 <p>A copy of all data files used in these lessons are stored in the <code>data/</code> directory of the GitHub repository. The data files you will work with will be specified at the start of the lesson materials, and you may also receive additional instructions or materials for workshops.</p>
 </div>
 </div>
-<div id="preparing-for-jest-workshops" class="section level2">
-<h2>Preparing for JEST workshops</h2>
-<p>These workshops are based on “live coding,” so instructors will be running example R code while learners are expected to follow along on their own machine. To follow along successfully during a JEST workshop, please ensure you have a laptop or other Windows, MacOS, or Linux device that has R and RStudio, and any necessary R packages, installed and up to date. Look for instructions provided by instructors in advance of the workshop about what R packages to install, and any other materials you may need to download or bring. Also, always bring a charger for your device.</p>
+<div id="preparing-for-jeds-workshops" class="section level2">
+<h2>Preparing for JEDS workshops</h2>
+<p>These workshops are based on “live coding,” so instructors will be running example R code while learners are expected to follow along on their own machine. To follow along successfully during a JEDS workshop, please ensure you have a laptop or other Windows, MacOS, or Linux device that has R and RStudio, and any necessary R packages, installed and up to date. Look for instructions provided by instructors in advance of the workshop about what R packages to install, and any other materials you may need to download or bring. Also, always bring a charger for your device.</p>
 <p>If the workshop is in a virtual format we will be using the Zoom platform, so make sure you have Zoom installed and up-to-date on your machine as well.</p>
 </div>
 

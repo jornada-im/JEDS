@@ -1,10 +1,10 @@
-## Welcome to the Jornada Ecological Statistics Tutorials
+## Welcome to the Jornada Ecological Data Science site
 
-Our aim is to teach introductory and intermediate statistics to Jornada researchers using accessible methods and relatable data.
+Our aim is to teach introductory and intermediate data science to Jornada researchers using accessible methods and relatable data.
 
 ## Setting up your environment
 
-These tutorials have been developed for learners using `R`. To set up your environment to work through lessons your own, or in a workshop, follow the [setup instructions](./html/setup.html). Lessons rely on either simulated data or Jornada data hosted at EDI. The [teaching datasets page](./html/teaching-datasets.html) will introduce these datasets and how to load them. Additional required `R` packages and suggestions for loading the data are given at the start of each lesson.
+Most tutorials have been developed for learners using `R`, `python`, and other open-source tools. To set up your environment to work through lessons your own, or in a workshop, follow the [setup instructions](./html/setup.html) that apply to the lesson. Lessons rely on either simulated data or Jornada data hosted at EDI. The [teaching datasets page](./html/teaching-datasets.html) will introduce these datasets and how to load them. Additional required software packages and suggestions for loading the data are given at the start of each lesson.
 
 ## Lessons
 

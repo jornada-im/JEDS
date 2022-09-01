@@ -1,5 +1,5 @@
 ---
-title: "JEST Introduction and Setup"
+title: "JEDS Introduction and Setup"
 author: "Greg Maurer, Darren James"
 date: '2022-06-18'
 output:
@@ -13,17 +13,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-Welcome to the Jornada Ecological Statistics Tutorials, or JEST! Our aim is to
-teach introductory and intermediate statistics to Jornada researchers using R,
-and real data from the Jornada.
+Welcome to the Jornada Environmental Data Science education site (JEDS!) Our aim is 
+to teach introductory and intermediate elements of data science (data management, 
+analysis, statistics, visualization, etc.) to Jornada researchers using open-source
+software tools, and real data from the Jornada.
 
-## Setting up for a lesson
+## Setting up for an `R` lesson
 
-We use the [R programming language](https://www.r-project.org/), and additional
-packages from the R software ecosystem, as our primary statistical analysis
-tools in these tutorials. During JEST workshops we teach using the [RStudio development environment](https://www.rstudio.com/) as our primary programming and analysis
-environment. For working through these tutorials, either on your own or in a
-workshop, you should have both installed according to the instructions below.
+Many JEDS tutorials use the [R programming language](https://www.r-project.org/), and additional
+packages from the R software ecosystem, as the primary software tools, especially for statistical analysis.
+During `R`-based JEDS workshops we teach using the [RStudio development environment](https://www.rstudio.com/)
+as our primary programming and analysis environment. For working through these tutorials, either on your own
+or in a workshop, you should have both installed according to the instructions below.
 
 *The section below borrows heavily from the "[Data Carpentry: Data Analysis and
 Visualization in R for Ecologists](https://datacarpentry.org/R-ecology-lesson/)"
@@ -36,7 +37,7 @@ cat(dc_lines[55:140], sep = '\n')
 ```
 
 
-### Install required R packages
+### Install required `R` packages
 
 During the course we will need a number of R packages. Packages contain useful 
 R code written by other people. In most workshops will use the packages 
@@ -85,11 +86,11 @@ directory of the GitHub repository. The data files you will work with will
 be specified at the start of the lesson materials, and you may also receive
 additional instructions or materials for workshops.
 
-## Preparing for JEST workshops
+## Preparing for JEDS workshops
 
 These workshops are based on "live coding," so instructors will be running
 example R code while learners are expected to follow along on their own machine.
-To follow along successfully during a JEST workshop, please ensure you have a
+To follow along successfully during a JEDS workshop, please ensure you have a
 laptop or other Windows, MacOS, or Linux device that has R and RStudio, and any
 necessary R packages, installed and up to date. Look for instructions provided
 by instructors in advance of the workshop about what R packages to install, and

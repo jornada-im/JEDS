@@ -853,9 +853,9 @@ emmeans.Tukey</code></pre>
 ## Confidence level used: 0.95 
 ## P value adjustment: tukey method for comparing a family of 5 estimates 
 ## significance level used: alpha = 0.05 
-## NOTE: Compact letter displays can be misleading
-##       because they show NON-findings rather than findings.
-##       Consider using &#39;pairs()&#39;, &#39;pwpp()&#39;, or &#39;pwpm()&#39; instead.</code></pre>
+## NOTE: If two or more means share the same grouping letter,
+##       then we cannot show them to be different.
+##       But we also did not show them to be the same.</code></pre>
 <p>This groups the comparisons, telling us that group <code>P</code>, or Playa grasslands are significantly more productive in 2017, while the other four groups are statistically the same.</p>
 <p>Be prepared to encounter issues with interpreting the intent and statistical meaning of some procedures in R. For example, below, <code>emmeans</code> comparisons using the <code>adjust = &quot;Tukey&quot;</code> parameter give us some difficult-to-parse warnings about the confidence interval adjustment. You will need to read up on issues like this and be aware that statisticians developing <code>R</code> packages don’t always agree on methods.</p>
 <pre class="r"><code># Problem: emmeans switches to Sidak when adjust = &quot;Tukey&quot; is specified
@@ -879,9 +879,9 @@ emmeans(lm.ANOVA, ~ zone, adjust = &quot;Tukey&quot;) %&gt;%
 ## Conf-level adjustment: sidak method for 5 estimates 
 ## P value adjustment: tukey method for comparing a family of 5 estimates 
 ## significance level used: alpha = 0.05 
-## NOTE: Compact letter displays can be misleading
-##       because they show NON-findings rather than findings.
-##       Consider using &#39;pairs()&#39;, &#39;pwpp()&#39;, or &#39;pwpm()&#39; instead.</code></pre>
+## NOTE: If two or more means share the same grouping letter,
+##       then we cannot show them to be different.
+##       But we also did not show them to be the same.</code></pre>
 <p>Should we be using the Sidak confidence interval adjustment? The statistician who wrote <code>emmeans</code> thinks so.</p>
 <p>We’ve based these mean comparison letters on the default Tukey method and its confidence intervals. However, there are other methods that might be more or less conservative. Lets compare results from Tukey and Scheffe methods, by re-doing the comparison, binding the tables, and making a figure. Sheffe is a more conservative method of comparing groups.</p>
 <pre class="r"><code># First get comparisons from Scheffe
