@@ -86,6 +86,40 @@ directory of the GitHub repository. The data files you will work with will
 be specified at the start of the lesson materials, and you may also receive
 additional instructions or materials for workshops.
 
+## Setup for shell, git and GitHub lessons
+
+[`git`](https://git-scm.com/) is a distributed version control system and is the
+underlying technology behind [GitHub](https://github.com), the web-based software development and
+collaboration platform. It is common to use `git` together with a "shell", which
+is a command-line interface to your computer. So, for JEDS tutorials that involve
+`git` and GitHub, please complete three steps using the recommended resources:
+
+1. Install `git` to your computer
+2. Make sure you have access to a shell
+3. Sign up for a [GitHub](https://github.com) account
+
+If you are on MacOS or Linux, you should have a shell installed already, just make
+sure you can open it. For Windows you can install `git` and the `bash` shell together.
+There are two good resources for getting `git` and related software ready for a
+one of the JEDS tutorials. 
+
+  * The [Carpentries `git` installation instructions](https://carpentries.github.io/workshop-template/#git)
+    gives good platform-based instructions.
+  * [Happy Git with R](https://happygitwithr.com/install-intro.html) has more detailed instructions
+    that cover a few edge-cases.
+
+If you want, you can also install a GUI client for `git` to help visualize
+and manage what is happening with repositories you are working with. A few recommended
+clients are [GitKraken](https://www.gitkraken.com/),
+[SourceTree](https://www.sourcetreeapp.com/), and [GitHub Desktop](https://desktop.github.com/).
+More discussion of clients is available over at [Happy Git with R](https://happygitwithr.com/git-client.html).
+
+```{r results="asis", include=FALSE, echo=FALSE}
+# This brings in SC Shell/Git content for installing git
+sc_lines <- readLines('https://github.com/carpentries/workshop-template/raw/gh-pages/_includes/install_instructions/git.html')
+cat(sc_lines, sep = '\n')
+```
+
 ## Preparing for JEDS workshops
 
 These workshops are based on "live coding," so instructors will be running
