@@ -1,7 +1,7 @@
 ---
 title: "JEDS Introduction and Setup"
 author: "Greg Maurer, Darren James"
-date: '2022-06-18'
+date: '2022-09-01'
 output:
     html_document:
       toc: true
@@ -13,12 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Introduction
 
-Welcome to the Jornada Environmental Data Science education site (JEDS!) Our aim is 
+Welcome to the Jornada Environmental Data Science education site (JEDS!). Our aim is 
 to teach introductory and intermediate elements of data science (data management, 
 analysis, statistics, visualization, etc.) to Jornada researchers using open-source
 software tools, and real data from the Jornada.
 
-## Setting up for an `R` lesson
+## Setup for an `R` lesson
 
 Many JEDS tutorials use the [R programming language](https://www.r-project.org/), and additional
 packages from the R software ecosystem, as the primary software tools, especially for statistical analysis.
@@ -33,9 +33,8 @@ lesson (Eunice, 2022)*
 ```{r results="asis", echo=FALSE}
 # This brings in DC R ecology content for installing R and R studio
 dc_lines <- readLines('https://github.com/datacarpentry/R-ecology-lesson/raw/main/index.Rmd')
-cat(dc_lines[55:140], sep = '\n')
+cat(dc_lines[55:138], sep = '\n')
 ```
-
 
 ### Install required `R` packages
 
@@ -86,7 +85,7 @@ directory of the GitHub repository. The data files you will work with will
 be specified at the start of the lesson materials, and you may also receive
 additional instructions or materials for workshops.
 
-## Setup for shell, git and GitHub lessons
+## Setup for shell, `git` and GitHub lessons
 
 [`git`](https://git-scm.com/) is a distributed version control system and is the
 underlying technology behind [GitHub](https://github.com), the web-based software development and
@@ -104,7 +103,7 @@ There are two good resources for getting `git` and related software ready for a
 one of the JEDS tutorials. 
 
 * The [Carpentries `git` installation instructions](https://carpentries.github.io/workshop-template/#git)
-gives good platform-based instructions.
+gives succinct platform-based instructions.
 * [Happy Git with R](https://happygitwithr.com/install-intro.html) has more detailed instructions
 that cover a few edge-cases.
 

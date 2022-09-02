@@ -9,11 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Greg Maurer, Darren James" />
+<meta name="author" content="Greg Maurer" />
 
 <meta name="date" content="2022-09-01" />
 
-<title>JEDS Introduction and Setup</title>
+<title>Git and GitHub for researchers</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -363,8 +363,8 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">JEDS Introduction and Setup</h1>
-<h4 class="author">Greg Maurer, Darren James</h4>
+<h1 class="title toc-ignore">Git and GitHub for researchers</h1>
+<h4 class="author">Greg Maurer</h4>
 <h4 class="date">2022-09-01</h4>
 
 </div>
@@ -372,121 +372,19 @@ pre code {
 <div id="TOC">
 <ul>
 <li><a href="#introduction">Introduction</a></li>
-<li><a href="#setup-for-an-r-lesson">Setup for an <code>R</code> lesson</a>
-<ul>
-<li><a href="#install-r-and-rstudio">Install R and RStudio</a></li>
-<li><a href="#update-r-and-rstudio">Update R and RStudio</a></li>
-<li><a href="#install-required-r-packages">Install required <code>R</code> packages</a></li>
-<li><a href="#download-the-data">Download the data</a></li>
-</ul></li>
-<li><a href="#setup-for-shell-git-and-github-lessons">Setup for shell, <code>git</code> and GitHub lessons</a></li>
-<li><a href="#preparing-for-jeds-workshops">Preparing for JEDS workshops</a></li>
+<li><a href="#do-you-have-git">Do you have <code>git</code>?</a></li>
 </ul>
 </div>
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Welcome to the Jornada Environmental Data Science education site (JEDS!). Our aim is to teach introductory and intermediate elements of data science (data management, analysis, statistics, visualization, etc.) to Jornada researchers using open-source software tools, and real data from the Jornada.</p>
 </div>
-<div id="setup-for-an-r-lesson" class="section level2">
-<h2>Setup for an <code>R</code> lesson</h2>
-<p>Many JEDS tutorials use the <a href="https://www.r-project.org/">R programming language</a>, and additional packages from the R software ecosystem, as the primary software tools, especially for statistical analysis. During <code>R</code>-based JEDS workshops we teach using the <a href="https://www.rstudio.com/">RStudio development environment</a> as our primary programming and analysis environment. For working through these tutorials, either on your own or in a workshop, you should have both installed according to the instructions below.</p>
-<p><em>The section below borrows heavily from the “<a href="https://datacarpentry.org/R-ecology-lesson/">Data Carpentry: Data Analysis and Visualization in R for Ecologists</a>” lesson (Eunice, 2022)</em></p>
-<div id="install-r-and-rstudio" class="section level3">
-<h3>Install R and RStudio</h3>
-<p>R and RStudio are two separate pieces of software:</p>
-<ul>
-<li><strong>R</strong> is a programming language that is especially powerful for data exploration, visualization, and statistical analysis</li>
-<li><strong>RStudio</strong> is an integrated development environment (IDE) that makes using R easier. In this course we use RStudio to interact with R.</li>
-</ul>
-<p>If you don’t already have R and RStudio installed, follow the instructions for your operating system below. You have to install R before you install RStudio.</p>
-<div id="windows" class="section level4">
-<h4>Windows</h4>
-<ul>
-<li>Download R from the <a href="https://cran.r-project.org/bin/windows/base/release.htm">CRAN website</a>.</li>
-<li>Run the <code>.exe</code> file that was just downloaded</li>
-<li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>All Installers</em>, download the RStudio Installer for Windows.</li>
-<li>Double click the file to install it</li>
-<li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
-</ul>
-<div id="macos" class="section level5">
-<h5>MacOS</h5>
-<ul>
-<li>Download R from the <a href="https://cran.r-project.org/bin/macosx/">CRAN website</a>.</li>
-<li>Select the <code>.pkg</code> file for the latest R version</li>
-<li>Double click on the downloaded file to install R</li>
-<li>It is also a good idea to install <a href="https://www.xquartz.org/">XQuartz</a> (needed by some packages)</li>
-<li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>All Installers</em>, download the RStudio Installer for MacOS.</li>
-<li>Double click the file to install RStudio</li>
-<li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
-</ul>
-</div>
-<div id="linux" class="section level5">
-<h5>Linux</h5>
-<ul>
-<li>Follow the instructions for your distribution from <a href="https://cloud.r-project.org/bin/linux">CRAN</a>, they provide information to get the most recent version of R for common distributions. For most distributions, you could use your package manager (e.g., for Debian/Ubuntu run <code>sudo apt-get install r-base</code>, and for Fedora <code>sudo yum install R</code>), but we don’t recommend this approach as the versions provided by this are usually out of date. In any case, make sure you have at least R 3.3.1.</li>
-<li>Go to the <a href="https://www.rstudio.com/products/rstudio/download/#download">RStudio download page</a></li>
-<li>Under <em>All Installers</em>, select the version that matches your distribution and install it with your preferred method (e.g., with Debian/Ubuntu <code>sudo dpkg -i   rstudio-YYYY.MM.X-ZZZ-amd64.deb</code> at the terminal).</li>
-<li>Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.</li>
-</ul>
-</div>
-</div>
-</div>
-<div id="update-r-and-rstudio" class="section level3">
-<h3>Update R and RStudio</h3>
-<p>If you already have R and RStudio installed, first check if your R version is up to date:</p>
-<ul>
-<li>When you open RStudio your R version will be printed in the console on the bottom left. Alternatively, you can type <code>sessionInfo()</code> into the console. If your R version is 4.0.0 or later, you don’t need to update R for this lesson. If your version of R is older than that, download and install the latest version of R from the R project website <a href="https://cran.r-project.org/bin/windows/base/">for Windows</a>, <a href="https://cran.r-project.org/bin/macosx/">for MacOS</a>, or <a href="https://cran.r-project.org/bin/linux/">for Linux</a></li>
-<li>It is not necessary to remove old versions of R from your system, but if you wish to do so you can check <a href="https://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-UNinstall-R_003f">How do I uninstall R?</a></li>
-<li>Note: The changes introduced by new R versions are usually backwards-compatible. That is, your old code should still work after updating your R version. However, if breaking changes happen, it is useful to know that you can have multiple versions of R installed in parallel and that you can switch between them in RStudio by going to <code>Tools &gt; Global Options &gt; General &gt; Basic</code>.</li>
-<li>After installing a new version of R, you will have to reinstall all your packages with the new version. For Windows, there is a package called <code>installr</code> that can help you with upgrading your R version and migrate your package library.</li>
-</ul>
-<p>To update RStudio to the latest version, open RStudio and click on <code>Help &gt; Check for Updates</code>. If a new version is available follow the instruction on screen. By default, RStudio will also automatically notify you of new versions every once in a while.</p>
-</div>
-<div id="install-required-r-packages" class="section level3">
-<h3>Install required <code>R</code> packages</h3>
-<p>During the course we will need a number of R packages. Packages contain useful R code written by other people. In most workshops will use the packages <code>tidyverse</code>, <code>nlme</code>, <code>lme4</code>, and <code>emmeans</code>.</p>
-<p>To try to install these packages, open RStudio and copy and paste the following command into the console window (look for a blinking cursor on the bottom left), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command.</p>
-<pre class="r"><code>install.packages(c(&quot;tidyverse&quot;, &quot;nlme&quot;, &quot;lme4&quot;, &quot;emmeans&quot;))</code></pre>
-<p>Alternatively, you can install the packages using RStudio’s graphical user interface by going to <code>Tools &gt; Install Packages</code> and typing the names of the packages separated by a comma.</p>
-<p>R tries to download and install the packages on your machine. When the installation has finished, you can try to load the packages by pasting the following code into the console:</p>
-<pre class="r"><code>library(tidyverse)
-library(nlme)
-library(lme4)
-library(emmeans)</code></pre>
-<p>If you do not see an error like <code>there is no package called ‘...’</code> you are good to go!</p>
-<p><strong>NOTE</strong> that if you are attending a workshop, you will likely receive additional instructions about packages required for for your workshop. It is a good idea to install these in advance, using commands like those above, and let your instructors know if you have any problems.</p>
-<p>Generally, it is recommended to keep your R version and all packages up to date, because new versions bring improvements and important bugfixes. To update the packages that you have installed, click <code>Update</code> in the <code>Packages</code> tab in the bottom right panel of RStudio, or go to <code>Tools &gt; Check for Package Updates...</code>.</p>
-<p>Sometimes, package updates introduce changes that break your old code, which can be very frustrating. To avoid this problem, you can use a package called <code>renv</code>. It locks the package versions you have used for a given project and makes it straightforward to reinstall those exact package version in a new environment, for example after updating your R version or on another computer. However, the details are outside of the scope of this lesson.</p>
-</div>
-<div id="download-the-data" class="section level3">
-<h3>Download the data</h3>
-<p>We will download the data directly from R during the lessons. However, if you are expecting problems with the network, it may be better to download the data beforehand and store it on your machine.</p>
-<p>The data files for the lesson can be downloaded manually here: <a href="https://doi.org/10.6084/m9.figshare.1314459" class="uri">https://doi.org/10.6084/m9.figshare.1314459</a></p>
-<p>A copy of all data files used in these lessons are stored in the <code>data/</code> directory of the GitHub repository. The data files you will work with will be specified at the start of the lesson materials, and you may also receive additional instructions or materials for workshops.</p>
-</div>
-</div>
-<div id="setup-for-shell-git-and-github-lessons" class="section level2">
-<h2>Setup for shell, <code>git</code> and GitHub lessons</h2>
-<p><a href="https://git-scm.com/"><code>git</code></a> is a distributed version control system and is the underlying technology behind <a href="https://github.com">GitHub</a>, the web-based software development and collaboration platform. It is common to use <code>git</code> together with a “shell”, which is a command-line interface to your computer. So, for JEDS tutorials that involve <code>git</code> and GitHub, please complete three steps using the recommended resources:</p>
-<ol style="list-style-type: decimal">
-<li>Install <code>git</code> to your computer</li>
-<li>Make sure you have access to a shell</li>
-<li>Sign up for a <a href="https://github.com">GitHub</a> account</li>
-</ol>
-<p>If you are on MacOS or Linux, you should have a shell installed already, just make sure you can open it. For Windows you can install <code>git</code> and the <code>bash</code> shell together. There are two good resources for getting <code>git</code> and related software ready for a one of the JEDS tutorials.</p>
-<ul>
-<li>The <a href="https://carpentries.github.io/workshop-template/#git">Carpentries <code>git</code> installation instructions</a> gives succinct platform-based instructions.</li>
-<li><a href="https://happygitwithr.com/install-intro.html">Happy Git with R</a> has more detailed instructions that cover a few edge-cases.</li>
-</ul>
-<p>If you want, you can also install a GUI client for <code>git</code> to help visualize and manage what is happening with repositories you are working with. A few recommended clients are <a href="https://www.gitkraken.com/">GitKraken</a>, <a href="https://www.sourcetreeapp.com/">SourceTree</a>, and <a href="https://desktop.github.com/">GitHub Desktop</a>. More discussion of clients is available over at <a href="https://happygitwithr.com/git-client.html">Happy Git with R</a>.</p>
-</div>
-<div id="preparing-for-jeds-workshops" class="section level2">
-<h2>Preparing for JEDS workshops</h2>
-<p>These workshops are based on “live coding,” so instructors will be running example R code while learners are expected to follow along on their own machine. To follow along successfully during a JEDS workshop, please ensure you have a laptop or other Windows, MacOS, or Linux device that has R and RStudio, and any necessary R packages, installed and up to date. Look for instructions provided by instructors in advance of the workshop about what R packages to install, and any other materials you may need to download or bring. Also, always bring a charger for your device.</p>
-<p>If the workshop is in a virtual format we will be using the Zoom platform, so make sure you have Zoom installed and up-to-date on your machine as well.</p>
+<div id="do-you-have-git" class="section level2">
+<h2>Do you have <code>git</code>?</h2>
+<pre class="bash"><code>git --version</code></pre>
+<pre><code>## git version 2.35.1</code></pre>
+<p>We have it!</p>
+<p>Now, lets output this into our <code>data/</code> directory so that we can load it easily next time.</p>
 </div>
 
 

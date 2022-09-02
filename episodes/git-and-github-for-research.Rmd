@@ -1,0 +1,33 @@
+---
+title: "Git and GitHub for researchers"
+author: "Greg Maurer"
+date: '2022-09-01'
+output:
+    html_document:
+      toc: true
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+
+
+## Do you have `git`?
+
+```{bash, make_sure}
+git --version
+```
+We have it!
+
+```{r}
+
+```
+
+Now, lets output this into our `data/` directory so that we can load it easily
+next time.
+
+```{r}
+
+```
