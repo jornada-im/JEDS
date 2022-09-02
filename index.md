@@ -13,7 +13,7 @@ Most tutorials have been developed for learners using `R`, `python`, and other o
 
 ## Upcoming workshops
 
-* [2022-09-08 - Data Therapy Git/GitHub tutorial](./workshops/20220908-data-therapy-git-github/index)
+* [2022-09-08 - Data Therapy Git/GitHub tutorial](./workshops/2022-data-therapy-git-github/index)
 * Probably more coming in fall 2022...
 
 ## Past workshops
