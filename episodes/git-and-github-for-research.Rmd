@@ -3,31 +3,241 @@ title: "Git and GitHub for researchers"
 author: "Greg Maurer"
 date: '2022-09-01'
 output:
+  #ioslides_presentation
     html_document:
       toc: true
+#toc: yes
 ---
 
-```{r, setup, include=FALSE}
+```{r, setup1, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Introduction
+```{bash, setup2, include=FALSE}
+mkdir ~/awesomeproject
+touch ~/awesomeproject/data.csv ~/awesomeproject/analysis_script_final.1.R \
+~/awesomeproject/analysis_script_final.R ~/awesomeproject/analysis_script_v1.R \
+~/awesomeproject/analysis_script_v2.R ~/awesomeproject/analysis_script_v3_MLtest.R \
+~/awesomeproject/analysis_script_v3.R ~/awesomeproject/analysis_script.R
+
+mkdir ~/awesomeproject_git
+touch ~/awesomeproject_git/analysis_script.R ~/awesomeproject_git/data.csv
+cd ~/awesomeproject_git
+git init
+echo "This is my script" >> analysis_script.R
+git add analysis_script.R
+git commit -m "Initial commit - add analysis script"
+echo "Add a linear model" >> analysis_script.R
+git add analysis_script.R
+git commit -m "Fit linear model to the data"
+echo "Add a polynomial model" >> analysis_script.R
+git add analysis_script.R
+git commit -m "Fit polynomial model"
+echo "Make some figures" >> analysis_script.R
+git add analysis_script.R
+git commit -m "Statistics and figures for report 1"
+```
+
+# 1. Getting to know git
+
+## What is `git`?
+
+* free & open-source distributed version control system (DVCS)
+* first authored by Linus Torvalds for development of the Linux kernel
+* very widely used to "version control" software dev projects
+* excels at tracking changes to computer code files (plain text)
+* good for collaborative workflows
+
+## Why use version control as a researcher? {.build}
+
+>- scientists write lots of computer code and documentation
+>- we revise things often
+>- paths of inquiry get abandoned, or revisited later
+>- scientists work collaboratively
+>- research projects evolve and diversify with time
+
+Research can become a "garden of forking paths"
+
+**Version control records changes and helps manage the complexity**
+
+## Inside a "simple" data analysis project
+
+```{r, awesomeproject}
+dir('~/awesomeproject/')
+```
+
+The researcher has gone down different paths:
+
+* linear, polynomial, and machine learning models
+* input from a collaborator
+* a "final product" for a report or paper
+
+Each resulted in a different file.
+
+## `git` simplifies things 
+
+```{r, awesomeproject_git}
+dir('~/awesomeproject_git/', all.files=TRUE, no..=TRUE) 
+# the 2nd and 3rd arguments select which hidden files to show, including .git 
+```
+
+This is a _`git` repository_ for the same analysis project
+
+* There is only one script (`analysis_script.R`)
+* All changes to the script (and other files) are recorded in the `.git`
+directory.
+
+## What is recorded in `.git/`?
+
+**`git` keeps track of what changed, who changed it, when it changed, and why* **
+![Schematic of a git-based workflow](img/git_diagram1.png)
+\ \ \ \ \ \ \ \* _as long as you tell it to_
+
+## An annotated list of "commits" {.smaller}
+
+```{bash, commits}
+git -C ~/awesomeproject_git/ log
+```
+
+## Some terminology
+
+>- ***repository***: a directory with a history of changes recorded by `git`,
+meaning it must contain a `.git` subdirectory.
+>- ***commit***: `git`'s basic unit of version control that records *exactly* which
+lines changed in which files, and how, plus annotations about person, time, etc.
+>- ***version***: the state of repository files produced by a particular line of
+development that includes one or more commits to the repository
+>- ***branch***: a version of repository files that diverges (with separate
+commits) from the main line of development (the `main` branch) in the repository
+>- ***fork***: a complete copy of a `git` repository that then undergoes
+divergent changes from the original
+
+# 2. Now try some `git` basics
 
 
-## Do you have `git`?
+### Finding and configuring `git`
 
-```{bash, make_sure}
+We will do this in the system shell. So, open a terminal with `bash`, `zsh`,
+or another shell (you may have installed one with `git` on windows), and then
+type the following command.
+
+```{bash, check_for_git}
 git --version
 ```
-We have it!
+If you got the output above, or similar. You have `git` installed. If you didn't
+you will need to return to the [setup instructions](../html/setup.html) and
+install `git` for your system.
 
-```{r}
+If `git` is newly installed on your system, you probably need to configure a
+couple of things. As you start using `git` commands, it helps to know that they
+usually follow a `git verb options` pattern, where `verb` is the action you need
+to take, and `options` give some specifics of how to do the action. For 
+configuration, lets first, tell `git` who you are.
 
+```{bash, tell_git_who_u_are, eval=FALSE}
+git config --global user.name "Marie Curie"
+git config --global user.email "marie@sorbonne.fr"
 ```
 
-Now, lets output this into our `data/` directory so that we can load it easily
-next time.
+There are some differences in how computer platforms handle line endings
+in text files. Correspondingly, you will want to tell `git` how to do this too,
+and the configuration for MS Windows machines will be different than for Mac and
+Linux machines. For Mac and Linux, the recommended setting is:
 
-```{r}
+```{bash, line-endings_mac, eval=FALSE}
+git config --global core.autocrlf input
+```
 
+And for Windows it is:
+
+```{bash, line-endings_win, eval=FALSE}
+git config --global core.autocrlf true
+```
+
+Since we'll be using GitHub, which names its repository main branches `main`,
+we should make sure our `git` follows the same convention.
+
+```{bash, config_main, eval=FALSE}
+git config --global init.defaultBranch main
+```
+
+Finally, you might also want to configure `git` to use your favorite text editor
+for writing commit messages. More information about that [here](https://swcarpentry.github.io/git-novice/02-setup/index.html).
+
+You can show your `git` configurations anytime with `git config --list` command.
+
+### Making your first repository
+
+Now lets make a new directory and add a text file to it. We will turn this into
+a `git` repository in a moment.
+
+```{bash, start_repo}
+mkdir ~/my_repo
+touch ~/my_repo/script.R
+cd ~/my_repo
+```
+```{r, setup3, include=FALSE}
+# Have to change working directory
+knitr::opts_knit$set(root.dir = '~/my_repo')
+#setwd('~/my_repo')
+```
+
+Now that we are in our project directory, lets make it a repository
+
+```{bash, init_repo}
+git init
+```
+
+We can use the `ls -a` shell command to see if we made a `.git` directory to
+to store the changes we will make to our files.
+
+```{bash, list_repo}
+ls -a
+```
+Now lets ask `git` to tell us the status of our repository.
+
+```{bash, repo_status}
+git status
+```
+
+We are on the `main` branch, there are no commits yet, and there is a file that
+we made - `script.R` - that is not being tracked. 
+
+### Adding files and tracking changes
+
+Lets tell `git` to track that file. We do that with the `add` verb, which 
+"stages" the file to be added to a new commit.
+
+```{bash, stage_file}
+git add script.R
+```
+
+If we want to check the status now, we'll see that `script.R` is staged to be 
+added as a new file, under the "Changes to be committed" list.
+
+```{bash, status_staged}
+git status
+```
+
+```{bash, commit_file}
+git commit -m 'Adding the first R script'
+```
+
+# 3. Starting with GitHub
+
+```{r, setup4, include=FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
+#setwd('~/GitHub/JEDS/episodes')
+```
+
+```{r, cleanup_r, include=FALSE}
+unlink('~/awesomeproject', recursive=TRUE)
+unlink('~/awesomeproject_git', recursive=TRUE)
+unlink('~/my_repo', recursive=TRUE)
+```
+
+```{bash, cleanup, include=FALSE, exec=FALSE}
+#rm -r ~/awesomeproject;
+#rm -r ~/awesomeproject_git;
+#rm -r ~/my_repo;
 ```
