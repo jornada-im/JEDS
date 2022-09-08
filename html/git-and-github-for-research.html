@@ -395,7 +395,11 @@ pre code {
 <li><a href="#how-to-use-github">How to use GitHub</a></li>
 <li><a href="#when-should-researchers-use-github">When should researchers use GitHub?</a></li>
 </ul></li>
-<li><a href="#basic-github">4. Basic GitHub</a></li>
+<li><a href="#working-with-github-repositories">4. Working with GitHub repositories</a>
+<ul>
+<li><a href="#create-and-clone-a-github-repository">Create and clone a GitHub repository</a></li>
+<li><a href="#make-changes-and-push-to-github">Make changes and push to GitHub</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -476,27 +480,27 @@ ls -a ~/awesomeproject_git/</code></pre>
 <div id="an-annotated-list-of-commits" class="section level2 smaller">
 <h2 class="smaller">An annotated list of “commits”</h2>
 <pre class="bash"><code>git -C ~/awesomeproject_git/ log</code></pre>
-<pre><code>## commit fa07d0dbe9d4c4de3b43ab6415bdf9eabf1ed087
+<pre><code>## commit 1f2f0c77cb0eb9e29a7adebc7504cbb74ed1768a
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 14:18:05 2022 -0600
+## Date:   Thu Sep 8 14:48:12 2022 -0600
 ## 
 ##     Statistics and figures for report 1
 ## 
-## commit 6e880e7996201eb22716db8b2137d097ccc1f757
+## commit 680c522175e3cf9ac837b1023fd5a9b4e0f15876
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 14:18:05 2022 -0600
+## Date:   Thu Sep 8 14:48:12 2022 -0600
 ## 
 ##     Fit polynomial model
 ## 
-## commit 37274ced4dc08c741192a9d8f509f1cb23531084
+## commit bfce3a7f574796e0739d92006e15f192f81ca0c3
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 14:18:05 2022 -0600
+## Date:   Thu Sep 8 14:48:12 2022 -0600
 ## 
 ##     Fit linear model to the data
 ## 
-## commit f4b5c6bfb70804a2f4f6a54faf56d7215a8b0600
+## commit 1d393707cbc297c65df004a9e4971818301a4061
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 14:18:05 2022 -0600
+## Date:   Thu Sep 8 14:48:12 2022 -0600
 ## 
 ##     Initial commit - add analysis script</code></pre>
 </div>
@@ -563,7 +567,7 @@ cd ~/my_repo</code></pre>
 ##  new file:   script.R</code></pre>
 <p>This staging step lets you compose multiple changes to your repository files into a group of updates to your history (sometimes called a change-set). When we are ready to add these changes, for us just one new file, to our <code>git</code> repository, we <code>commit</code> the changes to the repository, which will store the initial version of our file in <code>git</code>’s history.</p>
 <pre class="bash"><code>git commit -m &#39;Adding the first R script&#39;</code></pre>
-<pre><code>## [main (root-commit) f9eb6ba] Adding the first R script
+<pre><code>## [main (root-commit) b5de751] Adding the first R script
 ##  1 file changed, 0 insertions(+), 0 deletions(-)
 ##  create mode 100644 script.R</code></pre>
 <p>Sooner or later we’ll add something to this file, and we’ll want to commit those changes to the repository as well. <strong>Open up your <code>script.R</code> file in a text editor and add a couple lines of “code”, then save this file again</strong>. After it is saved you can check your repository status with <code>git status</code> again.</p>
@@ -587,20 +591,20 @@ cd ~/my_repo</code></pre>
 <p>The lines prepended with a <code>+</code> show what has been added since the last commit. Lines starting with <code>-</code> would show you what was removed, but we haven’t removed anything. This seems like a reasonable change, so lets stage the updated file with <code>git add</code> and add it to our repository with <code>git commit</code>.</p>
 <pre class="bash"><code>git add script.R
 git commit -m &#39;I updated the script with 2 lines&#39;</code></pre>
-<pre><code>## [main 6064d07] I updated the script with 2 lines
+<pre><code>## [main 4b9a300] I updated the script with 2 lines
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>Take note that when you commit something to your repository’s history it is wise to explain what was changed using a “commit message” That is what we are doing with the <code>-m</code> option followed by a quoted message. Commit messages are invaluable in helping you understand how and why your repository is changing, so before you commit something, put a little thought into how you will describe the changes.</p>
 <p>Lets take a quick look at our history now:</p>
 <pre class="bash"><code>git log</code></pre>
-<pre><code>## commit 6064d0722ab6ca005806c683fa38d3b0511dda08
+<pre><code>## commit 4b9a300489b7f17b60ff73ff82e0d7d243478073
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 14:18:06 2022 -0600
+## Date:   Thu Sep 8 14:48:12 2022 -0600
 ## 
 ##     I updated the script with 2 lines
 ## 
-## commit f9eb6ba219ef4caca996cae1f7c65e8c10ec8c1a
+## commit b5de751654b9f9b2900df72fd981f766324f4035
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 14:18:06 2022 -0600
+## Date:   Thu Sep 8 14:48:12 2022 -0600
 ## 
 ##     Adding the first R script</code></pre>
 <p>We can see our progress so far. There are two commits, with the first adding the new <code>script.R</code> file, and the second one adding a couple of lines to it.</p>
@@ -628,7 +632,6 @@ git commit -m &#39;I updated the script with 2 lines&#39;</code></pre>
 </ul>
 <p><strong>Clone or sync changes (<code>push</code> and <code>pull</code>) with GitHub repositories using <code>git</code></strong></p>
 <pre class="bash"><code>git clone https://github.com/jornada-im/JEDS.git</code></pre>
-<pre><code>## Cloning into &#39;JEDS&#39;...</code></pre>
 <p><strong>GitHub also has a bunch of APIs, a command-line tool, GitHub Desktop…</strong></p>
 </div>
 <div id="when-should-researchers-use-github" class="section level2">
@@ -648,9 +651,27 @@ git commit -m &#39;I updated the script with 2 lines&#39;</code></pre>
 </ul>
 </div>
 </div>
-<div id="basic-github" class="section level1">
-<h1>4. Basic GitHub</h1>
+<div id="working-with-github-repositories" class="section level1">
+<h1>4. Working with GitHub repositories</h1>
+<div id="create-and-clone-a-github-repository" class="section level2">
+<h2>Create and clone a GitHub repository</h2>
 <p>Lets create a repository on GitHub, initialize it with some files, and then use our local <code>git</code> tools to pull the new repository to our computer. We can then make some changes and push them back to GitHub.</p>
+<ol style="list-style-type: decimal">
+<li><p>Log into <a href="https://github.com" class="uri">https://github.com</a> with your account credentials (or make an account if you didn’t in advance).</p></li>
+<li><p>Press the little green “New” button to create a new repository</p></li>
+<li><p>Name the repository <code>my_repo</code></p></li>
+<li><p>Initialize with a <code>README.md</code> file and a <code>.gitignore</code></p></li>
+</ol>
+<p>Now your repository is created. To move the repository to your local machine, you will do something called “cloning” the GitHub repository. First lets make a place on your local machine to put the repository. Go back to your system shell and make a new directory called <code>GitHub</code> and navigate into it.</p>
+<pre class="bash"><code>mkdir GitHub
+cd GitHub</code></pre>
+<p>Now you need to use <code>git</code> to clone the repository on GitHub using its web address. Returning to your repository page (<a href="https://github.com/%7Busername%7D/my_repo" class="uri">https://github.com/{username}/my_repo</a>), look in the In the top right of the new repository there is a green “Code” button. Click it and a dialogue will open giving you the option to copy an address. Use the “HTTPS” option and press the “Copy” button to the right of the address (2overlapping squares). The address for your repository is now in your system clipboard. Return to your shell and <code>git clone</code> the repository:</p>
+<pre class="bash"><code>git clone https://github.com/gremau/my_repo.git</code></pre>
+</div>
+<div id="make-changes-and-push-to-github" class="section level2">
+<h2>Make changes and push to GitHub</h2>
+<p>Now we will make some changes to our new repository on our local system.</p>
+</div>
 </div>
 
 

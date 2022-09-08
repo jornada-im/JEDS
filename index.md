@@ -9,7 +9,7 @@ Most tutorials have been developed for learners using `R`, `python`, and other o
 ## Lessons
 
 1. [Hypothesis testing with general linear models and mixed models](./html/statistical-inference-linear-and-mixed.html)
-2. [Using git and GitHub as a researcher](./html/git-and-github-for-research.html) (Not ready yet)
+2. [Using git and GitHub as a researcher](./html/git-and-github-for-research.html)
 
 ## Upcoming workshops
 

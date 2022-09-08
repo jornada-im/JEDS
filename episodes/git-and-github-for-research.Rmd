@@ -4,8 +4,8 @@ author: "Greg Maurer"
 date: '2022-09-01'
 output:
   #ioslides_presentation
-    html_document:
-      toc: true
+  html_document:
+    toc: true
 #toc: yes
 ---
 
@@ -297,7 +297,7 @@ networked, collaborative way
 
 **Clone or sync changes (`push` and `pull`) with GitHub repositories using `git`**
 
-```{bash, clone_GitHub, exec=FALSE}
+```{bash, clone_GitHub_ex, eval=FALSE}
 git clone https://github.com/jornada-im/JEDS.git
 ```
 
@@ -315,11 +315,51 @@ git clone https://github.com/jornada-im/JEDS.git
 * Personal/professional/project/educational websites
 * Automating tasks
 
-# 4. Basic GitHub
+
+# 4. Working with GitHub repositories
+
+## Create and clone a GitHub repository
 
 Lets create a repository on GitHub, initialize it with some files, and then use
 our local `git` tools to pull the new repository to our computer. We can then
 make some changes and push them back to GitHub.
+
+1. Log into <https://github.com> with your account credentials (or make an 
+account if you didn't in advance).
+
+2. Press the little green "New" button to create a new repository
+
+3. Name the repository `my_repo`
+
+4. Initialize with a `README.md` file and a `.gitignore`
+
+Now your repository is created. To move the repository to your local machine,
+you will do something called "cloning" the GitHub repository. First lets make a
+place on your local machine to put the repository. Go back to your system shell
+and make a new directory called `GitHub` and navigate into it.
+
+```{bash, mkdir_GitHub, eval=FALSE}
+mkdir GitHub
+cd GitHub
+```
+
+Now you need to use `git` to clone the repository on GitHub using its web
+address. Returning to your repository page (<https://github.com/{username}/my_repo>),
+look in the In the top right of the new repository there is a green "Code" 
+button. Click it and a dialogue will open giving you the option to copy an
+address. Use the "HTTPS" option and press the "Copy" button to the right of the
+address (2overlapping squares). The address for your repository is now in your
+system clipboard. Return to your shell and `git clone` the repository:
+
+```{bash, clone_GitHub, eval=FALSE}
+git clone https://github.com/gremau/my_repo.git
+```
+
+## Make changes and push to GitHub
+
+Now we will make some changes to our new repository on our local system.
+
+
 
 ```{r, setup4, include=FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
@@ -332,7 +372,7 @@ unlink('~/awesomeproject_git', recursive=TRUE)
 unlink('~/my_repo', recursive=TRUE)
 ```
 
-```{bash, cleanup, include=FALSE, exec=FALSE}
+```{bash, cleanup, include=FALSE, eval=FALSE}
 #rm -r ~/awesomeproject;
 #rm -r ~/awesomeproject_git;
 #rm -r ~/my_repo;

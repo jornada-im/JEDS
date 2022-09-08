@@ -14,7 +14,7 @@ If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.ed
 
 ## Lesson materials
 
-* [Using git and GitHub as a researcher](../../html/git-and-github-for-research.html) (Still in development!)
+* [Using git and GitHub as a researcher](../../html/git-and-github-for-research.html) (mostly done!)
 
 
 
