@@ -219,11 +219,74 @@ added as a new file, under the "Changes to be committed" list.
 git status
 ```
 
+This staging step lets you compose multiple changes to your repository files 
+into a group of updates to your history (sometimes called a change-set). When
+we are ready to add these changes, for us just one new file, to our `git`
+repository, we `commit` the changes to the repository, which will store the
+initial version of our file in `git`'s history.
+
 ```{bash, commit_file}
 git commit -m 'Adding the first R script'
 ```
 
+Sooner or later we'll add something to this file, and we'll want to commit those
+changes to the repository as well. **Open up your `script.R` file in a text editor
+and add a couple lines of "code", then save this file again**. After it is saved
+you can check your repository status with `git status` again.
+
+```{bash, add_lines, include=FALSE}
+echo "Load the data..." >> script.R
+echo "Fit a linear model..." >> script.R
+```
+
+```{bash, status_script}
+git status
+```
+
+This tells us that `script.R` was modified, but those changes haven't been
+staged yet To get line-by-line details about what changed in your file, you can
+"diff" the file to show the difference between the last committed version, and
+what it looks like after you added some code.
+
+```{bash, diff_script}
+git diff script.R
+```
+
+The lines prepended with a `+` show what has been added since the last commit.
+Lines starting with `-` would show you what was removed, but we haven't removed
+anything. This seems like a reasonable change, so lets stage the updated file
+with `git add` and add it to our repository with `git commit`.
+
+```{bash, commit_script}
+git add script.R
+git commit -m 'I updated the script with 2 lines'
+```
+
+Take note that when you commit something to your repository's history it is wise
+to explain what was changed using a "commit message" That is what we are doing
+with the `-m` option followed by a quoted message. Commit messages are invaluable
+in helping you understand how and why your repository is changing, so before
+you commit something, put a little thought into how you will describe the changes.
+
+Lets take a quick look at our history now:
+
+```{bash, log_after_changes}
+git log
+```
+
+We can see our progress so far. There are two commits, with the first adding the
+new `script.R` file, and the second one adding a couple of lines to it.
+
 # 3. Starting with GitHub
+
+## What is GitHub?
+
+* <https://github.com>
+* Software development and collaboration platform
+* A host for `git` repositories with web-based tools for working in a highly
+networked, collaborative way
+* Owned by Microsoft now
+* Very widely used
 
 ```{r, setup4, include=FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')

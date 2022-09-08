@@ -387,7 +387,10 @@ pre code {
 <li><a href="#making-your-first-repository">Making your first repository</a></li>
 <li><a href="#adding-files-and-tracking-changes">Adding files and tracking changes</a></li>
 </ul></li>
-<li><a href="#starting-with-github">3. Starting with GitHub</a></li>
+<li><a href="#starting-with-github">3. Starting with GitHub</a>
+<ul>
+<li><a href="#what-is-github">What is GitHub?</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -450,27 +453,27 @@ pre code {
 <div id="an-annotated-list-of-commits" class="section level2 smaller">
 <h2 class="smaller">An annotated list of “commits”</h2>
 <pre class="bash"><code>git -C ~/awesomeproject_git/ log</code></pre>
-<pre><code>## commit 180628d19f7771df4cf06cfd4e46a375309a968f
+<pre><code>## commit 62e9fecd7a2081678a164ff54a01bef75476cd0e
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 01:45:45 2022 -0600
+## Date:   Thu Sep 8 11:04:41 2022 -0600
 ## 
 ##     Statistics and figures for report 1
 ## 
-## commit d574ac7eb4a050a7bee399e0e640ee344871b70c
+## commit 0a95657aa1914b8db62c72c4fac11297f95cac73
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 01:45:45 2022 -0600
+## Date:   Thu Sep 8 11:04:41 2022 -0600
 ## 
 ##     Fit polynomial model
 ## 
-## commit 41e128735e59a305bbc1e35c1f30939635e2d794
+## commit 793b8d096836646a925bae7f4122320e1bf5278d
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 01:45:45 2022 -0600
+## Date:   Thu Sep 8 11:04:41 2022 -0600
 ## 
 ##     Fit linear model to the data
 ## 
-## commit 27d51700d51d758260e6198b46cd7740a01a1ad4
+## commit 4aa029730b202b73ac97f7bbffccd3daae1ecb95
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Sep 8 01:45:45 2022 -0600
+## Date:   Thu Sep 8 11:04:41 2022 -0600
 ## 
 ##     Initial commit - add analysis script</code></pre>
 </div>
@@ -548,14 +551,63 @@ cd ~/my_repo</code></pre>
 ## Changes to be committed:
 ##   (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
 ##  new file:   script.R</code></pre>
+<p>This staging step lets you compose multiple changes to your repository files into a group of updates to your history (sometimes called a change-set). When we are ready to add these changes, for us just one new file, to our <code>git</code> repository, we <code>commit</code> the changes to the repository, which will store the initial version of our file in <code>git</code>’s history.</p>
 <pre class="bash"><code>git commit -m &#39;Adding the first R script&#39;</code></pre>
-<pre><code>## [main (root-commit) 8fc0a56] Adding the first R script
+<pre><code>## [main (root-commit) c8662ed] Adding the first R script
 ##  1 file changed, 0 insertions(+), 0 deletions(-)
 ##  create mode 100644 script.R</code></pre>
+<p>Sooner or later we’ll add something to this file, and we’ll want to commit those changes to the repository as well. <strong>Open up your <code>script.R</code> file in a text editor and add a couple lines of “code”, then save this file again</strong>. After it is saved you can check your repository status with <code>git status</code> again.</p>
+<pre class="bash"><code>git status</code></pre>
+<pre><code>## On branch main
+## Changes not staged for commit:
+##   (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+##   (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+##  modified:   script.R
+## 
+## no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)</code></pre>
+<p>This tells us that <code>script.R</code> was modified, but those changes haven’t been staged yet To get line-by-line details about what changed in your file, you can “diff” the file to show the difference between the last committed version, and what it looks like after you added some code.</p>
+<pre class="bash"><code>git diff script.R</code></pre>
+<pre><code>## diff --git a/script.R b/script.R
+## index e69de29..4cd5370 100644
+## --- a/script.R
+## +++ b/script.R
+## @@ -0,0 +1,2 @@
+## +Load the data...
+## +Fit a linear model...</code></pre>
+<p>The lines prepended with a <code>+</code> show what has been added since the last commit. Lines starting with <code>-</code> would show you what was removed, but we haven’t removed anything. This seems like a reasonable change, so lets stage the updated file with <code>git add</code> and add it to our repository with <code>git commit</code>.</p>
+<pre class="bash"><code>git add script.R
+git commit -m &#39;I updated the script with 2 lines&#39;</code></pre>
+<pre><code>## [main 42758f7] I updated the script with 2 lines
+##  1 file changed, 2 insertions(+)</code></pre>
+<p>Take note that when you commit something to your repository’s history it is wise to explain what was changed using a “commit message” That is what we are doing with the <code>-m</code> option followed by a quoted message. Commit messages are invaluable in helping you understand how and why your repository is changing, so before you commit something, put a little thought into how you will describe the changes.</p>
+<p>Lets take a quick look at our history now:</p>
+<pre class="bash"><code>git log</code></pre>
+<pre><code>## commit 42758f7ba4b7e03d320ec38e92de93bdf503d028
+## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
+## Date:   Thu Sep 8 11:04:41 2022 -0600
+## 
+##     I updated the script with 2 lines
+## 
+## commit c8662ed9601d1da1b9ee226fead1f7a46c2c4b2f
+## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
+## Date:   Thu Sep 8 11:04:41 2022 -0600
+## 
+##     Adding the first R script</code></pre>
+<p>We can see our progress so far. There are two commits, with the first adding the new <code>script.R</code> file, and the second one adding a couple of lines to it.</p>
 </div>
 </div>
 <div id="starting-with-github" class="section level1">
 <h1>3. Starting with GitHub</h1>
+<div id="what-is-github" class="section level2">
+<h2>What is GitHub?</h2>
+<ul>
+<li><a href="https://github.com" class="uri">https://github.com</a></li>
+<li>Software development and collaboration platform</li>
+<li>A host for <code>git</code> repositories with web-based tools for working in a highly networked, collaborative way</li>
+<li>Owned by Microsoft now</li>
+<li>Very widely used</li>
+</ul>
+</div>
 </div>
 
 
