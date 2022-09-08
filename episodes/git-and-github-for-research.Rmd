@@ -50,11 +50,11 @@ git commit -m "Statistics and figures for report 1"
 
 ## Why use version control as a researcher? {.build}
 
->- scientists write lots of computer code and documentation
->- we revise things often
->- paths of inquiry get abandoned, or revisited later
->- scientists work collaboratively
->- research projects evolve and diversify with time
+* scientists write lots of computer code and documentation
+* we revise things often
+* paths of inquiry get abandoned, or revisited later
+* scientists work collaboratively
+* research projects evolve and diversify with time
 
 Research can become a "garden of forking paths"
 
@@ -62,8 +62,8 @@ Research can become a "garden of forking paths"
 
 ## Inside a "simple" data analysis project
 
-```{r, awesomeproject}
-dir('~/awesomeproject/')
+```{bash, awesomeproject}
+ls ~/awesomeproject/
 ```
 
 The researcher has gone down different paths:
@@ -76,9 +76,9 @@ Each resulted in a different file.
 
 ## `git` simplifies things 
 
-```{r, awesomeproject_git}
-dir('~/awesomeproject_git/', all.files=TRUE, no..=TRUE) 
-# the 2nd and 3rd arguments select which hidden files to show, including .git 
+```{bash, awesomeproject_git}
+# The -a lists hidden files like .git
+ls -a ~/awesomeproject_git/
 ```
 
 This is a _`git` repository_ for the same analysis project
@@ -93,12 +93,6 @@ directory.
 ![Schematic of a git-based workflow](img/git_diagram1.png)
 \ \ \ \ \ \ \ \* _as long as you tell it to_
 
-## An annotated list of "commits" {.smaller}
-
-```{bash, commits}
-git -C ~/awesomeproject_git/ log
-```
-
 ## Some terminology
 
 >- ***repository***: a directory with a history of changes recorded by `git`,
@@ -112,10 +106,16 @@ commits) from the main line of development (the `main` branch) in the repository
 >- ***fork***: a complete copy of a `git` repository that then undergoes
 divergent changes from the original
 
+## An annotated list of "commits" {.smaller}
+
+```{bash, commits}
+git -C ~/awesomeproject_git/ log
+```
+
+
 # 2. Now try some `git` basics
 
-
-### Finding and configuring `git`
+## Finding and configuring `git`
 
 We will do this in the system shell. So, open a terminal with `bash`, `zsh`,
 or another shell (you may have installed one with `git` on windows), and then
@@ -287,6 +287,39 @@ new `script.R` file, and the second one adding a couple of lines to it.
 networked, collaborative way
 * Owned by Microsoft now
 * Very widely used
+
+## How to use GitHub
+
+**Interact with the GitHub website with a browser**
+
+* For example, [this tutorial](https://github.com/jornada-im/JEDS/tree/main/episodes) is in a repository on GitHub.
+* With an account you can create `git` repositories and much more.
+
+**Clone or sync changes (`push` and `pull`) with GitHub repositories using `git`**
+
+```{bash, clone_GitHub, exec=FALSE}
+git clone https://github.com/jornada-im/JEDS.git
+```
+
+**GitHub also has a bunch of APIs, a command-line tool, GitHub Desktop...**
+
+## When should researchers use GitHub?
+
+* If you do scientific computing/software development
+* For collaborative...
+  - data analysis
+  - writing
+  - project management
+  - teaching
+  - (and computing/software dev)
+* Personal/professional/project/educational websites
+* Automating tasks
+
+# 4. Basic GitHub
+
+Lets create a repository on GitHub, initialize it with some files, and then use
+our local `git` tools to pull the new repository to our computer. We can then
+make some changes and push them back to GitHub.
 
 ```{r, setup4, include=FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
