@@ -16,5 +16,9 @@ If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.ed
 
 * [Using git and GitHub as a researcher](../../html/git-and-github-for-research.html) (mostly done!)
 
+## Some other resources
 
-
+* [Happy Git with R](https://happygitwithr.com/)
+* [Karl Broman's minimal tutorial](https://kbroman.org/github_tutorial/)
+* [SWC Version Control with git](http://swcarpentry.github.io/git-novice)
+* [git commands documentation](https://git-scm.com/docs), including links to cheatsheets

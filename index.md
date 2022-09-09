@@ -1,6 +1,6 @@
-## Welcome to the Jornada Ecological Data Science site
+## Welcome!
 
-Our aim is to teach introductory and intermediate data science to Jornada researchers using accessible methods and relatable data.
+Our aim is to teach introductory and intermediate data science methods to Jornada researchers using accessible methods and relatable data.
 
 ## Setting up your environment
 
@@ -13,7 +13,7 @@ Most tutorials have been developed for learners using `R`, `python`, and other o
 
 ## Upcoming workshops
 
-* [2022-09-08 - Data Therapy Git/GitHub tutorial](./workshops/2022-data-therapy-git-github/index)
+* [2022 Data Therapy Git/GitHub tutorials](./workshops/2022-data-therapy-git-github/index) (there may be more than one)
 * Probably more coming in fall 2022...
 
 ## Past workshops

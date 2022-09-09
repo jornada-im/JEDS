@@ -39,10 +39,10 @@ cat(dc_lines[55:138], sep = '\n')
 ### Install required `R` packages
 
 During the course we will need a number of R packages. Packages contain useful 
-R code written by other people. In most workshops will use the packages 
+R code written by other people. In most workshops we will use the packages 
 `tidyverse`, `nlme`, `lme4`, and `emmeans`.
 
-To try to install these packages, open RStudio and copy and paste the following 
+To install these packages, open RStudio and copy and paste the following 
 command into the console window (look for a blinking cursor on the bottom left),
 then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) 
 to execute the command.
@@ -55,9 +55,9 @@ Alternatively, you can install the packages using RStudio's graphical user
 interface by going to `Tools > Install Packages` and typing the names of the 
 packages separated by a comma.
 
-R tries to download and install the packages on your machine.
-When the installation has finished, you can try to load the
-packages by pasting the following code into the console:
+R tries to download and install the packages on your machine. When the
+installation has finished, you can load the packages by pasting the following 
+code into the console:
 
 ```{r eval=FALSE}
 library(tidyverse)
@@ -81,17 +81,17 @@ cat(dc_lines[174:194], sep = '\n')
 ```
 
 A copy of all data files used in these lessons are stored in the `data/`
-directory of the GitHub repository. The data files you will work with will
+directory of the GitHub repository. The data files you need for lessons will
 be specified at the start of the lesson materials, and you may also receive
-additional instructions or materials for workshops.
+additional information from instructors before for workshops.
 
 ## Setup for shell, `git` and GitHub lessons
 
 [`git`](https://git-scm.com/) is a distributed version control system and is the
-underlying technology behind [GitHub](https://github.com), the web-based software development and
-collaboration platform. It is common to use `git` together with a "shell", which
-is a command-line interface to your computer. So, for JEDS tutorials that involve
-`git` and GitHub, please complete three steps using the recommended resources:
+underlying technology behind [GitHub](https://github.com), the web-based software development and collaboration platform. It is common to use `git` together with
+a "shell", which is a command-line interface to your computer. So, for JEDS
+tutorials that involve `git` and GitHub, please complete three steps using the
+recommended resources:
 
 1. Install `git` to your computer
 2. Make sure you have access to a shell
@@ -104,8 +104,7 @@ one of the JEDS tutorials.
 
 * The [Carpentries `git` installation instructions](https://carpentries.github.io/workshop-template/#git)
 gives succinct platform-based instructions.
-* [Happy Git with R](https://happygitwithr.com/install-intro.html) has more detailed instructions
-that cover a few edge-cases.
+* [Happy Git with R](https://happygitwithr.com/install-intro.html) has more detailed instructions that cover a few edge-cases.
 
 If you want, you can also install a GUI client for `git` to help visualize
 and manage what is happening with repositories you are working with. A few recommended

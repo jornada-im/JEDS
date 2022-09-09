@@ -6,6 +6,8 @@ output:
   #ioslides_presentation
   html_document:
     toc: true
+params:
+  password: "83 purple corndog"
 #toc: yes
 ---
 
@@ -17,8 +19,8 @@ knitr::opts_chunk$set(echo = TRUE)
 mkdir ~/awesomeproject
 touch ~/awesomeproject/data.csv ~/awesomeproject/analysis_script_final.1.R \
 ~/awesomeproject/analysis_script_final.R ~/awesomeproject/analysis_script_v1.R \
-~/awesomeproject/analysis_script_v2.R ~/awesomeproject/analysis_script_v3_MLtest.R \
-~/awesomeproject/analysis_script_v3.R ~/awesomeproject/analysis_script.R
+~/awesomeproject/analysis_script_v2.R ~/awesomeproject/analysis_script_MLtest.R \
+~/awesomeproject/analysis_script_Darren.R ~/awesomeproject/analysis_script.R
 
 mkdir ~/awesomeproject_git
 touch ~/awesomeproject_git/analysis_script.R ~/awesomeproject_git/data.csv
@@ -36,6 +38,9 @@ git commit -m "Fit polynomial model"
 echo "Make some figures" >> analysis_script.R
 git add analysis_script.R
 git commit -m "Statistics and figures for report 1"
+
+# Note that we also have to create the `my_gh_repo` on GitHub and clone it
+# to the ~/GitHub directory for this all to knit.
 ```
 
 # 1. Getting to know git
@@ -66,13 +71,11 @@ Research can become a "garden of forking paths"
 ls ~/awesomeproject/
 ```
 
-The researcher has gone down different paths:
+The researcher has gone down different paths, each resulting in a new file:
 
 * linear, polynomial, and machine learning models
 * input from a collaborator
 * a "final product" for a report or paper
-
-Each resulted in a different file.
 
 ## `git` simplifies things 
 
@@ -112,6 +115,10 @@ divergent changes from the original
 git -C ~/awesomeproject_git/ log
 ```
 
+```{r, cleanup_1, include=FALSE}
+unlink('~/awesomeproject', recursive=TRUE)
+unlink('~/awesomeproject_git', recursive=TRUE)
+```
 
 # 2. Now try some `git` basics
 
@@ -277,6 +284,13 @@ git log
 We can see our progress so far. There are two commits, with the first adding the
 new `script.R` file, and the second one adding a couple of lines to it.
 
+```{r, setup_4, include=FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
+```
+```{r, cleanup_2, include=FALSE}
+unlink('~/my_repo', recursive=TRUE)
+```
+
 # 3. Starting with GitHub
 
 ## What is GitHub?
@@ -329,51 +343,94 @@ account if you didn't in advance).
 
 2. Press the little green "New" button to create a new repository
 
-3. Name the repository `my_repo`
+3. Name the repository `my_gh_repo`
 
-4. Initialize with a `README.md` file and a `.gitignore`
+4. Initialize with a `README.md` file
 
 Now your repository is created. To move the repository to your local machine,
 you will do something called "cloning" the GitHub repository. First lets make a
 place on your local machine to put the repository. Go back to your system shell
-and make a new directory called `GitHub` and navigate into it.
+and make a new directory called `GitHub` to hold local clones of your GitHub
+repositories.
 
 ```{bash, mkdir_GitHub, eval=FALSE}
 mkdir GitHub
-cd GitHub
 ```
 
 Now you need to use `git` to clone the repository on GitHub using its web
 address. Returning to your repository page (<https://github.com/{username}/my_repo>),
-look in the In the top right of the new repository there is a green "Code" 
-button. Click it and a dialogue will open giving you the option to copy an
-address. Use the "HTTPS" option and press the "Copy" button to the right of the
-address (2overlapping squares). The address for your repository is now in your
-system clipboard. Return to your shell and `git clone` the repository:
+look in the top right of the new repository's landing page, and there is a green
+"Code" button. Click it to open a dialogue that gives you the option to copy an
+address. Use the "SSH" option and press the "Copy" button to the right of the
+address (2 overlapping squares). The address for your repository is now in your
+system clipboard. Return to your shell, navigate to the `GitHub` directory, and 
+`git clone` the repository at that address:
 
 ```{bash, clone_GitHub, eval=FALSE}
-git clone https://github.com/gremau/my_repo.git
+cd ~/GitHub/
+git clone git@github.com:gremau/my_gh_repo.git
 ```
+
+Now you should have a clone, or copy, of the repository you just made on GitHub
+ready to work with in your local `GitHub` directory.
 
 ## Make changes and push to GitHub
 
-Now we will make some changes to our new repository on our local system.
+Lets make some changes to our new repository on our local system. Use a text
+editor to open up the `README.md` file inside your `my_gh_repo` repository
+folder and add a couple new lines of text. Once you do, `git` should notice the
+change when checking the repository status.
 
-
-
-```{r, setup4, include=FALSE}
-knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
-#setwd('~/GitHub/JEDS/episodes')
+```{bash, change_gh_repo, include=FALSE}
+echo "This repository does this" >> ~/GitHub/my_gh_repo/README.md
+echo "This repository does that" >> ~/GitHub/my_gh_repo/README.md
+```
+```{r, setup_5, include=FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/my_gh_repo')
+```
+```{bash, new_repo_status}
+git status
 ```
 
-```{r, cleanup_r, include=FALSE}
-unlink('~/awesomeproject', recursive=TRUE)
-unlink('~/awesomeproject_git', recursive=TRUE)
-unlink('~/my_repo', recursive=TRUE)
+Notice that `git status` now tells us the repository status in relation to the
+"origin", or the repository on GitHub that we cloned from. If we are content
+with these changes we can stage them and commit them.
+
+```{bash, new_repo_commit}
+git add README.md
+git commit -m "Added two lines to the README file"
+```
+
+Great! But now our local clone of the repository has a commit that is not at 
+GitHub. How do we fix this? First lets look at what `git status` says.
+
+```{bash, new_repo_status2}
+git status
+```
+
+Our local repository is one commit ahead of the origin now. To bring the GitHub
+repository up to date, we need to `git push` the changes there. Note that this
+isn't going to work unless you have configured SSH access to GitHub. For now,
+this is beyond the scope of this tutorial, so [see here](https://swcarpentry.github.io/git-novice/07-github/index.html#3-ssh-background-and-setup) to learn how to set up SSH access.
+
+```{bash, push new_repo, eval=FALSE}
+git push
+```
+
+If this is successful, the most recent commit adding two new lines to the README
+file will be added to the GitHub repository, thus syncing up the local and
+remote versions of our files.
+
+
+```{r, setup_6, include=FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
+```
+```{r, cleanup_3, include=FALSE}
+unlink('~/GitHub/my_gh_repo', recursive=TRUE)
 ```
 
 ```{bash, cleanup, include=FALSE, eval=FALSE}
-#rm -r ~/awesomeproject;
+gh repo create my_gh_repo --public
 #rm -r ~/awesomeproject_git;
 #rm -r ~/my_repo;
 ```
