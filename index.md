@@ -1,6 +1,6 @@
 ## Welcome!
 
-Our aim is to teach introductory and intermediate data science methods to Jornada researchers using accessible methods and relatable data.
+Our aim is to teach data science concepts and skills to Jornada researchers using accessible methods and relatable data.
 
 ## Setting up your environment
 
