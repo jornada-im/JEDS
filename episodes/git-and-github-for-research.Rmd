@@ -7,7 +7,7 @@ output:
   html_document:
     toc: true
 params:
-  password: "83 purple corndog"
+  password: ""
 #toc: yes
 ---
 
@@ -330,7 +330,7 @@ git clone https://github.com/jornada-im/JEDS.git
 * Automating tasks
 
 
-# 4. Working with GitHub repositories
+# 4. Working collaboratively with GitHub repositories
 
 ## Create and clone a GitHub repository
 
@@ -341,7 +341,7 @@ make some changes and push them back to GitHub.
 1. Log into <https://github.com> with your account credentials (or make an 
 account if you didn't in advance).
 
-2. Press the little green "New" button to create a new repository
+2. Press the little green <button style="background-color:green;border-color:green;color:white">New</button> button to create a new repository
 
 3. Name the repository `my_gh_repo`
 
@@ -361,18 +361,31 @@ Now you need to use `git` to clone the repository on GitHub using its web
 address. Returning to your repository page (<https://github.com/{username}/my_repo>),
 look in the top right of the new repository's landing page, and there is a green
 "Code" button. Click it to open a dialogue that gives you the option to copy an
-address. Use the "SSH" option and press the "Copy" button to the right of the
+address. Use the "HTTPS" option and press the "Copy" button to the right of the
 address (2 overlapping squares). The address for your repository is now in your
 system clipboard. Return to your shell, navigate to the `GitHub` directory, and 
 `git clone` the repository at that address:
 
-```{bash, clone_GitHub, eval=FALSE}
-cd ~/GitHub/
-git clone git@github.com:gremau/my_gh_repo.git
+```{bash, clone_GitHub, eval=T}
+cd ~/GitHub/ #Note: you can put GitHub/ somewhere other than the home directory (~)
+git clone https://github.com/jornada-im/my_gh_repo.git
 ```
 
-Now you should have a clone, or copy, of the repository you just made on GitHub
-ready to work with in your local `GitHub` directory.
+Now you should have a clone, or copy, of the `my_gh_repo` repository you just 
+made that is ready to work with in your local `GitHub` directory. Lets enter
+that directory and look around.
+
+```{r, setup_5, include=FALSE}
+# Keep the correct path
+knitr::opts_knit$set(root.dir = '~/GitHub')
+```
+```{bash, look_at_clone, eval=T}
+cd my_gh_repo/
+ls -a
+```
+
+We can see the `README.md` file that we created on GitHub, plus the `.git` folder
+ready and waiting for us.
 
 ## Make changes and push to GitHub
 
@@ -381,48 +394,92 @@ editor to open up the `README.md` file inside your `my_gh_repo` repository
 folder and add a couple new lines of text. Once you do, `git` should notice the
 change when checking the repository status.
 
+```{r, setup_6, include=FALSE}
+# Keep the correct path
+knitr::opts_knit$set(root.dir = '~/GitHub/my_gh_repo/')
+```
 ```{bash, change_gh_repo, include=FALSE}
-echo "This repository does this" >> ~/GitHub/my_gh_repo/README.md
-echo "This repository does that" >> ~/GitHub/my_gh_repo/README.md
+echo "This repository does this" >> README.md
+echo "This repository does that" >> README.md
 ```
-```{r, setup_5, include=FALSE}
-knitr::opts_knit$set(root.dir = '~/GitHub/my_gh_repo')
-```
+
 ```{bash, new_repo_status}
 git status
 ```
 
 Notice that `git status` now tells us the repository status in relation to the
-"origin", or the repository on GitHub that we cloned from. If we are content
-with these changes we can stage them and commit them.
+"origin". The `origin` is a remote repository that your local copy is linked to,
+in this case the repository on GitHub that we cloned from. We can list our
+remote repositories, and inspect the origin with the `git remote` command.
+
+```{bash, check origin1}
+git remote
+```
+
+This just tells us we have one remote repository - `origin` - but we can get
+more details.
+
+```{bash, check origin2}
+git remote show origin # This gives details of origin
+```
+
+Getting back to the changes we made, if we are content with our local changes we
+can stage them and commit them.
 
 ```{bash, new_repo_commit}
 git add README.md
 git commit -m "Added two lines to the README file"
 ```
 
-Great! But now our local clone of the repository has a commit that is not at 
-GitHub. How do we fix this? First lets look at what `git status` says.
+Great! But now our local clone of the repository has a commit that is not at the
+`origin` repository on GitHub. How do we fix this? First lets look at what
+`git status` says.
 
 ```{bash, new_repo_status2}
 git status
 ```
 
-Our local repository is one commit ahead of the origin now. To bring the GitHub
+Our local repository is one commit ahead of `origin` now. To bring the GitHub
 repository up to date, we need to `git push` the changes there. Note that this
-isn't going to work unless you have configured SSH access to GitHub. For now,
-this is beyond the scope of this tutorial, so [see here](https://swcarpentry.github.io/git-novice/07-github/index.html#3-ssh-background-and-setup) to learn how to set up SSH access.
+isn't going to work unless you have something called a "Personal Access Token"
+(PAT), or have configured SSH access to GitHub. We can quickly create a PAT on
+GitHub with these steps (taken from [here](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token)):
+
+1. Go back to <https://github.com> - you should be logged in with your account
+credentials already
+
+2. Open the dropdown at the very top right corner of your page to see GitHub 
+user account options, and choose **Settings**.
+
+3. In the left sidebar choose **Developer settings**
+
+4. In the left sidebar (again) choose **Personal access tokens**
+
+5. Give it a name, expiration date, and give the token `repo` access by checking
+the first check box under **Select scopes**
+
+6. Click the <button style="background-color:green;border-color:green;color:white">Generate token</button> button at the bottom, and then copy the resulting token to
+your clipboard (the copy button is the overlapping squares again).
+
+For now, SSH access is beyond the scope of this tutorial, but it is highly
+recommended. [See here](https://swcarpentry.github.io/git-novice/07-github/index.html#3-ssh-background-and-setup) to learn how to set up SSH access for your machine
+and GitHub.
+
+Now that you have copied the token you can use `git push` to push the changes
+to `origin` on GitHub.
 
 ```{bash, push new_repo, eval=FALSE}
 git push
+# Username for 'https://github.com': {enter your GitHub username}
+# Password for 'https://gremau@github.com': {PASTE the "PAT" here}
+
 ```
 
 If this is successful, the most recent commit adding two new lines to the README
 file will be added to the GitHub repository, thus syncing up the local and
 remote versions of our files.
 
-
-```{r, setup_6, include=FALSE}
+```{r, setup_7, include=FALSE}
 knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
 ```
 ```{r, cleanup_3, include=FALSE}
@@ -434,3 +491,24 @@ gh repo create my_gh_repo --public
 #rm -r ~/awesomeproject_git;
 #rm -r ~/my_repo;
 ```
+
+## Collaborating on GitHub with "Forking"
+
+You can copy any public repository on GitHub to your own account by "Forking" 
+the repository. Essentially, this is creating a clone of the repository for you
+in your own account, and that clone will keep contain a link to the original
+repository it was forked from. To demonstrate this, lets clone the repository 
+that contains this tutorial. Return to GitHub in your browser and follow these
+steps.
+
+1. Navigate to <https://github.com/jornada-im/JEDS>
+2. In the upper right of the repository page click the "Fork" button between
+"Star" and "Watch".
+3. You'll have the option to change the name and owner, but you can leave
+everything as it is and click the <button style="background-color:green;border-color:green;color:white">Create fork</button> button at the bottom.
+
+You'll now have a fork of the repository in your own account, and in the upper
+left under the repository name you should see a link back to the original
+repository ([jornada-im/JEDS](https://github.com/jornada-im/JEDS)). Now lets
+clone this to our local GitHub folder and make some changes.
+
