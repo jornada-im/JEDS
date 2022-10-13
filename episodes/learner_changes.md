@@ -2,12 +2,12 @@
 
 ## Misspelling
 
-Misspling is a tarrable prblem in ouir world that we shuld rilly correct.
+Misspelling is a terrible problem in our world that we should really correct.
 
 ## Coding problems
 
 A simple "Hello world" program in python is:
 
-    print('Hello world'
+    print('Hello world')
 
 but for some reason it doesn't work.
