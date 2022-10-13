@@ -390,30 +390,33 @@ things</a></li>
 basics</a>
 <ul>
 <li><a href="#finding-and-configuring-git">Finding and configuring
-<code>git</code></a>
-<ul>
+<code>git</code></a></li>
 <li><a href="#making-your-first-repository">Making your first
 repository</a></li>
 <li><a href="#adding-files-and-tracking-changes">Adding files and
 tracking changes</a></li>
 </ul></li>
-</ul></li>
-<li><a href="#starting-with-github">3. Starting with GitHub</a>
+<li><a href="#getting-to-know-github">3. Getting to know GitHub</a>
 <ul>
 <li><a href="#what-is-github">What is GitHub?</a></li>
 <li><a href="#how-to-use-github">How to use GitHub</a></li>
 <li><a href="#when-should-researchers-use-github">When should
 researchers use GitHub?</a></li>
 </ul></li>
-<li><a href="#working-collaboratively-with-github-repositories">4.
-Working collaboratively with GitHub repositories</a>
+<li><a href="#basics-of-github-repositories">4. Basics of GitHub
+repositories</a>
 <ul>
 <li><a href="#create-and-clone-a-github-repository">Create and clone a
 GitHub repository</a></li>
 <li><a href="#make-changes-and-push-to-github">Make changes and push to
 GitHub</a></li>
-<li><a href="#collaborating-on-github-with-forking">Collaborating on
-GitHub with “Forking”</a></li>
+</ul></li>
+<li><a href="#collaborative-work-with-git-and-github">5. Collaborative
+work with <code>git</code> and GitHub</a>
+<ul>
+<li><a href="#forking-a-repository">“Forking” a repository</a></li>
+<li><a href="#branching-pushing-changes-and-issuing-pull-requests">Branching,
+pushing changes and issuing pull requests</a></li>
 </ul></li>
 </ul>
 </div>
@@ -512,27 +515,27 @@ the original</li>
 <div id="an-annotated-list-of-commits" class="section level2 smaller">
 <h2 class="smaller">An annotated list of “commits”</h2>
 <pre class="bash"><code>git -C ~/awesomeproject_git/ log</code></pre>
-<pre><code>## commit d5e68751175e84ffdb17f6ff57e31574068f586b
+<pre><code>## commit 9ddd96db132dfadc29ed6b675a5557b6b8a29e45
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 09:27:07 2022 -0600
+## Date:   Thu Oct 13 14:39:14 2022 -0600
 ## 
 ##     Statistics and figures for report 1
 ## 
-## commit 35162edf1098319a403dbd729ca8bfa6cebbc85b
+## commit 3b22c3ef81ead9e8c82a3ed384b32acc1a39dc7a
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 09:27:07 2022 -0600
+## Date:   Thu Oct 13 14:39:14 2022 -0600
 ## 
 ##     Fit polynomial model
 ## 
-## commit b5b8698453f2af1754a30fc0b321b51a01f3ced5
+## commit 27a2b1abbab80dd61a5368d3bf7dc9e4b972d822
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 09:27:07 2022 -0600
+## Date:   Thu Oct 13 14:39:14 2022 -0600
 ## 
 ##     Fit linear model to the data
 ## 
-## commit 2ccf81ca7f20fdb7e76cd1fd0ec5bde63a3e5de8
+## commit 506a837e9e6ee7c70887648b4b359ac63f55706d
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 09:27:07 2022 -0600
+## Date:   Thu Oct 13 14:39:14 2022 -0600
 ## 
 ##     Initial commit - add analysis script</code></pre>
 </div>
@@ -576,8 +579,9 @@ your favorite text editor for writing commit messages. More information
 about that <a href="https://swcarpentry.github.io/git-novice/02-setup/index.html">here</a>.</p>
 <p>You can show your <code>git</code> configurations anytime with
 <code>git config --list</code> command.</p>
-<div id="making-your-first-repository" class="section level3">
-<h3>Making your first repository</h3>
+</div>
+<div id="making-your-first-repository" class="section level2">
+<h2>Making your first repository</h2>
 <p>Now lets make a new directory and add a text file to it. We will turn
 this into a <code>git</code> repository in a moment.</p>
 <pre class="bash"><code>mkdir ~/my_repo
@@ -611,8 +615,8 @@ repository.</p>
 there is a file that we made - <code>script.R</code> - that is not being
 tracked.</p>
 </div>
-<div id="adding-files-and-tracking-changes" class="section level3">
-<h3>Adding files and tracking changes</h3>
+<div id="adding-files-and-tracking-changes" class="section level2">
+<h2>Adding files and tracking changes</h2>
 <p>Lets tell <code>git</code> to track that file. We do that with the
 <code>add</code> verb, which “stages” the file to be added to a new
 commit.</p>
@@ -635,7 +639,7 @@ just one new file, to our <code>git</code> repository, we
 <code>commit</code> the changes to the repository, which will store the
 initial version of our file in <code>git</code>’s history.</p>
 <pre class="bash"><code>git commit -m &#39;Adding the first R script&#39;</code></pre>
-<pre><code>## [main (root-commit) e2368c7] Adding the first R script
+<pre><code>## [main (root-commit) 423f48d] Adding the first R script
 ##  1 file changed, 0 insertions(+), 0 deletions(-)
 ##  create mode 100644 script.R</code></pre>
 <p>Sooner or later we’ll add something to this file, and we’ll want to
@@ -672,7 +676,7 @@ reasonable change, so lets stage the updated file with
 <code>git commit</code>.</p>
 <pre class="bash"><code>git add script.R
 git commit -m &#39;I updated the script with 2 lines&#39;</code></pre>
-<pre><code>## [main cda3279] I updated the script with 2 lines
+<pre><code>## [main 3e0dc02] I updated the script with 2 lines
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>Take note that when you commit something to your repository’s history
 it is wise to explain what was changed using a “commit message” That is
@@ -682,15 +686,15 @@ and why your repository is changing, so before you commit something, put
 a little thought into how you will describe the changes.</p>
 <p>Lets take a quick look at our history now:</p>
 <pre class="bash"><code>git log</code></pre>
-<pre><code>## commit cda327992c6a7c87361066541c1e25f2eeffa48a
+<pre><code>## commit 3e0dc0243c68e4d01097e3d846a7b5db466c9df5
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 09:27:07 2022 -0600
+## Date:   Thu Oct 13 14:39:15 2022 -0600
 ## 
 ##     I updated the script with 2 lines
 ## 
-## commit e2368c7fb8dd555d1eca95cd0cbfff1f4e29bcae
+## commit 423f48dddeef94af7cf302d7c304a940536a2284
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 09:27:07 2022 -0600
+## Date:   Thu Oct 13 14:39:14 2022 -0600
 ## 
 ##     Adding the first R script</code></pre>
 <p>We can see our progress so far. There are two commits, with the first
@@ -698,9 +702,8 @@ adding the new <code>script.R</code> file, and the second one adding a
 couple of lines to it.</p>
 </div>
 </div>
-</div>
-<div id="starting-with-github" class="section level1">
-<h1>3. Starting with GitHub</h1>
+<div id="getting-to-know-github" class="section level1">
+<h1>3. Getting to know GitHub</h1>
 <div id="what-is-github" class="section level2">
 <h2>What is GitHub?</h2>
 <ul>
@@ -745,8 +748,8 @@ Desktop…</strong></p>
 </ul>
 </div>
 </div>
-<div id="working-collaboratively-with-github-repositories" class="section level1">
-<h1>4. Working collaboratively with GitHub repositories</h1>
+<div id="basics-of-github-repositories" class="section level1">
+<h1>4. Basics of GitHub repositories</h1>
 <div id="create-and-clone-a-github-repository" class="section level2">
 <h2>Create and clone a GitHub repository</h2>
 <p>Lets create a repository on GitHub, initialize it with some files,
@@ -760,18 +763,22 @@ make an account if you didn’t in advance).</p></li>
 <button style="background-color:green;border-color:green;color:white">New</button>
 button to create a new repository</p></li>
 <li><p>Name the repository <code>my_gh_repo</code></p></li>
-<li><p>Initialize with a <code>README.md</code> file</p></li>
+<li><p>Check the box to “Add a <code>README</code> file”</p></li>
+<li><p>Click the
+<button style="background-color:green;border-color:green;color:white">Create
+repository</button></p></li>
 </ol>
-<p>Now your repository is created. To move the repository to your local
-machine, you will do something called “cloning” the GitHub repository.
-First lets make a place on your local machine to put the repository. Go
-back to your system shell and make a new directory called
-<code>GitHub</code> to hold local clones of your GitHub
-repositories.</p>
+<p>Now your repository is created and you should be in its landing page.
+To move the new repository to your local machine, you must “clone” it
+from GitHub. First make a place on your local machine to put the
+repository. Return to your system shell and make a new directory called
+<code>GitHub</code> to hold local repositories you clone from
+GitHub.</p>
 <pre class="bash"><code>mkdir GitHub</code></pre>
-<p>Now you need to use <code>git</code> to clone the repository on
-GitHub using its web address. Returning to your repository page (<a href="https://github.com/%7Busername%7D/my_repo" class="uri">https://github.com/{username}/my_repo</a>), look in the top
-right of the new repository’s landing page, and there is a green “Code”
+<p>Now you need to use <code>git</code> to clone <code>my_gh_repo</code>
+from GitHub using its web address. Returning to your repository page (<a href="https://github.com/%7Busername%7D/my_repo" class="uri">https://github.com/{username}/my_repo</a>), look in the top
+right of this repository’s landing page, and there is a
+<button style="background-color:green;border-color:green;color:white">Code</button>
 button. Click it to open a dialogue that gives you the option to copy an
 address. Use the “HTTPS” option and press the “Copy” button to the right
 of the address (2 overlapping squares). The address for your repository
@@ -817,10 +824,13 @@ repository that your local copy is linked to, in this case the
 repository on GitHub that we cloned from. We can list our remote
 repositories, and inspect the origin with the <code>git remote</code>
 command.</p>
-<pre class="bash"><code>git remote</code></pre>
-<pre><code>## origin</code></pre>
-<p>This just tells us we have one remote repository -
-<code>origin</code> - but we can get more details.</p>
+<pre class="bash"><code>git remote -v # -v is for &quot;verbose&quot;</code></pre>
+<pre><code>## origin   https://github.com/jornada-im/my_gh_repo.git (fetch)
+## origin   https://github.com/jornada-im/my_gh_repo.git (push)</code></pre>
+<p>This tells us we have one remote repository, called
+<code>origin</code>, and we can push to and pull from this repository.
+We can also see some other details about branches, and where the push
+and pull operations will go.</p>
 <pre class="bash"><code>git remote show origin # This gives details of origin</code></pre>
 <pre><code>## * remote origin
 ##   Fetch URL: https://github.com/jornada-im/my_gh_repo.git
@@ -836,7 +846,7 @@ command.</p>
 changes we can stage them and commit them.</p>
 <pre class="bash"><code>git add README.md
 git commit -m &quot;Added two lines to the README file&quot;</code></pre>
-<pre><code>## [main 0118eab] Added two lines to the README file
+<pre><code>## [main 46228b2] Added two lines to the README file
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>Great! But now our local clone of the repository has a commit that is
 not at the <code>origin</code> repository on GitHub. How do we fix this?
@@ -886,14 +896,17 @@ to push the changes to <code>origin</code> on GitHub.</p>
 the README file will be added to the GitHub repository, thus syncing up
 the local and remote versions of our files.</p>
 </div>
-<div id="collaborating-on-github-with-forking" class="section level2">
-<h2>Collaborating on GitHub with “Forking”</h2>
+</div>
+<div id="collaborative-work-with-git-and-github" class="section level1">
+<h1>5. Collaborative work with <code>git</code> and GitHub</h1>
+<div id="forking-a-repository" class="section level2">
+<h2>“Forking” a repository</h2>
 <p>You can copy any public repository on GitHub to your own account by
-“Forking” the repository. Essentially, this is creating a clone of the
-repository for you in your own account, and that clone will keep contain
-a link to the original repository it was forked from. To demonstrate
-this, lets clone the repository that contains this tutorial. Return to
-GitHub in your browser and follow these steps.</p>
+“Forking” the repository. Essentially, this creates a clone of someone
+else’s repository for you, in your own GitHub account. To demonstrate
+this, lets clone the repository that contains this tutorial
+(jornada-im/JEDS). Return to GitHub in your browser and follow these
+steps.</p>
 <ol style="list-style-type: decimal">
 <li>Navigate to <a href="https://github.com/jornada-im/JEDS" class="uri">https://github.com/jornada-im/JEDS</a></li>
 <li>In the upper right of the repository page click the “Fork” button
@@ -901,12 +914,89 @@ between “Star” and “Watch”.</li>
 <li>You’ll have the option to change the name and owner, but you can
 leave everything as it is and click the
 <button style="background-color:green;border-color:green;color:white">Create
-fork</button> button at the bottom.</li>
+fork</button> button, which will create the fork and take you to its
+landing page.</li>
 </ol>
-<p>You’ll now have a fork of the repository in your own account, and in
-the upper left under the repository name you should see a link back to
-the original repository (<a href="https://github.com/jornada-im/JEDS">jornada-im/JEDS</a>). Now lets
-clone this to our local GitHub folder and make some changes.</p>
+<p>You’ll now have a fork of the “JEDS” repository in your own GitHub
+account (your_username/JEDS). In the upper left of the page, under the
+repository name you should see a link back to the original repository
+(<a href="https://github.com/jornada-im/JEDS">jornada-im/JEDS</a>). Now
+lets clone this to our local GitHub folder and make some changes.</p>
+<p>On your new JEDS repository fork page, click the
+<button style="background-color:green;border-color:green;color:white">Code</button>
+to open the dialogue, then select “HTTPS”, and copy the link to the
+repository (copy with the overlapping squares). Now clone that into your
+GitHub directory.</p>
+<pre class="bash"><code>cd ~/GitHub/
+git clone https://github.com/gremau/JEDS.git JEDS_fork #JEDS_fork is optional</code></pre>
+<pre><code>## Cloning into &#39;JEDS_fork&#39;...</code></pre>
+<p>Now you have a local copy of your fork (your_username/JEDS). If you
+want to interact with the original repository (jornada-im/JEDS) then we
+need to make sure there is a link to that. Lets go to that
+repository</p>
+<pre class="bash"><code>cd JEDS/</code></pre>
+<p>and check the status of our remote repositories.</p>
+<pre class="bash"><code>git remote -v</code></pre>
+<pre><code>## origin   https://github.com/gremau/JEDS.git (fetch)
+## origin   https://github.com/gremau/JEDS.git (push)</code></pre>
+<p>It looks like our only “remote” repository is our fork on GitHub
+(your_username/JEDS). This is OK, but not ideal for collaboration
+purposes. It would be better if we also had the original repository
+(jornada-im/JEDS) configured as an “upstream” source repository. This
+way, we could pull any changes made to the source repository directly
+into our local clone. Instead, we’d currently need to do this indirectly
+through GitHub. There are several ways to configure an upstream source
+repository (see <a href="https://happygitwithr.com/fork-and-clone.html#fork-and-clone-finish">methods
+in Happy Git</a> for example), but we’re going to set that aside today
+and focus on the simplest possible method to make changes.</p>
+</div>
+<div id="branching-pushing-changes-and-issuing-pull-requests" class="section level2">
+<h2>Branching, pushing changes and issuing pull requests</h2>
+<p>So, lets continue by making some changes to a local file in our fork
+of the JEDS repository. Before we do this, we’re goint to create a
+<strong>branch</strong> to make the changes on. A branch is a
+separate</p>
+<pre class="bash"><code>git branch my_changes
+git checkout my_changes</code></pre>
+<pre><code>## Switched to branch &#39;my_changes&#39;</code></pre>
+<p>You could also use a shorthand command for this -
+<code>git checkout -b my_changes</code>. We have now created a branch
+within our repository, called <code>my_changes</code> that we can
+develop without changing anything in <code>main</code>. This is a great
+way to partition your changes until you are sure they will work well
+with the rest of the repository.</p>
+<p>Now lets make those changes. Look inside the <code>episodes</code>
+folder and find the <code>learner_changes.md</code> file.</p>
+<pre class="bash"><code>ls episodes/</code></pre>
+<pre><code>## git-and-github-for-research.Rmd
+## img
+## learner_changes.md
+## setup.Rmd
+## statistical-inference-linear-and-mixed.Rmd
+## teaching-datasets.Rmd</code></pre>
+<p>Open this file in a text editor and and correct some of the problems
+in the spelling or the code. Save your changes and then stage and commit
+the changes.</p>
+<pre class="bash"><code>git add episodes/learner_changes.md
+git commit -m &#39;I made this file better&#39;</code></pre>
+<pre><code>## [my_changes c22143d] I made this file better
+##  1 file changed, 2 insertions(+)</code></pre>
+<p>We have committed the changes to the branch. Now we want to see if we
+can get them added to the original repository. First, our branch needs
+to be published to our fork repository on GitHub (your_username/JEDS).
+We can to this with a variation on <code>git push</code> that sets an
+“upstream” remote in the process. This upstream remote will be our
+current origin (which is your_username/JEDS).</p>
+<pre class="bash"><code>git push --set-upstream origin my_changes</code></pre>
+<pre><code>## remote: 
+## remote: Create a pull request for &#39;my_changes&#39; on GitHub by visiting:        
+## remote:      https://github.com/gremau/JEDS/pull/new/my_changes        
+## remote: 
+## To https://github.com/gremau/JEDS.git
+##  * [new branch]      my_changes -&gt; my_changes
+## branch &#39;my_changes&#39; set up to track &#39;origin/my_changes&#39;.</code></pre>
+<p>Now if we return to GitHub, we can send a pull request.</p>
+<p>We’ll see how that goes when we get there….</p>
 </div>
 </div>
 
