@@ -173,7 +173,7 @@ for writing commit messages. More information about that [here](https://swcarpen
 
 You can show your `git` configurations anytime with `git config --list` command.
 
-### Making your first repository
+## Making your first repository
 
 Now lets make a new directory and add a text file to it. We will turn this into
 a `git` repository in a moment.
@@ -210,7 +210,7 @@ git status
 We are on the `main` branch, there are no commits yet, and there is a file that
 we made - `script.R` - that is not being tracked. 
 
-### Adding files and tracking changes
+## Adding files and tracking changes
 
 Lets tell `git` to track that file. We do that with the `add` verb, which 
 "stages" the file to be added to a new commit.
@@ -291,7 +291,7 @@ knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
 unlink('~/my_repo', recursive=TRUE)
 ```
 
-# 3. Starting with GitHub
+# 3. Getting to know GitHub
 
 ## What is GitHub?
 
@@ -330,7 +330,7 @@ git clone https://github.com/jornada-im/JEDS.git
 * Automating tasks
 
 
-# 4. Working collaboratively with GitHub repositories
+# 4. Basics of GitHub repositories
 
 ## Create and clone a GitHub repository
 
@@ -345,28 +345,30 @@ account if you didn't in advance).
 
 3. Name the repository `my_gh_repo`
 
-4. Initialize with a `README.md` file
+4. Check the box to "Add a `README` file"
 
-Now your repository is created. To move the repository to your local machine,
-you will do something called "cloning" the GitHub repository. First lets make a
-place on your local machine to put the repository. Go back to your system shell
-and make a new directory called `GitHub` to hold local clones of your GitHub
-repositories.
+5. Click the <button style="background-color:green;border-color:green;color:white">Create repository</button>
+
+Now your repository is created and you should be in its landing page. To move
+the new repository to your local machine, you must "clone" it from GitHub.
+First make a place on your local machine to put the repository. Return to your
+system shell and make a new directory called `GitHub` to hold local repositories
+you clone from GitHub.
 
 ```{bash, mkdir_GitHub, eval=FALSE}
 mkdir GitHub
 ```
 
-Now you need to use `git` to clone the repository on GitHub using its web
+Now you need to use `git` to clone `my_gh_repo` from GitHub using its web
 address. Returning to your repository page (<https://github.com/{username}/my_repo>),
-look in the top right of the new repository's landing page, and there is a green
-"Code" button. Click it to open a dialogue that gives you the option to copy an
+look in the top right of this repository's landing page, and there is a
+<button style="background-color:green;border-color:green;color:white">Code</button> button. Click it to open a dialogue that gives you the option to copy an
 address. Use the "HTTPS" option and press the "Copy" button to the right of the
 address (2 overlapping squares). The address for your repository is now in your
 system clipboard. Return to your shell, navigate to the `GitHub` directory, and 
 `git clone` the repository at that address:
 
-```{bash, clone_GitHub, eval=T}
+```{bash, clone_my_gh_repo, eval=T}
 cd ~/GitHub/ #Note: you can put GitHub/ somewhere other than the home directory (~)
 git clone https://github.com/jornada-im/my_gh_repo.git
 ```
@@ -413,11 +415,12 @@ in this case the repository on GitHub that we cloned from. We can list our
 remote repositories, and inspect the origin with the `git remote` command.
 
 ```{bash, check origin1}
-git remote
+git remote -v # -v is for "verbose"
 ```
 
-This just tells us we have one remote repository - `origin` - but we can get
-more details.
+This tells us we have one remote repository, called `origin`, and we can push to
+and pull from this repository. We can also see some other details about
+branches, and where the push and pull operations will go.
 
 ```{bash, check origin2}
 git remote show origin # This gives details of origin
@@ -486,29 +489,124 @@ knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
 unlink('~/GitHub/my_gh_repo', recursive=TRUE)
 ```
 
-```{bash, cleanup, include=FALSE, eval=FALSE}
-gh repo create my_gh_repo --public
-#rm -r ~/awesomeproject_git;
-#rm -r ~/my_repo;
-```
 
-## Collaborating on GitHub with "Forking"
+# 5. Collaborative work with `git` and GitHub
+
+## "Forking" a repository
 
 You can copy any public repository on GitHub to your own account by "Forking" 
-the repository. Essentially, this is creating a clone of the repository for you
-in your own account, and that clone will keep contain a link to the original
-repository it was forked from. To demonstrate this, lets clone the repository 
-that contains this tutorial. Return to GitHub in your browser and follow these
-steps.
+the repository. Essentially, this creates a clone of someone else's repository
+for you, in your own GitHub account. To demonstrate this, lets clone the repository 
+that contains this tutorial (jornada-im/JEDS). Return to GitHub in your browser
+and follow these steps.
 
 1. Navigate to <https://github.com/jornada-im/JEDS>
 2. In the upper right of the repository page click the "Fork" button between
 "Star" and "Watch".
 3. You'll have the option to change the name and owner, but you can leave
-everything as it is and click the <button style="background-color:green;border-color:green;color:white">Create fork</button> button at the bottom.
+everything as it is and click the <button style="background-color:green;border-color:green;color:white">Create fork</button> button, which will create the fork and take you to its landing page.
 
-You'll now have a fork of the repository in your own account, and in the upper
-left under the repository name you should see a link back to the original
-repository ([jornada-im/JEDS](https://github.com/jornada-im/JEDS)). Now lets
-clone this to our local GitHub folder and make some changes.
+You'll now have a fork of the "JEDS" repository in your own GitHub account
+(your_username/JEDS). In the upper left of the page, under the repository name
+you should see a link back to the original repository ([jornada-im/JEDS](https://github.com/jornada-im/JEDS)). Now lets clone this to
+our local GitHub folder and make some changes.
 
+On your new JEDS repository fork page, click the <button style="background-color:green;border-color:green;color:white">Code</button> to
+open the dialogue, then select "HTTPS", and copy the link to the repository (copy 
+with the overlapping squares). Now clone that into your GitHub directory.
+
+```{bash, clone_JEDS2, eval=T}
+cd ~/GitHub/
+git clone https://github.com/gremau/JEDS.git JEDS_fork #JEDS_fork is optional
+```
+```{r, setup_8, include=FALSE}
+knitr::opts_knit$set(root.dir = '~/GitHub/JEDS_fork')
+```
+
+Now you have a local copy of your fork (your_username/JEDS). If you want to
+interact with the original repository (jornada-im/JEDS) then we need to make sure
+there is a link to that. Lets go to that repository
+
+```{bash, cd_JEDS2, eval=FALSE}
+cd JEDS/
+```
+
+and check the status of our remote repositories.
+
+```{bash, remotes_JEDS2, eval=T}
+git remote -v
+```
+
+It looks like our only "remote" repository is our fork on GitHub
+(your_username/JEDS). This is OK, but not ideal for collaboration purposes. It
+would be better if we also had the original repository (jornada-im/JEDS)
+configured as an "upstream" source repository. This way, we could pull any changes
+made to the source repository directly into our local clone. Instead, we'd
+currently need to do this indirectly through GitHub. There are several ways to
+configure an upstream source repository (see [methods in Happy Git](https://happygitwithr.com/fork-and-clone.html#fork-and-clone-finish) for
+example), but we're going to set that aside today and focus on the simplest
+possible method to make changes.
+
+## Branching, pushing changes and issuing pull requests
+
+So, lets continue by making some changes to a local file in our fork of the JEDS
+repository. Before we do this, we're goint to create a **branch** to make the 
+changes on. A branch is a separate 
+
+```{bash, branch_JEDS2, eval=T}
+git branch my_changes
+git checkout my_changes
+```
+
+You could also use a shorthand command for this - `git checkout -b my_changes`.
+We have now created a branch within our repository, called `my_changes` that we
+can develop without changing anything in `main`. This is a great way to partition
+your changes until you are sure they will work well with the rest of the
+repository.
+
+Now lets make those changes. Look inside the `episodes` folder and find the
+`learner_changes.md` file.
+
+```{bash, find_JEDS2_file, eval=T}
+ls episodes/
+``` 
+
+Open this file in a text editor and and correct some of the problems in the
+spelling or the code. Save your changes and then stage and commit the changes.
+
+```{bash, change_JEDS2_repo, include=FALSE}
+echo "This repository does this" >> episodes/learner_changes.md
+echo "This repository does that" >> episodes/learner_changes.md
+```
+```{bash, commit_JEDS2_file, eval=T}
+git add episodes/learner_changes.md
+git commit -m 'I made this file better'
+``` 
+
+We have committed the changes to the branch. Now we want to see if we can get
+them added to the original repository. First, our branch needs to be published
+to our fork repository on GitHub (your_username/JEDS). We can to this with a
+variation on `git push` that sets an "upstream" remote in the process. This
+upstream remote will be our current origin (which is your_username/JEDS).
+
+```{bash, push_JEDS2_file, eval=T}
+git push --set-upstream origin my_changes
+``` 
+
+Now if we return to GitHub, we can send a pull request.
+
+We'll see how that goes when we get there....
+
+```{r, setup_9, include=FALSE }
+knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
+```
+
+
+
+
+
+```{bash, cleanup, include=FALSE, eval=FALSE}
+gh repo create my_gh_repo --public
+#rm -r ~/awesomeproject_git;
+#rm -r ~/my_repo;
+```
