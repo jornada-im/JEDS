@@ -43,9 +43,9 @@ git commit -m "Statistics and figures for report 1"
 # to the ~/GitHub directory for this all to knit.
 ```
 
-# 1. Getting to know git
+# 1. Getting to know Git
 
-## What is `git`?
+## What is Git?
 
 * free & open-source distributed version control system (DVCS)
 * first authored by Linus Torvalds for development of the Linux kernel
@@ -77,36 +77,36 @@ The researcher has gone down different paths, each resulting in a new file:
 * input from a collaborator
 * a "final product" for a report or paper
 
-## `git` simplifies things 
+## Using Git simplifies things 
 
 ```{bash, awesomeproject_git}
 # The -a lists hidden files like .git
 ls -a ~/awesomeproject_git/
 ```
 
-This is a _`git` repository_ for the same analysis project
+This is a _**Git repository**_ for the same analysis project
 
-* There is only one script (`analysis_script.R`)
-* All changes to the script (and other files) are recorded in the `.git`
-directory.
+* There is only one script (`analysis_script.R`).
+* Git commands (`git ...`) help manage and version control files.
+* Changes to the script (and other files) are recorded in the `.git` directory.
 
 ## What is recorded in `.git/`?
 
-**`git` keeps track of what changed, who changed it, when it changed, and why* **
+**Git keeps track of what changed, who changed it, when it changed, and why* **
 ![Schematic of a git-based workflow](img/git_diagram1.png)
 \ \ \ \ \ \ \ \* _as long as you tell it to_
 
 ## Some terminology
 
->- ***repository***: a directory with a history of changes recorded by `git`,
+>- ***repository***: a directory with a history of changes recorded by Git,
 meaning it must contain a `.git` subdirectory.
->- ***commit***: `git`'s basic unit of version control that records *exactly* which
+>- ***commit***: Git's basic unit of version control that records *exactly* which
 lines changed in which files, and how, plus annotations about person, time, etc.
 >- ***version***: the state of repository files produced by a particular line of
 development that includes one or more commits to the repository
 >- ***branch***: a version of repository files that diverges (with separate
 commits) from the main line of development (the `main` branch) in the repository
->- ***fork***: a complete copy of a `git` repository that then undergoes
+>- ***fork***: a complete copy of a Git repository that then undergoes
 divergent changes from the original
 
 ## An annotated list of "commits" {.smaller}
@@ -120,22 +120,23 @@ unlink('~/awesomeproject', recursive=TRUE)
 unlink('~/awesomeproject_git', recursive=TRUE)
 ```
 
-# 2. Now try some `git` basics
+# 2. Now try some Git basics
 
 ## Finding and configuring `git`
 
 We will do this in the system shell. So, open a terminal with `bash`, `zsh`,
-or another shell (you may have installed one with `git` on windows), and then
+or another shell (you may have installed one with Git on Windows), and then
 type the following command.
 
 ```{bash, check_for_git}
 git --version
 ```
-If you got the output above, or similar. You have `git` installed. If you didn't
-you will need to return to the [setup instructions](../html/setup.html) and
-install `git` for your system.
+If you got the output above, or similar, you have Git installed and it is
+available with `git` commands in your shell. If you didn't get that output
+you need to return to the [setup instructions](../html/setup.html) and install
+Git for your system.
 
-If `git` is newly installed on your system, you probably need to configure a
+If Git is newly installed on your system, you probably need to configure a
 couple of things. As you start using `git` commands, it helps to know that they
 usually follow a `git verb options` pattern, where `verb` is the action you need
 to take, and `options` give some specifics of how to do the action. For 
@@ -147,9 +148,9 @@ git config --global user.email "marie@sorbonne.fr"
 ```
 
 There are some differences in how computer platforms handle line endings
-in text files. Correspondingly, you will want to tell `git` how to do this too,
-and the configuration for MS Windows machines will be different than for Mac and
-Linux machines. For Mac and Linux, the recommended setting is:
+in text files. Correspondingly, you will want to tell Git how to handle this for
+you, and the configuration for MS Windows machines will be different than for
+Mac and Linux machines. For Mac and Linux, the recommended setting is:
 
 ```{bash, line-endings_mac, eval=FALSE}
 git config --global core.autocrlf input
@@ -162,21 +163,21 @@ git config --global core.autocrlf true
 ```
 
 Since we'll be using GitHub, which names its repository main branches `main`,
-we should make sure our `git` follows the same convention.
+we should make sure our local `git` follows the same convention.
 
 ```{bash, config_main, eval=FALSE}
 git config --global init.defaultBranch main
 ```
 
-Finally, you might also want to configure `git` to use your favorite text editor
+Finally, you might also want to configure Git to use your favorite text editor
 for writing commit messages. More information about that [here](https://swcarpentry.github.io/git-novice/02-setup/index.html).
 
-You can show your `git` configurations anytime with `git config --list` command.
+You can show your Git configurations anytime with `git config --list` command.
 
 ## Making your first repository
 
 Now lets make a new directory and add a text file to it. We will turn this into
-a `git` repository in a moment.
+a Git repository in a moment.
 
 ```{bash, start_repo}
 mkdir ~/my_repo
@@ -189,7 +190,7 @@ knitr::opts_knit$set(root.dir = '~/my_repo')
 #setwd('~/my_repo')
 ```
 
-Now that we are in our project directory, lets make it a repository
+Now that we are in our project directory, lets make it a Git repository
 
 ```{bash, init_repo}
 git init
@@ -201,7 +202,8 @@ to store the changes we will make to our files.
 ```{bash, list_repo}
 ls -a
 ```
-Now lets ask `git` to tell us the status of our repository.
+The `.git/` directory is there. Now lets ask Git to tell us the status of our
+repository.
 
 ```{bash, repo_status}
 git status
@@ -212,7 +214,7 @@ we made - `script.R` - that is not being tracked.
 
 ## Adding files and tracking changes
 
-Lets tell `git` to track that file. We do that with the `add` verb, which 
+Lets tell Git to track that file. We do that with the `add` verb, which 
 "stages" the file to be added to a new commit.
 
 ```{bash, stage_file}
@@ -230,7 +232,7 @@ This staging step lets you compose multiple changes to your repository files
 into a group of updates to your history (sometimes called a change-set). When
 we are ready to add these changes, for us just one new file, to our `git`
 repository, we `commit` the changes to the repository, which will store the
-initial version of our file in `git`'s history.
+initial version of our file in Git's history.
 
 ```{bash, commit_file}
 git commit -m 'Adding the first R script'
@@ -335,7 +337,7 @@ git clone https://github.com/jornada-im/JEDS.git
 ## Create and clone a GitHub repository
 
 Lets create a repository on GitHub, initialize it with some files, and then use
-our local `git` tools to pull the new repository to our computer. We can then
+our local `git` commands to pull the new repository to our computer. We can then
 make some changes and push them back to GitHub.
 
 1. Log into <https://github.com> with your account credentials (or make an 
@@ -370,11 +372,11 @@ system clipboard. Return to your shell, navigate to the `GitHub` directory, and
 
 ```{bash, clone_my_gh_repo, eval=T}
 cd ~/GitHub/ #Note: you can put GitHub/ somewhere other than the home directory (~)
-git clone https://github.com/jornada-im/my_gh_repo.git
+git clone https://github.com/gremau/my_gh_repo.git
 ```
 
 Now you should have a clone, or copy, of the `my_gh_repo` repository you just 
-made that is ready to work with in your local `GitHub` directory. Lets enter
+made that is ready to work with in your local `GitHub/` directory. Lets enter
 that directory and look around.
 
 ```{r, setup_5, include=FALSE}
@@ -393,7 +395,7 @@ ready and waiting for us.
 
 Lets make some changes to our new repository on our local system. Use a text
 editor to open up the `README.md` file inside your `my_gh_repo` repository
-folder and add a couple new lines of text. Once you do, `git` should notice the
+folder and add a couple new lines of text. Once you do, Git should notice the
 change when checking the repository status.
 
 ```{r, setup_6, include=FALSE}
@@ -469,7 +471,8 @@ recommended. [See here](https://swcarpentry.github.io/git-novice/07-github/index
 and GitHub.
 
 Now that you have copied the token you can use `git push` to push the changes
-to `origin` on GitHub.
+to `origin` on GitHub. You will be asked for your username and password. For the
+password you will paste the PAT token into the terminal.
 
 ```{bash, push new_repo, eval=FALSE}
 git push
@@ -490,14 +493,14 @@ unlink('~/GitHub/my_gh_repo', recursive=TRUE)
 ```
 
 
-# 5. Collaborative work with `git` and GitHub
+# 5. Collaborative work with Git and GitHub
 
 ## "Forking" a repository
 
 You can copy any public repository on GitHub to your own account by "Forking" 
 the repository. Essentially, this creates a clone of someone else's repository
 for you, in your own GitHub account. To demonstrate this, lets clone the repository 
-that contains this tutorial (jornada-im/JEDS). Return to GitHub in your browser
+that contains this tutorial (`jornada-im/JEDS`). Return to GitHub in your browser
 and follow these steps.
 
 1. Navigate to <https://github.com/jornada-im/JEDS>
@@ -507,8 +510,8 @@ and follow these steps.
 everything as it is and click the <button style="background-color:green;border-color:green;color:white">Create fork</button> button, which will create the fork and take you to its landing page.
 
 You'll now have a fork of the "JEDS" repository in your own GitHub account
-(your_username/JEDS). In the upper left of the page, under the repository name
-you should see a link back to the original repository ([jornada-im/JEDS](https://github.com/jornada-im/JEDS)). Now lets clone this to
+(`your_username/JEDS`). In the upper left of the page, under the repository name
+you should see a link back to the original repository ([`jornada-im/JEDS`](https://github.com/jornada-im/JEDS)). Now lets clone this to
 our local GitHub folder and make some changes.
 
 On your new JEDS repository fork page, click the <button style="background-color:green;border-color:green;color:white">Code</button> to
@@ -523,12 +526,12 @@ git clone https://github.com/gremau/JEDS.git JEDS_fork #JEDS_fork is optional
 knitr::opts_knit$set(root.dir = '~/GitHub/JEDS_fork')
 ```
 
-Now you have a local copy of your fork (your_username/JEDS). If you want to
-interact with the original repository (jornada-im/JEDS) then we need to make sure
+Now you have a local copy of your fork (`your_username/JEDS`). If you want to
+interact with the original repository (`jornada-im/JEDS`) then we need to make sure
 there is a link to that. Lets go to that repository
 
 ```{bash, cd_JEDS2, eval=FALSE}
-cd JEDS/
+cd JEDS_fork/
 ```
 
 and check the status of our remote repositories.
@@ -538,8 +541,8 @@ git remote -v
 ```
 
 It looks like our only "remote" repository is our fork on GitHub
-(your_username/JEDS). This is OK, but not ideal for collaboration purposes. It
-would be better if we also had the original repository (jornada-im/JEDS)
+(`your_username/JEDS`). This is OK, but not ideal for collaboration purposes. It
+would be better if we also had the original repository (`jornada-im/JEDS`)
 configured as an "upstream" source repository. This way, we could pull any changes
 made to the source repository directly into our local clone. Instead, we
 currently need to do this indirectly through GitHub. There are several ways to
@@ -589,9 +592,9 @@ git commit -m 'I made this file better'
 
 We have committed the changes to the `my_changes` branch. If we want to share
 these changes, the new branch will need to be accessible to others in the forked
-GitHub repository (your_username/JEDS). To publish the `my_changes` branch to 
+GitHub repository (`your_username/JEDS`). To publish the `my_changes` branch to 
 GitHub we can use a variation on `git push` that creates an "upstream" branch in
-the origin repository (again - your_username/JEDS).
+the origin repository (again - `your_username/JEDS`).
 
 ```{bash, push_JEDS2_file, eval=T}
 git push --set-upstream origin my_changes
@@ -600,7 +603,7 @@ git push --set-upstream origin my_changes
 Now if we return to GitHub, we can see that the new branch has been added to the
 repository there, and it will contain any changes we made to 
 `episodes/learner_changes.md`. If we want to contribute the changes in our new
-branch back to the source repository (jornada-im/JEDS), we can issue something
+branch back to the source repository (`jornada-im/JEDS`), we can issue something
 called a "pull request" in GitHub, which notifies the maintainer of the source repository that somebody wants to merge changes into it.
 
 ## Issuing pull requests
@@ -611,25 +614,25 @@ operation, called a "Pull request," available in a number of ways.
 
 Return to your fork of the JEDS repository on GitHub (https://github.com/{your_username}/JEDS)
 and look for the `my_changes` branch. By default you will be viewing the 
-<kbd>main</kbd> branch, which should be apparent in the dropdown menu to the top
+`main` branch, which should be apparent in the dropdown menu to the top
 left of your repository's code. You may also see a banner notification about the
 recent push to the `my_changes` branch that you just did. To view the `my_changes`
-branch, you can either follow the link in banner, or use the dropdown to select
-the `my_changes` branch.
+branch, you can either follow the link in the banner, or use the dropdown to
+select the `my_changes` branch.
 
 Once you select the new branch, the repository page will change slightly and
 you can now view all files in `my_changes`. If you like, open `episodes/learner_changes.md`
 to see that your modifications to the file are there (they are not in `main`).
 You will also notice a banner above the code that says "**This branch is 1 commit
-ahead of jornada-im:main.**" with options to "Contribute" or "Sync." This is
+ahead of jornada-im:main**" with options to "Contribute" or "Sync." This is
 telling you that the `my_changes` branch in your fork has one commit that is not
-present in the original source you forked from, the main branch of [`jornada-im/JEDS`](https://github.com/jornada-im/JEDS).
+present in the original source you forked from, the `main` branch of [`jornada-im/JEDS`](https://github.com/jornada-im/JEDS).
 To contribute your changes back to this source, you can issue a pull request by
 clicking the "Contribute" dropdown and selecting the <button style="background-color:green;border-color:green;color:white">Open pull request</button> button.
 
 When you open the pull request, notice that the new pull request template opens
 in the `jornada-im/JEDS` repository. GitHub will then check whether your branch
-can be merged into the main branch of this source repository. If it can, you
+can be merged into the `main` branch of this source repository. If it can, you
 will see the exact changes that will be made, and you have the opportunity to
 add a comment that will be seen by the person who will receive your pull request
 (whoever maintains the source repository, in this case Greg). When you have
