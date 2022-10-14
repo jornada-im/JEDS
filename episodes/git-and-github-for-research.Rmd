@@ -39,8 +39,8 @@ echo "Make some figures" >> analysis_script.R
 git add analysis_script.R
 git commit -m "Statistics and figures for report 1"
 
-# Note that we also have to create the `my_gh_repo` on GitHub and clone it
-# to the ~/GitHub directory for this all to knit.
+# Note that we also have to create the `my_gh_repo` and fork the
+# JEDS repository on GitHub - all to the gremau account - for this to knit.
 ```
 
 # 1. Getting to know Git
