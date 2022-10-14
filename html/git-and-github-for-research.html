@@ -415,8 +415,9 @@ GitHub</a></li>
 work with <code>git</code> and GitHub</a>
 <ul>
 <li><a href="#forking-a-repository">“Forking” a repository</a></li>
-<li><a href="#branching-pushing-changes-and-issuing-pull-requests">Branching,
-pushing changes and issuing pull requests</a></li>
+<li><a href="#branching-and-pushing-to-forks">Branching and pushing to
+forks</a></li>
+<li><a href="#issuing-pull-requests">Issuing pull requests</a></li>
 </ul></li>
 </ul>
 </div>
@@ -515,27 +516,27 @@ the original</li>
 <div id="an-annotated-list-of-commits" class="section level2 smaller">
 <h2 class="smaller">An annotated list of “commits”</h2>
 <pre class="bash"><code>git -C ~/awesomeproject_git/ log</code></pre>
-<pre><code>## commit 9ddd96db132dfadc29ed6b675a5557b6b8a29e45
+<pre><code>## commit 74cdf4048d665fd4497121bf07951842d5a64132
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 14:39:14 2022 -0600
+## Date:   Fri Oct 14 11:05:11 2022 -0600
 ## 
 ##     Statistics and figures for report 1
 ## 
-## commit 3b22c3ef81ead9e8c82a3ed384b32acc1a39dc7a
+## commit e614ee29eff9d76780154d9ad647ab18ea38bb3a
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 14:39:14 2022 -0600
+## Date:   Fri Oct 14 11:05:11 2022 -0600
 ## 
 ##     Fit polynomial model
 ## 
-## commit 27a2b1abbab80dd61a5368d3bf7dc9e4b972d822
+## commit 19ccb0d97ebfb7bce5fd587e4ebca369c19a931c
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 14:39:14 2022 -0600
+## Date:   Fri Oct 14 11:05:11 2022 -0600
 ## 
 ##     Fit linear model to the data
 ## 
-## commit 506a837e9e6ee7c70887648b4b359ac63f55706d
+## commit 456311a602875645c215600c7c4dfc65744c4747
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 14:39:14 2022 -0600
+## Date:   Fri Oct 14 11:05:11 2022 -0600
 ## 
 ##     Initial commit - add analysis script</code></pre>
 </div>
@@ -639,7 +640,7 @@ just one new file, to our <code>git</code> repository, we
 <code>commit</code> the changes to the repository, which will store the
 initial version of our file in <code>git</code>’s history.</p>
 <pre class="bash"><code>git commit -m &#39;Adding the first R script&#39;</code></pre>
-<pre><code>## [main (root-commit) 423f48d] Adding the first R script
+<pre><code>## [main (root-commit) e93208c] Adding the first R script
 ##  1 file changed, 0 insertions(+), 0 deletions(-)
 ##  create mode 100644 script.R</code></pre>
 <p>Sooner or later we’ll add something to this file, and we’ll want to
@@ -676,7 +677,7 @@ reasonable change, so lets stage the updated file with
 <code>git commit</code>.</p>
 <pre class="bash"><code>git add script.R
 git commit -m &#39;I updated the script with 2 lines&#39;</code></pre>
-<pre><code>## [main 3e0dc02] I updated the script with 2 lines
+<pre><code>## [main b3be097] I updated the script with 2 lines
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>Take note that when you commit something to your repository’s history
 it is wise to explain what was changed using a “commit message” That is
@@ -686,15 +687,15 @@ and why your repository is changing, so before you commit something, put
 a little thought into how you will describe the changes.</p>
 <p>Lets take a quick look at our history now:</p>
 <pre class="bash"><code>git log</code></pre>
-<pre><code>## commit 3e0dc0243c68e4d01097e3d846a7b5db466c9df5
+<pre><code>## commit b3be09715c1e00317fd516a94ac02d8b493be6dc
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 14:39:15 2022 -0600
+## Date:   Fri Oct 14 11:05:11 2022 -0600
 ## 
 ##     I updated the script with 2 lines
 ## 
-## commit 423f48dddeef94af7cf302d7c304a940536a2284
+## commit e93208cde99e4d16d5fce883c17aab2e4a206d88
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Thu Oct 13 14:39:14 2022 -0600
+## Date:   Fri Oct 14 11:05:11 2022 -0600
 ## 
 ##     Adding the first R script</code></pre>
 <p>We can see our progress so far. There are two commits, with the first
@@ -766,7 +767,7 @@ button to create a new repository</p></li>
 <li><p>Check the box to “Add a <code>README</code> file”</p></li>
 <li><p>Click the
 <button style="background-color:green;border-color:green;color:white">Create
-repository</button></p></li>
+repository</button> button</p></li>
 </ol>
 <p>Now your repository is created and you should be in its landing page.
 To move the new repository to your local machine, you must “clone” it
@@ -776,8 +777,8 @@ repository. Return to your system shell and make a new directory called
 GitHub.</p>
 <pre class="bash"><code>mkdir GitHub</code></pre>
 <p>Now you need to use <code>git</code> to clone <code>my_gh_repo</code>
-from GitHub using its web address. Returning to your repository page (<a href="https://github.com/%7Busername%7D/my_repo" class="uri">https://github.com/{username}/my_repo</a>), look in the top
-right of this repository’s landing page, and there is a
+from GitHub using its web address. Returning to your repository page (<a href="https://github.com/%7Busername%7D/my_gh_repo" class="uri">https://github.com/{username}/my_gh_repo</a>), look in the
+top right of this repository’s landing page, and there is a
 <button style="background-color:green;border-color:green;color:white">Code</button>
 button. Click it to open a dialogue that gives you the option to copy an
 address. Use the “HTTPS” option and press the “Copy” button to the right
@@ -846,7 +847,7 @@ and pull operations will go.</p>
 changes we can stage them and commit them.</p>
 <pre class="bash"><code>git add README.md
 git commit -m &quot;Added two lines to the README file&quot;</code></pre>
-<pre><code>## [main 46228b2] Added two lines to the README file
+<pre><code>## [main 2af88f8] Added two lines to the README file
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>Great! But now our local clone of the repository has a commit that is
 not at the <code>origin</code> repository on GitHub. How do we fix this?
@@ -944,18 +945,22 @@ repository</p>
 purposes. It would be better if we also had the original repository
 (jornada-im/JEDS) configured as an “upstream” source repository. This
 way, we could pull any changes made to the source repository directly
-into our local clone. Instead, we’d currently need to do this indirectly
+into our local clone. Instead, we currently need to do this indirectly
 through GitHub. There are several ways to configure an upstream source
 repository (see <a href="https://happygitwithr.com/fork-and-clone.html#fork-and-clone-finish">methods
 in Happy Git</a> for example), but we’re going to set that aside today
 and focus on the simplest possible method to make changes.</p>
 </div>
-<div id="branching-pushing-changes-and-issuing-pull-requests" class="section level2">
-<h2>Branching, pushing changes and issuing pull requests</h2>
-<p>So, lets continue by making some changes to a local file in our fork
-of the JEDS repository. Before we do this, we’re goint to create a
-<strong>branch</strong> to make the changes on. A branch is a
-separate</p>
+<div id="branching-and-pushing-to-forks" class="section level2">
+<h2>Branching and pushing to forks</h2>
+<p>Lets continue by making some changes to a local file in our fork of
+the JEDS repository. Before we do this, we should create a
+<strong>branch</strong> to make the changes in. A branch is a separate,
+named path of development within a repository. When we create a branch
+and make changes in it, they do not effect the <code>main</code> branch
+until we decide to <code>merge</code> them in. Creating and working with
+branches in <code>git</code> is simple, just create a new named branch
+and then <code>git checkout</code> the branch to begin work there.</p>
 <pre class="bash"><code>git branch my_changes
 git checkout my_changes</code></pre>
 <pre><code>## Switched to branch &#39;my_changes&#39;</code></pre>
@@ -963,7 +968,7 @@ git checkout my_changes</code></pre>
 <code>git checkout -b my_changes</code>. We have now created a branch
 within our repository, called <code>my_changes</code> that we can
 develop without changing anything in <code>main</code>. This is a great
-way to partition your changes until you are sure they will work well
+way to partition your changes until you are sure your changes work well
 with the rest of the repository.</p>
 <p>Now lets make those changes. Look inside the <code>episodes</code>
 folder and find the <code>learner_changes.md</code> file.</p>
@@ -979,14 +984,15 @@ in the spelling or the code. Save your changes and then stage and commit
 the changes.</p>
 <pre class="bash"><code>git add episodes/learner_changes.md
 git commit -m &#39;I made this file better&#39;</code></pre>
-<pre><code>## [my_changes c22143d] I made this file better
+<pre><code>## [my_changes 7f2007f] I made this file better
 ##  1 file changed, 2 insertions(+)</code></pre>
-<p>We have committed the changes to the branch. Now we want to see if we
-can get them added to the original repository. First, our branch needs
-to be published to our fork repository on GitHub (your_username/JEDS).
-We can to this with a variation on <code>git push</code> that sets an
-“upstream” remote in the process. This upstream remote will be our
-current origin (which is your_username/JEDS).</p>
+<p>We have committed the changes to the <code>my_changes</code> branch.
+If we want to share these changes, the new branch will need to be
+accessible to others in the forked GitHub repository
+(your_username/JEDS). To publish the <code>my_changes</code> branch to
+GitHub we can use a variation on <code>git push</code> that creates an
+“upstream” branch in the origin repository (again -
+your_username/JEDS).</p>
 <pre class="bash"><code>git push --set-upstream origin my_changes</code></pre>
 <pre><code>## remote: 
 ## remote: Create a pull request for &#39;my_changes&#39; on GitHub by visiting:        
@@ -995,8 +1001,53 @@ current origin (which is your_username/JEDS).</p>
 ## To https://github.com/gremau/JEDS.git
 ##  * [new branch]      my_changes -&gt; my_changes
 ## branch &#39;my_changes&#39; set up to track &#39;origin/my_changes&#39;.</code></pre>
-<p>Now if we return to GitHub, we can send a pull request.</p>
-<p>We’ll see how that goes when we get there….</p>
+<p>Now if we return to GitHub, we can see that the new branch has been
+added to the repository there, and it will contain any changes we made
+to <code>episodes/learner_changes.md</code>. If we want to contribute
+the changes in our new branch back to the source repository
+(jornada-im/JEDS), we can issue something called a “pull request” in
+GitHub, which notifies the maintainer of the source repository that
+somebody wants to merge changes into it.</p>
+</div>
+<div id="issuing-pull-requests" class="section level2">
+<h2>Issuing pull requests</h2>
+<p>When you have made changes to a forked repository on GitHub, you have
+the opportunity to contribute those back to the source repository.
+GitHub makes this operation, called a “Pull request,” available in a
+number of ways.</p>
+<p>Return to your fork of the JEDS repository on GitHub (<a href="https://github.com/%7Byour_username%7D/JEDS" class="uri">https://github.com/{your_username}/JEDS</a>) and look for
+the <code>my_changes</code> branch. By default you will be viewing the
+<kbd>main</kbd> branch, which should be apparent in the dropdown menu to
+the top left of your repository’s code. You may also see a banner
+notification about the recent push to the <code>my_changes</code> branch
+that you just did. To view the <code>my_changes</code> branch, you can
+either follow the link in banner, or use the dropdown to select the
+<code>my_changes</code> branch.</p>
+<p>Once you select the new branch, the repository page will change
+slightly and you can now view all files in <code>my_changes</code>. If
+you like, open <code>episodes/learner_changes.md</code> to see that your
+modifications to the file are there (they are not in <code>main</code>).
+You will also notice a banner above the code that says “<strong>This
+branch is 1 commit ahead of jornada-<a href="im:main" class="uri">im:main</a>.</strong>” with options to “Contribute” or
+“Sync.” This is telling you that the <code>my_changes</code> branch in
+your fork has one commit that is not present in the original source you
+forked from, the main branch of <a href="https://github.com/jornada-im/JEDS"><code>jornada-im/JEDS</code></a>.
+To contribute your changes back to this source, you can issue a pull
+request by clicking the “Contribute” dropdown and selecting the
+<button style="background-color:green;border-color:green;color:white">Open
+pull request</button> button.</p>
+<p>When you open the pull request, notice that the new pull request
+template opens in the <code>jornada-im/JEDS</code> repository. GitHub
+will then check whether your branch can be merged into the main branch
+of this source repository. If it can, you will see the exact changes
+that will be made, and you have the opportunity to add a comment that
+will be seen by the person who will receive your pull request (whoever
+maintains the source repository, in this case Greg). When you have
+provided your comments and reviewed the pull request press
+<button style="background-color:green;border-color:green;color:white">Create
+pull request</button> and the maintainer of <code>jornada-im/JEDS</code>
+will be able to respond to it by making further comments/requests,
+merging it into the source repository, or rejecting it.</p>
 </div>
 </div>
 

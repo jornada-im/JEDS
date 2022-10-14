@@ -347,7 +347,7 @@ account if you didn't in advance).
 
 4. Check the box to "Add a `README` file"
 
-5. Click the <button style="background-color:green;border-color:green;color:white">Create repository</button>
+5. Click the <button style="background-color:green;border-color:green;color:white">Create repository</button> button
 
 Now your repository is created and you should be in its landing page. To move
 the new repository to your local machine, you must "clone" it from GitHub.
@@ -360,7 +360,7 @@ mkdir GitHub
 ```
 
 Now you need to use `git` to clone `my_gh_repo` from GitHub using its web
-address. Returning to your repository page (<https://github.com/{username}/my_repo>),
+address. Returning to your repository page (<https://github.com/{username}/my_gh_repo>),
 look in the top right of this repository's landing page, and there is a
 <button style="background-color:green;border-color:green;color:white">Code</button> button. Click it to open a dialogue that gives you the option to copy an
 address. Use the "HTTPS" option and press the "Copy" button to the right of the
@@ -541,17 +541,21 @@ It looks like our only "remote" repository is our fork on GitHub
 (your_username/JEDS). This is OK, but not ideal for collaboration purposes. It
 would be better if we also had the original repository (jornada-im/JEDS)
 configured as an "upstream" source repository. This way, we could pull any changes
-made to the source repository directly into our local clone. Instead, we'd
+made to the source repository directly into our local clone. Instead, we
 currently need to do this indirectly through GitHub. There are several ways to
 configure an upstream source repository (see [methods in Happy Git](https://happygitwithr.com/fork-and-clone.html#fork-and-clone-finish) for
 example), but we're going to set that aside today and focus on the simplest
 possible method to make changes.
 
-## Branching, pushing changes and issuing pull requests
+## Branching and pushing to forks
 
-So, lets continue by making some changes to a local file in our fork of the JEDS
-repository. Before we do this, we're goint to create a **branch** to make the 
-changes on. A branch is a separate 
+Lets continue by making some changes to a local file in our fork of the JEDS
+repository. Before we do this, we should create a **branch** to make the 
+changes in. A branch is a separate, named path of development within a
+repository. When we create a branch and make changes in it, they do not effect
+the `main` branch until we decide to `merge` them in. Creating and working with
+branches in `git` is simple, just create a new named branch and then `git checkout`
+the branch to begin work there.
 
 ```{bash, branch_JEDS2, eval=T}
 git branch my_changes
@@ -561,8 +565,8 @@ git checkout my_changes
 You could also use a shorthand command for this - `git checkout -b my_changes`.
 We have now created a branch within our repository, called `my_changes` that we
 can develop without changing anything in `main`. This is a great way to partition
-your changes until you are sure they will work well with the rest of the
-repository.
+your changes until you are sure your changes work well with the rest of the
+repository. 
 
 Now lets make those changes. Look inside the `episodes` folder and find the
 `learner_changes.md` file.
@@ -583,30 +587,70 @@ git add episodes/learner_changes.md
 git commit -m 'I made this file better'
 ``` 
 
-We have committed the changes to the branch. Now we want to see if we can get
-them added to the original repository. First, our branch needs to be published
-to our fork repository on GitHub (your_username/JEDS). We can to this with a
-variation on `git push` that sets an "upstream" remote in the process. This
-upstream remote will be our current origin (which is your_username/JEDS).
+We have committed the changes to the `my_changes` branch. If we want to share
+these changes, the new branch will need to be accessible to others in the forked
+GitHub repository (your_username/JEDS). To publish the `my_changes` branch to 
+GitHub we can use a variation on `git push` that creates an "upstream" branch in
+the origin repository (again - your_username/JEDS).
 
 ```{bash, push_JEDS2_file, eval=T}
 git push --set-upstream origin my_changes
 ``` 
 
-Now if we return to GitHub, we can send a pull request.
+Now if we return to GitHub, we can see that the new branch has been added to the
+repository there, and it will contain any changes we made to 
+`episodes/learner_changes.md`. If we want to contribute the changes in our new
+branch back to the source repository (jornada-im/JEDS), we can issue something
+called a "pull request" in GitHub, which notifies the maintainer of the source repository that somebody wants to merge changes into it.
 
-We'll see how that goes when we get there....
+## Issuing pull requests
 
+When you have made changes to a forked repository on GitHub, you have the 
+opportunity to contribute those back to the source repository. GitHub makes this
+operation, called a "Pull request," available in a number of ways. 
+
+Return to your fork of the JEDS repository on GitHub (https://github.com/{your_username}/JEDS)
+and look for the `my_changes` branch. By default you will be viewing the 
+<kbd>main</kbd> branch, which should be apparent in the dropdown menu to the top
+left of your repository's code. You may also see a banner notification about the
+recent push to the `my_changes` branch that you just did. To view the `my_changes`
+branch, you can either follow the link in banner, or use the dropdown to select
+the `my_changes` branch.
+
+Once you select the new branch, the repository page will change slightly and
+you can now view all files in `my_changes`. If you like, open `episodes/learner_changes.md`
+to see that your modifications to the file are there (they are not in `main`).
+You will also notice a banner above the code that says "**This branch is 1 commit
+ahead of jornada-im:main.**" with options to "Contribute" or "Sync." This is
+telling you that the `my_changes` branch in your fork has one commit that is not
+present in the original source you forked from, the main branch of [`jornada-im/JEDS`](https://github.com/jornada-im/JEDS).
+To contribute your changes back to this source, you can issue a pull request by
+clicking the "Contribute" dropdown and selecting the <button style="background-color:green;border-color:green;color:white">Open pull request</button> button.
+
+When you open the pull request, notice that the new pull request template opens
+in the `jornada-im/JEDS` repository. GitHub will then check whether your branch
+can be merged into the main branch of this source repository. If it can, you
+will see the exact changes that will be made, and you have the opportunity to
+add a comment that will be seen by the person who will receive your pull request
+(whoever maintains the source repository, in this case Greg). When you have
+provided your comments and reviewed the pull request press <button style="background-color:green;border-color:green;color:white">Create pull request</button>
+and the maintainer of `jornada-im/JEDS` will be able to respond to it by making
+further comments/requests, merging it into the source repository, or rejecting
+it. 
+
+```{bash, cleanup_4, include=FALSE}
+git push -d origin my_changes
+git checkout main
+git branch -D my_changes
+```
 ```{r, setup_9, include=FALSE }
 knitr::opts_knit$set(root.dir = '~/GitHub/JEDS/episodes')
 ```
-
-
-
-
-
+```{r, cleanup_5, include=FALSE}
+unlink('~/GitHub/JEDS_fork', recursive=TRUE)
+```
 ```{bash, cleanup, include=FALSE, eval=FALSE}
-gh repo create my_gh_repo --public
+#gh repo create my_gh_repo --public
 #rm -r ~/awesomeproject_git;
 #rm -r ~/my_repo;
 ```
