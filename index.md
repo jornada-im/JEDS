@@ -1,6 +1,6 @@
 ## Welcome!
 
-Our aim is to teach data science concepts and skills to Jornada researchers using accessible methods and relatable data.
+Our aim is to teach environmental data science concepts and skills to Jornada researchers using accessible methods and relatable data.
 
 ## Setting up your environment
 
@@ -13,9 +13,10 @@ Most tutorials have been developed for learners using `R`, `python`, and other o
 
 ## Upcoming workshops
 
-* [2022 Data Therapy Git/GitHub tutorials](./workshops/2022-data-therapy-git-github/index) (there may be more than one)
-* Probably more coming in fall 2022...
+* [Spring 2023 Data Therapy geospatial data tutorials](./workshops/2023-data-therapy-geospatial/index)
+* The 2023 Jornada Desert Ecology Short Course will include a [Data Carpentries R workshop](https://datacarpentry.org/R-ecology-lesson/).
 
 ## Past workshops
 
+* [Fall 2022 Data Therapy Git/GitHub tutorials](./workshops/2022-data-therapy-git-github/index) 
 * [2022-06-29 - Jornada Desert Ecology Short Course](./workshops/20220629-jrn-ecology-short-course/index)

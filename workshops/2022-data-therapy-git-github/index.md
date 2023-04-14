@@ -1,4 +1,4 @@
-# 2022 Data Therapy git/GitHub sessions
+# 2022 Data Therapy: Git/GitHub Sessions
 
 **ONLINE -Date and time:** See the [calendar invite](https://www.google.com/calendar/event?eid=YWlta3ZsZDUzbzdsM3VkbWVjN2ZwNDExbzBfMjAyMjA5MDhUMjEwMDAwWiBkczVtNnF0NTRsYm9xYm85Z3QxNDhzcjJjMEBn)
 
