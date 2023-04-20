@@ -13,7 +13,7 @@ If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.ed
 
 ## Lesson materials
 
-* [Accessing Jornada spatial data]('../episodes/accessing_Jornada_geospatial.md')
+* [Accessing Jornada spatial data](../episodes/accessing_Jornada_geospatial)
 * [A brief survey](https://forms.gle/VQ5Nc7YUZv4Wb7go9) to help us know which direction to take the new spatial data catalog.
 
 ## Some other helpful resources
