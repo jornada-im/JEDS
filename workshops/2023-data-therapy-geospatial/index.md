@@ -1,6 +1,6 @@
-# 2023 Data Therapy: Geospatial Data Analysis
+# 2023 Data Therapy: Geospatial Data Access
 
-**ONLINE -Date and time:** See the [calendar invite](https://www.google.com/calendar/event?eid=YWlta3ZsZDUzbzdsM3VkbWVjN2ZwNDExbzBfMjAyMjA5MDhUMjEwMDAwWiBkczVtNnF0NTRsYm9xYm85Z3QxNDhzcjJjMEBn)
+**ONLINE - Date and time:** See the [calendar invite](https://www.google.com/calendar/event?eid=YWlta3ZsZDUzbzdsM3VkbWVjN2ZwNDExbzBfMjAyMjA5MDhUMjEwMDAwWiBkczVtNnF0NTRsYm9xYm85Z3QxNDhzcjJjMEBn)
 
 **Instructors:** Greg Maurer
 
@@ -13,7 +13,8 @@ If you have trouble preparing or need help please contact Greg (<gmaurer@nmsu.ed
 
 ## Lesson materials
 
-* None yet...
+* [Accessing Jornada spatial data]('./episodes/accessing_Jornada_geospatial.md)
+* [A brief survey](https://forms.gle/VQ5Nc7YUZv4Wb7go9) to help us know which direction to take the new spatial data catalog.
 
 ## Some other helpful resources
 
