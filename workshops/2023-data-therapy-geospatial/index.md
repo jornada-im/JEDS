@@ -4,6 +4,8 @@
 
 **Instructors:** Greg Maurer
 
+{:toc}
+
 
 ## Getting set up
 
