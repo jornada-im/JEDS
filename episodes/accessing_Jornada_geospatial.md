@@ -18,7 +18,7 @@ Its up to you, but a few tools we can recommend:
 * [QGIS](https://qgis.org/en/site/) is open-source, free, and powerful, and is installable on Mac, Windows, and Linux platforms. 
 * [Google Earth Pro](https://www.google.com/earth/about/versions/) is also free, but a bit less powerful.
 * [ArcGIS Desktop](https://www.esri.com/en-us/arcgis/products/arcgis-desktop/overview) or [ArcGIS Pro](https://www.esri.com/en-us/arcgis/products/arcgis-pro/overview) are great you have a license for them. Sometimes you can get a license through your institution. Many institutions also offer access to ArcGIS Online, a cloud-native GIS platform that integrates with the desktop ones.
-* For R users, you should have R installed and set up as per the JEDS [setup instructions](../../html/setup), and also install the R packages `terra` and `sf`, which are highly functional for raster and vector data, respectively.
+* For R users, you should have R installed and set up as per the JEDS [setup instructions](../html/setup), and also install the R packages `terra` and `sf`, which are highly functional for raster and vector data, respectively.
 * For python users, a good place to start might be GeoPandas, but there are many more options.
 
 ## 4. What about other kinds of data?
