@@ -1,4 +1,5 @@
-# April 2023 Data Therapy: Geospatial Data Access {no_toc}
+# April 2023 Data Therapy: Geospatial Data Access
+{:.no_toc}
 
 **ONLINE - 20 April 2023:**  [Data Therapy](https://www.google.com/calendar/event?eid=YWlta3ZsZDUzbzdsM3VkbWVjN2ZwNDExbzBfMjAyMjA5MDhUMjEwMDAwWiBkczVtNnF0NTRsYm9xYm85Z3QxNDhzcjJjMEBn)
 
@@ -39,7 +40,7 @@ We demonstrated how to use the vector datasets from the Jornada LTER spatial dat
 * In QGIS, one can copy the URL of a desired zip archive listed on the data catalog (such as 'https://lter.jornada.nmsu.edu/spatialfiles/JER_Fences.zip'), paste it into "Vector data" dialog of the "Open Data Source Manager", and click "Add", and QGIS will unpack the zip file and add the KMZ layers to the map.
 * In R, there is no automated unpacking of zip files, so they must be downloaded and unzipped first. Then, the resulting KMZ files can be loaded as R objects using functions in `sf`, such as:
 
-    fences <- sf::st_read('~/my_downloads/JER_fences/JER_Fences.kmz')
+        fences <- sf::st_read('~/my_downloads/JER_fences/JER_Fences.kmz')
 
 ## Discussion on improving the spatial data catalog
 
