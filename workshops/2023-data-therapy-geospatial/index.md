@@ -4,6 +4,8 @@
 
 **Instructors:** Greg Maurer
 
+## Table of Contents
+
 {:toc}
 
 
