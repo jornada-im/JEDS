@@ -1,0 +1,318 @@
+---
+title: "Data visualization with ggplot"
+author: "Darren James"
+date: '2025-08-06'
+output:
+    html_document:
+      toc: true
+---
+
+```{r, setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_packages, message=FALSE}
+# Get tidyverse & a few other packages
+
+# If they are not installed, uncomment and run these commands first
+# install.packages("tidyverse")
+# install.packages("ratdat")
+# install.packages("RColorBrewer")
+# install.packages("ggpmisc")
+
+# Now load them into your environment
+library(tidyverse) # Includes ggplot2
+library(ratdat) # For example data, complete_old
+library(RColorBrewer) # For color palettes
+library(ggpmisc) # For ggplot2 extensions
+```
+
+Now lets explore the data, load it, and re-run a recent plot
+
+```{r load_data}
+?complete_old
+
+# Add data to R environment
+data(complete_old)
+
+# Most recent plot from lesson
+ggplot(data = complete_old, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(outlier.shape = NA, fill = NA) +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none")
+```
+
+These boxplots are not ideal for describing these data 
+The points reveal underlying patterns not accounted for by the boxplots
+Notice that these data contain observations from multiple species and taxa
+
+```{r}
+?complete_old
+unique(complete_old$taxa)
+unique(complete_old$species_id)
+```
+
+Make a barplot of the total counts of each species, then rotate 
+to the x-axis labels to make them more readable.
+
+```{r}
+ggplot(data = complete_old, mapping = aes(x = species_id)) +
+  geom_bar(stat = "count") +
+  scale_y_continuous(breaks = seq(from = 0, to = 6000, by = 200)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5))
+```
+Now use the fill aesthetic to show the breakdown in counts by sex
+```{r}
+ggplot(data = complete_old, mapping = aes(x = species_id, fill = sex)) +
+  geom_bar(stat = "count") +
+  scale_y_continuous(breaks = seq(from = 0, to = 6000, by = 200)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) 
+```
+
+
+Lets choose a color palette from RColorBrewer
+
+```{r}
+display.brewer.all()
+
+ggplot(data = complete_old, mapping = aes(x = species_id, fill = sex)) +
+  geom_bar(stat = "count") +
+  scale_y_continuous(breaks = seq(from = 0, to = 6000, by = 200)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+Now add a horizontal line at count = 400
+
+```{r}
+ggplot(data = complete_old, mapping = aes(x = species_id, fill = sex)) +
+  geom_bar(stat = "count") +
+  scale_y_continuous(breaks = seq(from = 0, to = 6000, by = 200)) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+  scale_fill_brewer(palette = "Dark2") +
+  geom_hline(yintercept = 400, col = "black")
+```
+
+Look at only the species who occur 400 or more times
+
+```{r}
+species_400 <- complete_old %>%
+  group_by(species_id) %>%
+  summarise(total_obs = n()) %>%
+  dplyr::filter(total_obs >= 400)
+```
+Subset the data to include only the species occurring 400 or more times
+
+```{r}
+species_400_data <- complete_old %>%
+  dplyr::filter(species_id %in% species_400$species_id)
+```
+Recreate previous boxplots with jittered points, but facet by each species. 
+Don't suppress the outliers!
+
+```{r}
+ggplot(data = species_400_data, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(fill = NA) +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none") +
+  facet_wrap(~species_id) +
+  scale_color_brewer(palette = "Set3")
+```
+
+Now rotate x-axis label. Allow for different y-axis scale for each species,
+and extend whiskers to max and mix.
+
+```{r}
+ggplot(data = species_400_data, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(coef= NULL, fill = NA) +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none") +
+  scale_color_brewer(palette = "Set3") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  facet_wrap(~species_id, scales = "free_y") 
+```
+
+Create a new boxplot figure that lumps all plot_types together but has separate boxplots for each species
+
+```{r}
+ggplot(data = species_400_data, mapping = aes(x = species_id, y = hindfoot_length, color = species_id)) +
+  geom_jitter(alpha = 0.2) +
+  geom_boxplot(coef = NULL, col = "black", alpha = 0.2) +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none")
+```
+
+
+Subset the Dipodomys species and remove the species identified only to genus. 
+Then, remove the species with unassigned sex and create species name by pasting togther genus and species.
+
+```{r}
+Dipodomys <- complete_old %>%
+  dplyr::filter(genus == "Dipodomys") %>%
+  dplyr::filter(species != "sp.") %>% # Remove the unidentified individuals
+  dplyr::filter(sex != "") %>%
+  mutate(species_name = paste(genus, species, sep = " "))
+
+with(Dipodomys, table(species_name))
+unique(Dipodomys$sex)
+```
+
+
+Create boxplots of weight
+
+```{r}
+ggplot(data = Dipodomys, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(fill = NA) +
+  facet_wrap(~species_name, nrow = 1) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none")
+```
+
+
+Now transpose the data so that hindfoot_length and weight are in the same column, identified by a new column called "variable".
+
+```{r}
+Dipodomys_long <- Dipodomys %>%
+  pivot_longer(cols = c(hindfoot_length, weight),
+               names_to = "variable",
+               values_to = "value")
+
+ggplot(data = Dipodomys_long, mapping = aes(x = plot_type, y = value)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(fill = NA) +
+  facet_grid(variable ~ species_name) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none")
+```
+
+
+Allow for different y-axis scales
+
+```{r}
+ggplot(data = Dipodomys_long, mapping = aes(x = plot_type, y = value)) +
+  theme_bw() +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(fill = NA) +
+  facet_grid(variable ~ species_name, scales = "free_y") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none")
+```
+
+Work with Dipodomys spectabilis (Banner-tailed kangaroo rat)
+
+```{r}
+banner_tailed <- Dipodomys %>%
+  dplyr::filter(species_name == "Dipodomys spectabilis")
+```
+
+Look at the density of points across weight and hindfoot_length
+
+```{r}
+ggplot(banner_tailed, aes(x=weight)) +
+  geom_density()
+
+ggplot(banner_tailed, aes(x=hindfoot_length)) +
+  geom_density()
+```
+
+
+Weight is continuous but hindfoot_length is discrete
+
+```{r}
+ggplot(banner_tailed, aes(x=hindfoot_length)) +
+  geom_bar(state = "count") +
+  scale_x_continuous(breaks = unique(banner_tailed$hindfoot_length))
+```
+
+Use geom_density_2d to show the density
+
+```{r}
+ggplot(banner_tailed , aes(x = weight, y = hindfoot_length)) +
+  geom_point() +
+  geom_density_2d()
+```
+
+Fit LOESS regression line (default for geom_smooth)
+
+```{r}
+ggplot(banner_tailed, aes(x = weight, y = hindfoot_length)) +
+  geom_point() +
+  geom_smooth()
+```
+
+
+Linear regression
+
+```{r}
+ggplot(banner_tailed, aes(x = weight, y = hindfoot_length)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+Polynomial regression
+```{r}
+ggplot(banner_tailed, aes(x = weight, y = hindfoot_length)) +
+  geom_point() +
+  stat_smooth(method='lm', formula = y~poly(x,2))
+```
+
+Linear regression with regression equation and summary statistics
+
+```{r}
+ggplot(banner_tailed, aes(x = weight, y = hindfoot_length)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n"))) 
+```
+
+These regression statistics are consistent with lm() regression function
+
+```{r}
+lm(weight ~ hindfoot_length, data = banner_tailed) %>% summary()
+```
+
+Use separate colors for sex
+
+```{r}
+ggplot(banner_tailed, aes(x = weight, y = hindfoot_length, col = sex)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  stat_poly_eq(use_label(c("eq", "adj.R2", "f", "p", "n"))) 
+```
+
+
+Is there evidence for different slopes between males and females?
+
+```{r}
+lm(weight ~ hindfoot_length*sex, data = banner_tailed) %>% summary()
+```
+
+Use facet_grid to apply regression to all the species in the Dipodomys data.frame
+Allow for different y-axis scales
+
+```{r}
+ggplot(Dipodomys, aes(x = weight, y = hindfoot_length)) +
+  geom_point(col = "black") +
+  geom_smooth(method = "lm", se = FALSE) +
+  stat_poly_eq(mapping = use_label("eq", "adj.R2")) +
+  # stat_poly_eq(x = 100, y = 60, mapping = use_label("adj.R2", "n")) +
+  facet_grid(sex ~ species_name, scales = "free") +
+  theme(legend.position = "none")
+```
