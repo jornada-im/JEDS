@@ -92,9 +92,8 @@ This is a _**Git repository**_ for the same analysis project
 
 ## What is recorded in `.git/`?
 
-**Git keeps track of what changed, who changed it, when it changed, and why* **
+**Git keeps track of what changed in `analysis_script.R`, who changed it, when it changed, and why (_as long as you tell it to_).**
 ![Schematic of a git-based workflow](img/git_diagram1.png)
-\ \ \ \ \ \ \ \* _as long as you tell it to_
 
 ## Some terminology
 
@@ -253,7 +252,7 @@ git status
 ```
 
 This tells us that `script.R` was modified, but those changes haven't been
-staged yet To get line-by-line details about what changed in your file, you can
+staged yet. To get line-by-line details about what changed in your file, you can
 "diff" the file to show the difference between the last committed version, and
 what it looks like after you added some code.
 
