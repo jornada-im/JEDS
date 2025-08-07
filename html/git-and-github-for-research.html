@@ -508,27 +508,27 @@ that then undergoes divergent changes from the original</li>
 <div id="an-annotated-list-of-commits" class="section level2 smaller">
 <h2 class="smaller">An annotated list of “commits”</h2>
 <pre class="bash"><code>git -C ~/awesomeproject_git/ log</code></pre>
-<pre><code>## commit 10de0b7963b41ecbe67c9cba814e3fcf1742514e
+<pre><code>## commit 0491c1cb439aac6b52d6ac4cfb124381680bd24a
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Wed Aug 6 22:12:57 2025 -0600
+## Date:   Wed Aug 6 22:33:13 2025 -0600
 ## 
 ##     Statistics and figures for report 1
 ## 
-## commit 59b6f58b49b3c46821ed1a08d7bc778e2c3fa4b5
+## commit be453b419be30fa3712c24f30d8437ce9f6d966a
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Wed Aug 6 22:12:57 2025 -0600
+## Date:   Wed Aug 6 22:33:13 2025 -0600
 ## 
 ##     Fit polynomial model
 ## 
-## commit a6037998af77606ba78f3d46560073c0f81ac9e9
+## commit 762962489788b0f5010872a0e9047e16e4ed9ec6
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Wed Aug 6 22:12:57 2025 -0600
+## Date:   Wed Aug 6 22:33:13 2025 -0600
 ## 
 ##     Fit linear model to the data
 ## 
-## commit aaf376893a266fbf106b1b6b656b7ccca6431119
+## commit 7713f25e2148c16f214e97723b1ef744ff97bcf3
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Wed Aug 6 22:12:57 2025 -0600
+## Date:   Wed Aug 6 22:33:13 2025 -0600
 ## 
 ##     Initial commit - add analysis script</code></pre>
 </div>
@@ -632,7 +632,7 @@ just one new file, to our <code>git</code> repository, we
 <code>commit</code> the changes to the repository, which will store the
 initial version of our file in Git’s history.</p>
 <pre class="bash"><code>git commit -m &#39;Adding the first R script&#39;</code></pre>
-<pre><code>## [main (root-commit) 556101c] Adding the first R script
+<pre><code>## [main (root-commit) e5a1205] Adding the first R script
 ##  1 file changed, 0 insertions(+), 0 deletions(-)
 ##  create mode 100644 script.R</code></pre>
 <p>Sooner or later we’ll add something to this file, and we’ll want to
@@ -669,7 +669,7 @@ reasonable change, so lets stage the updated file with
 <code>git commit</code>.</p>
 <pre class="bash"><code>git add script.R
 git commit -m &#39;I updated the script with 2 lines&#39;</code></pre>
-<pre><code>## [main 5df43ae] I updated the script with 2 lines
+<pre><code>## [main 212363c] I updated the script with 2 lines
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>Take note that when you commit something to your repository’s history
 it is wise to explain what was changed using a “commit message” That is
@@ -679,15 +679,15 @@ and why your repository is changing, so before you commit something, put
 a little thought into how you will describe the changes.</p>
 <p>Lets take a quick look at our history now:</p>
 <pre class="bash"><code>git log</code></pre>
-<pre><code>## commit 5df43ae201299930e78e5df18f907aa675443ba8
+<pre><code>## commit 212363cf6ee2d8990c1e93cae12cbb57e881aef5
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Wed Aug 6 22:12:57 2025 -0600
+## Date:   Wed Aug 6 22:33:13 2025 -0600
 ## 
 ##     I updated the script with 2 lines
 ## 
-## commit 556101ccf81cf6def7789fb1eaf4c481830766da
+## commit e5a1205c407c9a4256eab9dca11fd3e8dae1a16b
 ## Author: Gregory Maurer &lt;gregmaurer@gmail.com&gt;
-## Date:   Wed Aug 6 22:12:57 2025 -0600
+## Date:   Wed Aug 6 22:33:13 2025 -0600
 ## 
 ##     Adding the first R script</code></pre>
 <p>We can see our progress so far. There are two commits, with the first
@@ -839,7 +839,7 @@ and pull operations will go.</p>
 changes we can stage them and commit them.</p>
 <pre class="bash"><code>git add README.md
 git commit -m &quot;Added two lines to the README file&quot;</code></pre>
-<pre><code>## [main 7e5d2b8] Added two lines to the README file
+<pre><code>## [main 7385e9a] Added two lines to the README file
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>Great! But now our local clone of the repository has a commit that is
 not at the <code>origin</code> repository on GitHub. How do we fix this?
@@ -883,7 +883,10 @@ GitHub.</p>
 to push the changes to <code>origin</code> on GitHub. You will be asked
 for your username and password. For the password you will paste the PAT
 token into the terminal.</p>
+<<<<<<< HEAD
 
+=======
+>>>>>>> a17e109 (now removed secret)
 <pre class="bash"><code>git push
 # Username for &#39;https://github.com&#39;: {enter your GitHub username}
 # Password for &#39;https://gremau@github.com&#39;: {PASTE the &quot;PAT&quot; here}
@@ -980,7 +983,7 @@ in the spelling or the code. Save your changes and then stage and commit
 the changes.</p>
 <pre class="bash"><code>git add episodes/learner_changes.md
 git commit -m &#39;I made this file better&#39;</code></pre>
-<pre><code>## [my_changes 33029e5] I made this file better
+<pre><code>## [my_changes 8d1ba76] I made this file better
 ##  1 file changed, 2 insertions(+)</code></pre>
 <p>We have committed the changes to the <code>my_changes</code> branch.
 If we want to share these changes, the new branch will need to be

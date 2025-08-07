@@ -33,7 +33,7 @@ lesson (Eunice, 2022)*
 ```{r results="asis", echo=FALSE}
 # This brings in DC R ecology content for installing R and R studio
 dc_lines <- readLines('https://github.com/datacarpentry/R-ecology-lesson/raw/refs/heads/main/learners/setup.md')
-cat(dc_lines[14:92], sep = '\n')
+cat(dc_lines[14:89], sep = '\n')
 ```
 
 ### Install required `R` packages
@@ -64,6 +64,7 @@ library(tidyverse)
 library(nlme)
 library(lme4)
 library(emmeans)
+library(ratdat)
 ```
 
 If you do not see an error like `there is no package called ‘...’` you are good 
@@ -77,7 +78,7 @@ instructors know if you have any problems.
 ```{r results="asis", echo=FALSE}
 # This brings in DC R ecology content for updating R packages
 #dc_lines <- readLines('https://github.com/datacarpentry/R-ecology-lesson/raw/main/index.Rmd')
-cat(dc_lines[120:140], sep = '\n')
+cat(dc_lines[111:120], sep = '\n')
 ```
 
 A copy of all data files used in these lessons are stored in the `data/`
